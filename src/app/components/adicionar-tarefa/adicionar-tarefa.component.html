@@ -1,0 +1,50 @@
+<div class="modal-container">
+  <div class="modal-content">
+      <form [formGroup]="form" (ngSubmit)="submit(form)">
+          <div class="modal-header">
+            <h5 class="modal-title" mat-dialog-title>{{data.title}}</h5>
+            <button type="button" class="close" mat-dialog-close>
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <mat-dialog-content>
+            <div class="modal-body">
+
+                <div class="form-outline formatar-mat-form">
+                    <label class="form-label" for="form2Example1">Título</label>
+
+                    <input matInput formControlName="titulo" type="text" id="form2Example1" class="form-control" />
+                    <div *ngIf="form.get('titulo')?.dirty || form.get('titulo')?.touched">
+                      <mat-error class="erro" *ngIf="form.get('titulo').hasError('required')">O campo título é obrigatório.</mat-error>
+                    </div>
+                </div>
+
+                <div class="form-outline formatar-mat-form">
+                    <label class="form-label" for="form2Example1">Descrição</label>
+
+                    <input matInput formControlName="descricao" type="text" id="form2Example1" class="form-control" />
+                    <div *ngIf="form.get('descricao')?.dirty || form.get('descricao')?.touched">
+                      <mat-error class="erro" *ngIf="form.get('descricao').hasError('required')">O campo descrição é obrigatório.</mat-error>
+                    </div>
+                </div>
+
+                <div class="form-outline formatar-mat-formC" style="position: relative;">
+                  <label class="form-label" for="form2Example1">Prazo</label>
+                  <input matInput formControlName="prazo" type="date" required [(ngModel)]="tarefa.prazo" placeholder="ex: 0000/00/00" [disabled]="disableBox" id="form2Example1" class="form-control" />
+                  <div *ngIf="form.get('prazo')?.dirty || form.get('prazo')?.touched">
+                    <mat-error class="erro" *ngIf="form.get('prazo').hasError('required')">O campo data limite é obrigatório.</mat-error>
+                    <mat-error class="erro" *ngIf="form.get('prazo').hasError('dataInvalida')">Data inválida, verifique o formato.</mat-error>
+                  </div>
+                </div>
+
+            </div>
+          </mat-dialog-content>
+          <div class="modal-footer">
+            <mat-dialog-actions class="justify-content-end">
+              <button type="button" class="btn btn-secondary mr-1" mat-dialog-close>Cancelar</button>
+              <button class="btn btn-primary" [disabled]="disableBox" type="submit">Salvar</button>
+            </mat-dialog-actions>
+          </div>
+      </form>
+  </div>
+</div>

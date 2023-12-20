@@ -1,0 +1,24 @@
+<div class="modal-container">
+  <div class="modal-content">
+      <div class="modal-header">
+          <h5 class="modal-title" mat-dialog-title>{{data.title}}</h5>
+          <button type="button" class="close" mat-dialog-close>
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <mat-dialog-content>
+          <div class="modal-body">
+              <!-- Nome input -->
+              <div class="form-outline formatar-mat-form">
+                  <p class="form-label">Confirma a operação na pessoa {{ pessoa.nome }}?</p>
+              </div>
+          </div>
+      </mat-dialog-content>
+      <div class="modal-footer">
+          <mat-dialog-actions class="justify-content-end">
+              <button type="button" class="btn btn-secondary mr-1" (click)="salvar('Não')">Não</button>
+              <button class="btn btn-primary" [disabled]="disableBox"(click)="salvar('Sim')" type="submit">Sim</button>
+          </mat-dialog-actions>
+      </div>
+  </div>
+</div>

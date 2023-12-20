@@ -1,1 +1,47 @@
-/* You can add global styles to this file, and also import other style files */
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+html, body{
+  height: 100%;
+}
+
+.sizeAlert{
+  max-width: 100%;
+  width: 100%;
+}
+
+.mat-dialog-container{
+  padding: 0 !important;
+}
+
+.mat-dialog-container {
+  overflow: hidden !important;
+}
+
+.modal-header {
+  padding: 1.2rem 1rem 0 1rem !important;
+}
+
+.modal-footer {
+  padding: 0 1rem 1.2rem 1rem !important;
+}
+
+
+.mat-input-element {
+  max-width: 100% !important;
+}
+
+.mat-snack-bar-container {
+  background: none !important;
+  box-shadow: none !important;
+  position: fixed;
+  top: 0;
+  left: 35%;
+  transform: translateX(-35%);
+  z-index: 9999;
+  width: 100%;
+}
