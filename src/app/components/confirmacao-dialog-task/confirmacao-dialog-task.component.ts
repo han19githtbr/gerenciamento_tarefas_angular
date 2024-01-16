@@ -42,7 +42,7 @@ export class ConfirmacaoDialogTaskComponent implements OnInit {
     ngOnInit() {
     }
 
-    fecharCadastrarDialog(): void{
+    fecharCadastrarDialog(): void {
       this.dialogRef.close();
     }
 

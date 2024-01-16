@@ -167,7 +167,6 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-
   alterarDepartamento(index: number, departamento: Departamento){
     const dialogRefDepartment = this.dialog.open(AdicionarDepartamentoComponent, {
       width: '30rem',
@@ -246,7 +245,6 @@ export class DashboardComponent implements OnInit {
       });
    }
   }
-
 
   salvarTarefa(){
     this.dialogRefTask = this.dialog.open(AdicionarTarefaComponent, {
