@@ -1,18 +1,32 @@
 <div id="wrapper">
-
+  <!--<app-notification-bell>
+    <i class="fas fa-bell"></i>
+  </app-notification-bell>-->
   <!-- Sidebar -->
   <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
+      <div id="mensagem_boas_vindas" class="mensagem_boas_vindas">
+        <div class="container_aceno_gif">
+          <img
+            id="aceno_gif"
+            class="aceno_gif"
+            src= "../../../assets/img/aceno.gif"
+            alt="minha foto"
+          >
+        </div>
+        <div class="container_texto_boas_vindas">
+          <h2 id="welcome_message"></h2>
+        </div>
+      </div>
       <!-- Sidebar - Brand -->
       <div class="navbar-brand d-flex align-items-center justify-content-center mt-4">
         <i class="fa fa-tasks fa-sm fa-fw mr-2 mb-3 text-gray-400"></i>
         <h2>SISTEMA DE GERENCIAMENTO DE TAREFAS</h2>
-        <i class="fa fa-tasks fa-sm fa-fw mr-2 mb-3 text-gray-400"></i>
+        <!--<i class="fa fa-tasks fa-sm fa-fw mr-2 mb-3 text-gray-400"></i>-->
 
       </div>
       <a class="sidebar-brand d-flex align-items-center justify-content-center mt-4 mb-4" routerLink="" routerLinkActive="active">
           <div class="sidebar-brand-icon rotate-n-15">
-              <i class="fa fa-laugh-wink"></i>
+            <i class="fa fa-laugh-wink"></i>
           </div>
           <div class="sidebar-brand-text mx-3">
 
@@ -33,7 +47,6 @@
 
           <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
           (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseTwo">
-            <!--<i class="fa fa-fw fa-cog"></i>-->
             <i class="fa fa-users fa-sm fa-fw ml-3 mr-2 text-gray-400"></i>
             <span>Listar Pessoas</span>
           </a>
@@ -63,8 +76,8 @@
                       <div class="card shadow mb-4">
                           <!-- Card Header - Dropdown -->
                           <div
-                              class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                              <h6 class="m-0 font-weight-bold text-primary">Listar Pessoas</h6>
+                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Listar Pessoas</h6>
                           </div>
                           <!-- Card Body -->
                           <div class="card-body">
@@ -78,10 +91,10 @@
                                               <th scope="col">Departamento</th>
                                               <th scope="col">
                                                   <a class="d-none d-sm-inline-block">
-                                                      <i class="fa fa-arrow-up fa-sm mr-2"></i>
+                                                    <i class="fa fa-arrow-up fa-sm mr-2"></i>
                                                   </a>
                                                   <a class="d-none d-sm-inline-block">
-                                                      <i class="fa fa-arrow-down fa-sm"></i>
+                                                    <i class="fa fa-arrow-down fa-sm"></i>
                                                   </a>
                                               </th>
                                               <th scope="col">Operações</th>
@@ -94,21 +107,20 @@
                                               <td>{{ item.departamento }}</td>
                                               <td>
                                                   <ng-container *ngIf="i !== 0">
-                                                      <a class="d-none d-sm-inline-block" (click)="upPeople(i)">
-                                                          <i class="fa fa-arrow-up fa-sm mr-2"></i>
-                                                      </a>
+                                                    <a class="d-none d-sm-inline-block" (click)="upPeople(i)">
+                                                      <i class="fa fa-arrow-up fa-sm mr-2"></i>
+                                                    </a>
                                                   </ng-container>
 
                                                   <ng-container *ngIf="i !== pessoas.length - 1">
-                                                      <a class="d-none d-sm-inline-block" (click)="downPeople(i)">
-                                                          <i class="fa fa-arrow-down fa-sm"></i>
-                                                      </a>
+                                                    <a class="d-none d-sm-inline-block" (click)="downPeople(i)">
+                                                      <i class="fa fa-arrow-down fa-sm"></i>
+                                                    </a>
                                                   </ng-container>
                                               </td>
                                               <td class="d-flex">
-
                                                   <a class="d-none d-sm-inline-block" (click)="removerPessoa(i, item)">
-                                                      <i class="fa fa-trash fa-sm"></i>
+                                                    <i class="fa fa-trash fa-sm"></i>
                                                   </a>
                                                   <a class="d-none d-sm-inline-block ml-5" (click)="alterarPessoa(i, item)">
                                                     <i class="fa fa-edit fa-sm"></i>
@@ -126,7 +138,7 @@
 
               <!-- Page Heading -->
               <div class="d-sm-flex align-items-center justify-content-end mb-4">
-                  <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm text-white" (click)="savePessoa()"><i class="fa fa-plus fa-sm text-white"></i> Adicionar pessoa</a>
+                <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm text-white" (click)="savePessoa()"><i class="fa fa-plus fa-sm text-white"></i> Adicionar pessoa</a>
               </div>
 
           </div>
@@ -152,7 +164,7 @@
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center mt-4 mb-4" routerLink="" routerLinkActive="active">
           <div class="sidebar-brand-icon rotate-n-15">
-              <i class="fa fa-laugh-wink"></i>
+            <i class="fa fa-laugh-wink"></i>
           </div>
           <div class="sidebar-brand-text mx-3">
             <div class="navbar-brand text-align-center">
@@ -172,14 +184,14 @@
 
           <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
           (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseTwo">
-              <!--<i class="fa fa-fw fa-cog"></i>-->
-              <i class="fa fa-building-o fa-sm fa-fw ml-3 mr-2 text-gray-400"></i>
-              <span>Listar Departamentos</span>
+            <!--<i class="fa fa-fw fa-cog"></i>-->
+            <i class="fa fa-building-o fa-sm fa-fw ml-3 mr-2 text-gray-400"></i>
+            <span>Listar Departamentos</span>
           </a>
           <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
 
               <div class="bg-white py-2 collapse-inner rounded">
-                  <a class="collapse-item" (click)="saveDepartamento()">Adicionar departamento</a>
+                <a class="collapse-item" (click)="saveDepartamento()">Adicionar departamento</a>
               </div>
           </div>
       </li>
@@ -203,7 +215,7 @@
                       <div class="card shadow mb-4">
                           <!-- Card Header - Dropdown -->
                           <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                              <h6 class="m-0 font-weight-bold text-primary">Listar Departamentos</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Listar Departamentos</h6>
                           </div>
                           <!-- Card Body -->
                           <div class="card-body">
@@ -216,10 +228,10 @@
                                               <th scope="col">Titulo</th>
                                               <th scope="col">
                                                   <a class="d-none d-sm-inline-block">
-                                                      <i class="fa fa-arrow-up fa-sm mr-2"></i>
+                                                    <i class="fa fa-arrow-up fa-sm mr-2"></i>
                                                   </a>
                                                   <a class="d-none d-sm-inline-block">
-                                                      <i class="fa fa-arrow-down fa-sm"></i>
+                                                    <i class="fa fa-arrow-down fa-sm"></i>
                                                   </a>
                                               </th>
                                               <th scope="col">Operações</th>
@@ -233,20 +245,20 @@
                                               <td>
                                                   <ng-container *ngIf="i !== 0">
                                                       <a class="d-none d-sm-inline-block" (click)="upDepartment(i)">
-                                                          <i class="fa fa-arrow-up fa-sm mr-2"></i>
+                                                        <i class="fa fa-arrow-up fa-sm mr-2"></i>
                                                       </a>
                                                   </ng-container>
 
                                                   <ng-container *ngIf="i !== departamentos.length - 1">
                                                       <a class="d-none d-sm-inline-block" (click)="downDepartment(i)">
-                                                          <i class="fa fa-arrow-down fa-sm"></i>
+                                                        <i class="fa fa-arrow-down fa-sm"></i>
                                                       </a>
                                                   </ng-container>
                                               </td>
                                               <td class="d-flex">
 
                                                   <a class="d-none d-sm-inline-block" (click)="removerDepartamento(i, item)" >
-                                                      <i class="fa fa-trash fa-sm"></i>
+                                                    <i class="fa fa-trash fa-sm"></i>
                                                   </a>
                                                   <a class="d-none d-sm-inline-block ml-5" (click)="alterarDepartamento(i, item)" >
                                                     <i class="fa fa-edit fa-sm"></i>
@@ -264,7 +276,7 @@
 
               <!-- Page Heading -->
               <div class="d-sm-flex align-items-center justify-content-end mb-4">
-                  <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm text-white" (click)="saveDepartamento()"><i class="fa fa-plus fa-sm text-white"></i> Adicionar departamento</a>
+                <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm text-white" (click)="saveDepartamento()"><i class="fa fa-plus fa-sm text-white"></i> Adicionar departamento</a>
               </div>
 
           </div>
@@ -290,7 +302,7 @@
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center mt-4 mb-4" routerLink="" routerLinkActive="active">
           <div class="sidebar-brand-icon rotate-n-15">
-              <i class="fa fa-laugh-wink"></i>
+            <i class="fa fa-laugh-wink"></i>
           </div>
           <div class="sidebar-brand-text mx-3">
             <div class="navbar-brand text-align-center">
@@ -317,7 +329,7 @@
           <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
 
               <div class="bg-white py-2 collapse-inner rounded">
-                  <a class="collapse-item" (click)="salvarTarefa()">Adicionar tarefa</a>
+                <a class="collapse-item" (click)="salvarTarefa()">Adicionar tarefa</a>
               </div>
           </div>
       </li>
@@ -352,6 +364,7 @@
                                           <thead class="thead-light">
                                             <tr>
                                               <th scope="col">Id</th>
+                                              <th scope="col">Departamento</th>
                                               <th scope="col">Título</th>
                                               <th scope="col">Descrição</th>
                                               <th scope="col">Prazo</th>
@@ -369,6 +382,7 @@
                                           <tbody cdkDropList (cdkDropListDropped)="reOrdemList($event)">
                                             <tr *ngFor="let item of tarefas; let i = index" cdkDrag>
                                               <th scope="row">{{ i + 1 }}</th>
+                                              <td>{{ item.departamento }}</td>
                                               <td>{{ item.titulo }}</td>
                                               <td>{{ item.descricao }}</td>
                                               <td>{{ item.prazo }}</td>
@@ -417,5 +431,65 @@
   </div>
   <!-- End of Content Wrapper -->
 
+
+  <!-- Aqui você itera sobre as tarefas pendentes e exibe as informações -->
+
+  
+  <!-- Seção para alocar pessoa na tarefa -->
+  <section class="alocar-section">
+    <h2>Alocar Pessoa na Tarefa</h2>
+
+    <div class="form-container">
+      <mat-form-field class="select-field">
+        <mat-label>Selecione uma tarefa</mat-label>
+        <mat-select [(value)]="tarefaSelecionada" (selectionChange)="selecionarTarefa($event)">
+          <mat-option *ngFor="let tarefa of tarefas" [value]="tarefa">{{ tarefa.titulo }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="select-field">
+        <mat-label>Selecione uma pessoa</mat-label>
+        <mat-select [(value)]="pessoaSelecionada">
+          <mat-option *ngFor="let pessoa of pessoas" [value]="pessoa">{{ pessoa.nome }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <button mat-raised-button color="primary" class="alocar-button" (click)="alocarPessoaNaTarefa()">Alocar</button>
+
+    <!-- Tabela para exibir a pessoa e tarefa alocada -->
+    <section *ngIf="pessoaAlocada && tarefaAlocada">
+      <h2>Pessoa e Tarefa Alocadas</h2>
+      <div class="card-body">
+        <div class="chart-area">
+            <div class="table-responsive-sm">
+                <table class="table table-striped">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Nome da Pessoa</th>
+                            <th scope="col">Título da Tarefa</th>
+                            <th scope="col">Operações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let pessoa of pessoasAlocadas">
+                        <td>{{ pessoa.nome }}</td>
+                        <td>
+                            <div *ngFor="let tarefa of pessoa.tarefas">
+                                {{ tarefa.titulo }}
+                            </div>
+                        </td>
+                        <td>
+                            <!-- Botões de operações (editar, excluir, etc.) -->
+                        </td>
+                      </tr>
+                    </tbody>
+                </table>
+            </div>
+          </div>
+      </div>
+
+    </section>
+  </section>
 </div>
 <!-- End of Page Wrapper -->

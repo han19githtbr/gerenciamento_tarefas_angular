@@ -4,6 +4,24 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AlertModalService } from 'src/app/services/alert-modal.service';
 import { Tarefa } from 'src/app/model/Tarefa.model';
 import { TarefaService } from 'src/app/services/tarefa.service';
+import { ToastrService } from 'ngx-toastr';
+import { Departamento } from 'src/app/model/Departamento.model';
+import { DepartamentoService } from 'src/app/services/departamento.service';
+
+
+// Definindo a função getToastOptions fora da classe
+function getToastOptions() {
+  return {
+    timeOut: 3000,
+    closeButton: true,
+    progressBar: true,
+    positionClass: 'toast-bottom-right',
+    tapToDismiss: true,
+    toastClass: 'ngx-toastr',
+    titleClass: 'toast-title',
+    messageClass: 'toast-message'
+  };
+}
 
 @Component({
   selector: 'app-adicionar-tarefa',
@@ -16,6 +34,8 @@ export class AdicionarTarefaComponent implements OnInit {
 
   title: string = '';
 
+  formDepartment!: FormGroup;
+
   oldTitle: string = '';
 
   tarefaButton: string = '';
@@ -26,12 +46,17 @@ export class AdicionarTarefaComponent implements OnInit {
 
   tarefas: Tarefa[] = [];
 
+  departamentos: Departamento[] = [];
+
+
   constructor(
       private fb: FormBuilder,
       public dialogRef: MatDialogRef<AdicionarTarefaComponent>,
       private alertModalService: AlertModalService,
       @Inject(MAT_DIALOG_DATA) public data: any,
-      private tarefaService: TarefaService
+      private tarefaService: TarefaService,
+      public departamentoService: DepartamentoService,
+      private toastr: ToastrService,
   ) {
       this.title = data['title'];
       this.tarefa.id = data['id'];
@@ -49,15 +74,33 @@ export class AdicionarTarefaComponent implements OnInit {
         descricao: ['', Validators.required],
         prazo: ['', [Validators.required, this.dataValida]],
       });
+      this.formDepartment = this.fb.group({
+        id: ["", Validators.required]
+      });
       this.tarefaService.getAllTarefa().subscribe((data: any) => {
         this.tarefas = data.body;
         console.log(this.tarefas);
-      })
+      });
+      this.departamentoService.getAllDepartamento().subscribe((data: any) => {
+        this.departamentos = data.body;
+      });
   }
 
 
   fecharCadastrarDialog(): void{
     this.dialogRef.close();
+  }
+
+  onDepartment() {
+    this.tarefa.departamento.id = +this.formDepartment.controls['id'].value;
+  }
+
+  showSuccess(message: string) {
+    this.toastr.success(message, 'Sucesso', getToastOptions());
+  }
+
+  showError(message: string) {
+    this.toastr.error(message, 'Erro', getToastOptions());
   }
 
 
@@ -72,28 +115,32 @@ export class AdicionarTarefaComponent implements OnInit {
   }
 
 
-  /*submit(form: any) {
+  submit(form: any) {
     this.disableBox = true;
     const tituloControl = form.get('titulo');
     if(!tituloControl.value){
         this.disableBox = false;
-        this.alertModalService.mostrarMensagem("O campo tem que ser preenchido.", this.alertModalService.ERRO);
+        this.showError("O campo tem que ser preenchido.")
+        //this.alertModalService.mostrarMensagem("O campo tem que ser preenchido.", this.alertModalService.ERRO);
     } else {
         if(this.tarefaButton == "Create"){
 
             this.tarefaService.salvarTarefa(this.tarefa).subscribe(data => {
                 if(data.body.success){
                     this.tarefa.id = data.body.id;
+                    this.tarefa.departamento.id = data.body.departamento.id;
                     this.tarefa.titulo = data.body.titulo;
                     this.tarefa.descricao = data.body.descricao;
                     this.tarefa.prazo = data.body.prazo;
                     this.tarefa.ordem_apresentacao = data.body.ordem_apresentacao;
                     this.tarefa.mensagem = data.body.mensagem;
-                    this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.SUCESSO);
+                    this.showSuccess("A tarefa foi salva com sucesso.")
+                    //this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.SUCESSO);
                     this.dialogRef.close(this.tarefa);
                 } else{
                     this.disableBox = false;
-                    this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.ERRO);
+                    //this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.ERRO);
+                    this.showError("Erro ao salvar a tarefa")
                 }
             })
           } else {
@@ -101,49 +148,22 @@ export class AdicionarTarefaComponent implements OnInit {
                 this.tarefaService.alterarTarefa(nomeTarefa, this.tarefa).subscribe(data => {
                   if(data.body.success){
                       this.tarefa.id = data.body.id;
+                      this.tarefa.departamento.id = data.body.departamento.id;
                       this.tarefa.titulo = data.body.titulo;
                       this.tarefa.descricao = data.body.descricao;
                       this.tarefa.prazo = data.body.prazo;
                       this.tarefa.ordem_apresentacao = data.body.ordem_apresentacao;
                       this.tarefa.mensagem = data.body.mensagem;
-                      this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.SUCESSO);
+                      //this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.SUCESSO);
+                      this.showSuccess("A tarefa foi alterada com sucesso.")
                       this.dialogRef.close(this.tarefa);
                   } else {
                       this.disableBox = false;
-                      this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.ERRO);
+                      //this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.ERRO);
+                      this.showError("Erro ao alterar a tarefa")
                   }
                 })
-        }
-    }
-  }*/
-
-
-  submit(form: any) {
-    this.disableBox = true;
-    const tituloControl = form.get('titulo');
-    if (!tituloControl.value) {
-      this.disableBox = false;
-      this.alertModalService.mostrarMensagem("O campo tem que ser preenchido.", this.alertModalService.ERRO);
-    } else {
-      const saveObservable = this.tarefaButton === "Create" ? this.tarefaService.salvarTarefa(this.tarefa) : this.tarefaService.alterarTarefa(this.oldTitle, this.tarefa);
-
-      saveObservable.subscribe(
-        (data) => {
-          if (data.body.success) {
-            this.tarefa = data.body;
-            this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.SUCESSO);
-            this.dialogRef.close(this.tarefa);
-          } else {
-            this.disableBox = false;
-            this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.ERRO);
-          }
-        },
-        (error) => {
-          this.disableBox = false;
-          this.alertModalService.mostrarMensagem("Erro ao processar a requisição.", this.alertModalService.ERRO);
-        }
-      );
+      }
     }
   }
-
 }

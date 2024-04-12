@@ -1,0 +1,29 @@
+/* notification-bell.component.css */
+.notification-bell {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #fff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: green;
+  color: #ffff00;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,7 +1,33 @@
 .fa-trash {
-  color: rgb(202, 17, 17);
+  color: rgb(240, 27, 151);
+  width: 20px;
 }
 
 .fa-edit {
-  color: rgb(42, 160, 42);
+  color: rgb(10, 41, 242);
+}
+
+.alocar-section {
+  text-align: center; /* Centraliza o conteúdo */
+  margin: 0 20px;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Adiciona espaço entre os campos */
+}
+
+.select-field {
+  width: 100%;
+}
+
+.alocar-button {
+  margin-top: 20px; /* Adiciona espaço acima do botão */
+}
+
+.container_texto_boas_vindas h2 {
+  color: blue;
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: bold;
 }

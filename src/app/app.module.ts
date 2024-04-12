@@ -7,6 +7,8 @@ import { ComponentesModule } from './components/component.module';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
+
 
 @NgModule({
   declarations: [
@@ -20,10 +22,15 @@ import { MatDialogModule } from '@angular/material/dialog';
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule,
-    MatDialogModule
+    MatDialogModule,
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true, // Permite o uso de HTML nas notificações
+    })
 
   ],
-  providers: [],
+  providers: [ToastrService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
