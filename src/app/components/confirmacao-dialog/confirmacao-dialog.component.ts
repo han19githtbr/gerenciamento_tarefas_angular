@@ -1,7 +1,7 @@
-import { Component, OnInit, Inject} from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ActivatedRoute} from '@angular/router';
-import { FormBuilder, FormGroup} from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Pessoa } from 'src/app/model/Pessoa.model';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { AlertModalService } from 'src/app/services/alert-modal.service';
