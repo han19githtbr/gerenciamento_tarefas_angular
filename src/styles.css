@@ -9,6 +9,22 @@ html, body{
   height: 100%;
 }
 
+.mensagem_boas_vindas {
+  margin-top: -300px;
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 50%;
+  left: -200px; /* inicialmente fora da tela à esquerda */
+  transition: left 1s ease-in-out;
+  z-index: 9999;
+}
+.aceno_gif {
+  width: 70px; /* ajuste conforme necessário */
+  z-index: 9999;
+}
+
 .sizeAlert{
   max-width: 100%;
   width: 100%;

@@ -11,31 +11,29 @@
             <div class="modal-body">
                 <!-- Nome Pessoa input -->
                 <div class="form-outline formatar-mat-form">
-                    <label class="form-label" for="form2Example1">Nome</label>
-                    <!-- <mat-form-field> -->
-                    <input matInput formControlName="nome" [(ngModel)]="pessoa.nome" type="text" id="form2Example1" class="form-control" />
-                    <div *ngIf="form.get['nome']?.dirty || form.get['nome']?.touched">
-                      <mat-error class="erro" *ngIf="form.get('nome').hasError('required')">O campo nome é obrigatório.</mat-error>
-                    </div>
+                  <label class="form-label" for="form2Example1">Nome</label>
+                  <!-- <mat-form-field> -->
+                  <input matInput formControlName="nome" [(ngModel)]="pessoa.nome" type="text" id="form2Example1" class="form-control" />
+                  <div *ngIf="form.get['nome']?.dirty || form.get['nome']?.touched">
+                    <mat-error class="erro" *ngIf="form.get('nome').hasError('required')">O campo nome é obrigatório.</mat-error>
+                  </div>
                 </div>
                 <!-- Departamento input -->
                 <div class="form-outline formatar-mat-form">
-                    <label class="form-label" for="form2Example1">Departamento</label>
+                  <label class="form-label" for="form2Example1">Departamento</label>
 
-                    <form [formGroup]="formDepartment" id="contactForm" class="formDepartment">
-                      <select (change)="onDepartment()" class="departamento" formControlName="id">
-                        <option *ngFor="let item of departamentos" class="departamentoOption" [value]="item.id">{{ item.id }} - {{ item.titulo }}</option>
-                      </select>
-                    </form>
-
+                  <form [formGroup]="formDepartment" id="contactForm" class="formDepartment">
+                    <select (change)="onDepartment()" class="departamento" formControlName="id" [(ngModel)]="pessoa.id" id="form2Example1">
+                      <option *ngFor="let item of departamentos" class="departamentoOption" [value]="item.id">{{ item.id }} - {{ item.titulo }}</option>
+                    </select>
+                  </form>
                 </div>
-
             </div>
           </mat-dialog-content>
           <div class="modal-footer">
             <mat-dialog-actions class="justify-content-end">
-                <button type="button" class="btn btn-secondary mr-1" mat-dialog-close>Cancelar</button>
-                <button class="btn btn-primary" [disabled]="disableBox" type="submit">Salvar</button>
+              <button type="button" class="btn btn-secondary mr-1" mat-dialog-close>Cancelar</button>
+              <button class="btn btn-primary" [disabled]="disableBox" type="submit">Salvar</button>
             </mat-dialog-actions>
           </div>
       </form>

@@ -16,6 +16,25 @@ import { DepartamentoService } from 'src/app/services/departamento.service';
 import { TarefaService } from 'src/app/services/tarefa.service';
 import { ConfirmacaoDialogDepartmentComponent } from '../confirmacao-dialog-department/confirmacao-dialog-department.component';
 import { ConfirmacaoDialogTaskComponent } from '../confirmacao-dialog-task/confirmacao-dialog-task.component';
+import { AlocarPessoaTarefaComponent } from '../alocar-pessoa-tarefa/alocar-pessoa-tarefa.component';
+import { MatSelectChange } from '@angular/material/select';
+import { ToastrService } from 'ngx-toastr';
+import { DialogPessoaTarefaComponent } from '../dialog-pessoa-tarefa/dialog-pessoa-tarefa.component';
+
+// Definindo a função getToastOptions fora da classe
+function getToastOptions() {
+  return {
+    timeOut: 3000,
+    closeButton: true,
+    progressBar: true,
+    positionClass: 'toast-bottom-right',
+    tapToDismiss: true,
+    toastClass: 'ngx-toastr',
+    titleClass: 'toast-title',
+    messageClass: 'toast-message'
+  };
+}
+
 
 @Component({
   selector: 'app-dashboard',
@@ -28,20 +47,35 @@ export class DashboardComponent implements OnInit {
 
   pessoas: Array<Pessoa> = [];
 
+  pessoaSelecionada: Pessoa;
+
+  tarefaSelecionada: Tarefa;
+
   departamentos: Array<Departamento> = [];
 
   tarefas: Array<Tarefa> = [];
+
+  pessoasAlocadas: Pessoa[] = [];
+
+  tarefasAlocadas: Tarefa[] = [];
+
+  tarefasPendentes: Tarefa[] = [];
+
+  pessoaAlocada: Pessoa;
+  tarefaAlocada: Tarefa;
 
   constructor(
     private dialog: MatDialog,
     public dialogRef: MatDialogRef<AdicionarPessoaComponent>,
     public dialogRefDepartment: MatDialogRef<AdicionarDepartamentoComponent>,
     public dialogRefTask: MatDialogRef<AdicionarTarefaComponent>,
+    public dialogRefPessoaTarefa: MatDialogRef<DialogPessoaTarefaComponent>,
     private alertModalService: AlertModalService,
     public sanitizer: DomSanitizer,
     private pessoaService: PessoaService,
     private departamentoService: DepartamentoService,
     private tarefaService: TarefaService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -54,6 +88,35 @@ export class DashboardComponent implements OnInit {
     this.tarefaService.getAllTarefa().subscribe((data: HttpResponse<Tarefa[]>) => {
       this.tarefas = data.body;
     });
+    this.carregarTarefasPendentes();
+  }
+
+
+  carregarTarefasPendentes(): void {
+    this.tarefaService.listarTarefasPendentes().subscribe(
+      (tarefas: Tarefa[]) => {
+        this.tarefasPendentes = tarefas;
+      },
+      (error: any) => {
+        console.error('Erro ao carregar tarefas pendentes:', error);
+      }
+    );
+  }
+
+  selecionarTarefa(event: MatSelectChange) {
+    this.tarefaSelecionada = event.value;
+  }
+
+  selecionarPessoa(event: MatSelectChange) {
+    this.pessoaSelecionada = event.value;
+  }
+
+  showSuccess(message: string) {
+    this.toastr.success(message, 'Sucesso', getToastOptions());
+  }
+
+  showError(message: string) {
+    this.toastr.error(message, 'Erro', getToastOptions());
   }
 
   savePessoa(){
@@ -72,6 +135,7 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
+
 
   alterarPessoa(index: number, pessoa: Pessoa){
     const dialogRef = this.dialog.open(AdicionarPessoaComponent, {
@@ -109,6 +173,71 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
+
+
+  alocarPessoaNaTarefa() {
+    if (!this.tarefaSelecionada || !this.pessoaSelecionada) {
+      this.showError('Por favor, selecione uma tarefa e uma pessoa.');
+      return;
+    }
+
+    console.log('tarefaId:', this.tarefaSelecionada.id);
+    console.log('pessoaId:', this.pessoaSelecionada.id);
+
+    // Verificar se a pessoa pertence ao mesmo departamento da tarefa
+    if (this.tarefaSelecionada.departamento !== this.pessoaSelecionada.departamento) {
+      this.showError('A pessoa selecionada não pertence ao mesmo departamento da tarefa.');
+      return;
+    }
+
+    const dialogRefPessoaTarefa = this.dialog.open(DialogPessoaTarefaComponent, {
+      width: '30rem',
+      data: {
+        title: 'Alocar Pessoa na Tarefa',
+        tarefa: {
+          id: this.tarefaSelecionada.id,
+          titulo: this.tarefaSelecionada.titulo,
+          descricao: this.tarefaSelecionada.descricao,
+          prazo: this.tarefaSelecionada.prazo,
+          ordem_apresentacao: this.tarefaSelecionada.ordem_apresentacao,
+          pessoaId: this.pessoaSelecionada.id  // Incluindo a ID da pessoa na tarefa
+        },
+        message: 'Deseja alocar esta pessoa na tarefa?'
+      },
+    });
+
+    dialogRefPessoaTarefa.afterClosed().subscribe(result => {
+      if (result === 'Sim') {
+        this.tarefaService.alocarPessoaNaTarefa(this.tarefaSelecionada.id, this.pessoaSelecionada.id).subscribe(
+          (response: any) => {
+            if (response.success) {
+              // A alocação foi bem-sucedida, atualize as listas de pessoas alocadas e tarefas alocadas
+              this.pessoasAlocadas.push(this.pessoaSelecionada);
+              this.tarefasAlocadas.push(this.tarefaSelecionada);
+
+              // Limpe as seleções após a alocação bem-sucedida
+              this.tarefaSelecionada = null;
+              this.pessoaSelecionada = null;
+
+              // Exiba a mensagem de sucesso
+              this.showSuccess('A pessoa foi alocada com sucesso.');
+            } else {
+              // A alocação falhou, exiba uma mensagem de erro para o usuário
+              this.showError('Falha ao alocar a pessoa: ' + response.mensagem);
+            }
+          },
+          error => {
+            // Trate o erro aqui, exiba uma mensagem de erro ou faça outra ação apropriada
+            console.error('Erro ao alocar a pessoa:', error);
+          }
+        );
+      } else {
+        // Este trecho deve ser executado apenas se o usuário clicar em "Cancelar" na caixa de diálogo
+        this.showError('A alocação foi cancelada pelo usuário.');
+      }
+    });
+  }
+
 
   reOrdemList(event: CdkDragDrop<Pessoa[]>){
     moveItemInArray(this.pessoas, event.previousIndex, event.currentIndex);
@@ -205,6 +334,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+
   reOrdemListDepartment(event: CdkDragDrop<Departamento[]>){
     moveItemInArray(this.departamentos, event.previousIndex, event.currentIndex);
     this.departamentos.forEach((departamento, index) => {
@@ -217,6 +347,7 @@ export class DashboardComponent implements OnInit {
       });
     });
   }
+
 
   upDepartment(index: number){
     if (index > 0) {
@@ -232,6 +363,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+
   downDepartment(index: number){
     if (index < this.departamentos.length - 1) {
       [this.departamentos[index], this.departamentos[index + 1]] = [this.departamentos[index + 1], this.departamentos[index]];
@@ -245,6 +377,7 @@ export class DashboardComponent implements OnInit {
       });
    }
   }
+
 
   salvarTarefa(){
     this.dialogRefTask = this.dialog.open(AdicionarTarefaComponent, {
@@ -262,6 +395,7 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
+
 
   alterarTarefa(index: number, tarefa: Tarefa){
     const dialogRefTask = this.dialog.open(AdicionarTarefaComponent, {

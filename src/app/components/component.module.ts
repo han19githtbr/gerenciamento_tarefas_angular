@@ -51,6 +51,10 @@ import { FooterComponent } from './footer-component/footer-component.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ConfirmacaoDialogDepartmentComponent } from './confirmacao-dialog-department/confirmacao-dialog-department.component';
 import { ConfirmacaoDialogTaskComponent } from './confirmacao-dialog-task/confirmacao-dialog-task.component';
+import { AlocarPessoaTarefaComponent } from './alocar-pessoa-tarefa/alocar-pessoa-tarefa.component';
+import { DialogPessoaTarefaComponent } from './dialog-pessoa-tarefa/dialog-pessoa-tarefa.component';
+import { NotificationBellComponent } from './notification-bell/notification-bell.component';
+
 
 const dialogMock = {
   close: () => { }
@@ -64,8 +68,14 @@ const dialogMock = {
     ConfirmacaoDialogComponent,
     ConfirmacaoDialogDepartmentComponent,
     ConfirmacaoDialogTaskComponent,
+<<<<<<< HEAD
+=======
+    AlocarPessoaTarefaComponent,
+>>>>>>> becae804790385865d4176bd560fed0b243ca00d
     FooterComponent,
-    DashboardComponent
+    DialogPessoaTarefaComponent,
+    DashboardComponent,
+    NotificationBellComponent
   ],
   imports: [
     CommonModule, MatTreeModule, MatTooltipModule, MatToolbarModule, MatTabsModule, MatSortModule, MatSnackBarModule,
@@ -93,6 +103,12 @@ const dialogMock = {
     ConfirmacaoDialogDepartmentComponent,
     ConfirmacaoDialogTaskComponent,
     DashboardComponent,
+<<<<<<< HEAD
+=======
+    DialogPessoaTarefaComponent,
+    AlocarPessoaTarefaComponent,
+    NotificationBellComponent,
+>>>>>>> becae804790385865d4176bd560fed0b243ca00d
     FooterComponent
   ],
   providers: [
