@@ -36,14 +36,22 @@ export class DialogPessoaTarefaComponent implements OnInit {
     }
 
     salvar(value: string) {
-        if (value == 'Sim') {
-            this.tarefaService.alocarPessoaNaTarefa(this.pessoaId, this.data.tarefa.id).subscribe(data => {
-              this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.SUCESSO);
-              this.dialogRefPessoaTarefa.close(value);
-            })
-        } else {
-            this.dialogRefPessoaTarefa.close();
-        }
+      if (value == 'Sim') {
+          this.disableBox = true; // evita duplo clique
+          this.tarefaService.alocarPessoaNaTarefa(this.data.tarefa.id, this.pessoaId).subscribe({
+              next: (data) => {
+                  //this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.SUCESSO);
+                  this.dialogRefPessoaTarefa.close({ result: 'Sim', mensagem: data.body.mensagem });
+              },
+              error: (err) => {
+                  console.error('Erro ao alocar:', err);
+                  this.disableBox = false; // reabilita o botão
+                  this.dialogRefPessoaTarefa.close({ result: 'Erro', mensagem: 'Erro ao alocar pessoa.' });
+              }
+          });
+      } else {
+          this.dialogRefPessoaTarefa.close({ result: 'Não' });
+      }
     }
 }
 

@@ -68,9 +68,9 @@ export class DashboardComponent implements OnInit {
     private dialog: MatDialog,
     public dialogRef: MatDialogRef<AdicionarPessoaComponent>,
     public dialogRefDepartment: MatDialogRef<AdicionarDepartamentoComponent>,
-    public dialogRefTask: MatDialogRef<AdicionarTarefaComponent>,
+    //public dialogRefTask: MatDialogRef<AdicionarTarefaComponent>,
     public dialogRefPessoaTarefa: MatDialogRef<DialogPessoaTarefaComponent>,
-    private alertModalService: AlertModalService,
+    //private alertModalService: AlertModalService,
     public sanitizer: DomSanitizer,
     private pessoaService: PessoaService,
     private departamentoService: DepartamentoService,
@@ -89,6 +89,7 @@ export class DashboardComponent implements OnInit {
       this.tarefas = data.body;
     });
     this.carregarTarefasPendentes();
+    this.carregarTarefasAlocadas();
   }
 
 
@@ -119,18 +120,28 @@ export class DashboardComponent implements OnInit {
     this.toastr.error(message, 'Erro', getToastOptions());
   }
 
-  savePessoa(){
+  savePessoa() {
     this.dialogRef = this.dialog.open(AdicionarPessoaComponent, {
       width: "30rem",
       data: {
         title: 'Adicionar Pessoa',
         pessoaButton: 'Create',
       },
-    })
-    this.dialogRef.afterClosed().subscribe(data => {
-      if(data){
+    });
+
+    this.dialogRef.afterClosed().subscribe(pessoaSalva => {
+      console.log('Modal fechado com dados:', pessoaSalva); // Adicione este log para debug
+      if (pessoaSalva) {
+        if (this.pessoas) {
+          this.pessoas = [...this.pessoas, pessoaSalva];
+        } else {
+          this.pessoas = [pessoaSalva];
+        }
+
+        // Recarrega a lista completa para garantir consistência
         this.pessoaService.getAllPessoa().subscribe((data: HttpResponse<Pessoa[]>) => {
           this.pessoas = data.body;
+          this.showSuccess('Pessoa adicionada com sucesso!');
         });
       }
     });
@@ -149,9 +160,13 @@ export class DashboardComponent implements OnInit {
         }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.pessoas[index] = result;
+    dialogRef.afterClosed().subscribe(pessoaAlterada => {
+      if (pessoaAlterada) {
+        this.pessoas[index] = pessoaAlterada;
+
+        this.pessoas = [...this.pessoas];
+
+        this.showSuccess('Pessoa alterada com sucesso!');
       }
     });
   }
@@ -175,21 +190,89 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  alocarPessoaNaTarefa() {
+  verificarDadosAntesDeAlocar() {
+    console.log('=== VERIFICAÇÃO DE DADOS ===');
+    console.log('Tarefa selecionada:', this.tarefaSelecionada);
+    console.log('Pessoa selecionada:', this.pessoaSelecionada);
+
     if (!this.tarefaSelecionada || !this.pessoaSelecionada) {
-      this.showError('Por favor, selecione uma tarefa e uma pessoa.');
+        console.error('❌ Dados incompletos!');
+        return false;
+    }
+
+    console.log('Tarefa ID:', this.tarefaSelecionada.id);
+    console.log('Pessoa ID:', this.pessoaSelecionada.id);
+    console.log('Tarefa Departamento:', this.tarefaSelecionada.departamento);
+    console.log('Pessoa Departamento:', this.pessoaSelecionada.departamento);
+
+    return true;
+  }
+
+
+  alocarPessoaNaTarefa() {
+    console.log('🔍 === ALOCAR PESSOA NA TAREFA ===');
+
+    if (!this.verificarDadosAntesDeAlocar()) {
+        this.showError('Dados incompletos para alocação.');
+        return;
+    }
+
+    // Verificação básica
+    if (!this.tarefaSelecionada) {
+      this.showError('Selecione uma tarefa.');
       return;
     }
 
-    console.log('tarefaId:', this.tarefaSelecionada.id);
-    console.log('pessoaId:', this.pessoaSelecionada.id);
-
-    // Verificar se a pessoa pertence ao mesmo departamento da tarefa
-    if (this.tarefaSelecionada.departamento !== this.pessoaSelecionada.departamento) {
-      this.showError('A pessoa selecionada não pertence ao mesmo departamento da tarefa.');
+    if (!this.pessoaSelecionada) {
+      this.showError('Selecione uma pessoa.');
       return;
     }
 
+    // Logs detalhados
+    console.log('📊 DADOS PARA ALOCAÇÃO:');
+    console.log('   Tarefa ID:', this.tarefaSelecionada?.id);
+    console.log('   Tarefa Título:', this.tarefaSelecionada?.titulo);
+    console.log('   Pessoa ID:', this.pessoaSelecionada?.id);
+    console.log('   Pessoa Nome:', this.pessoaSelecionada?.nome);
+
+    // Verificar se IDs existem
+    if (!this.tarefaSelecionada.id) {
+      console.error('❌ ERRO: Tarefa sem ID!');
+      console.error('   Tarefa objeto:', this.tarefaSelecionada);
+      this.showError('A tarefa selecionada não tem um ID válido.');
+      return;
+    }
+
+    if (!this.pessoaSelecionada.id) {
+      console.error('❌ ERRO: Pessoa sem ID!');
+      console.error('   Pessoa objeto:', this.pessoaSelecionada);
+      this.showError('A pessoa selecionada não tem um ID válido.');
+      return;
+    }
+
+    // Verificar departamentos (forma simplificada)
+    const tarefaDeptId = this.getDepartamentoIdDaTarefa(this.tarefaSelecionada);
+    const pessoaDeptId = this.pessoaSelecionada.departamentoId;
+
+    console.log('🏢 DEPARTAMENTOS:');
+    console.log('   Tarefa Dept ID:', tarefaDeptId);
+    console.log('   Pessoa Dept ID:', pessoaDeptId);
+
+    if (!tarefaDeptId || !pessoaDeptId) {
+      console.error('❌ ERRO: Departamento não identificado');
+      this.showError('Não foi possível identificar o departamento.');
+      return;
+    }
+
+    if (tarefaDeptId !== pessoaDeptId) {
+      console.error('❌ ERRO: Departamentos diferentes');
+      this.showError('A pessoa não pertence ao mesmo departamento da tarefa.');
+      return;
+    }
+
+    console.log('✅ Validações passadas!');
+
+    // Abrir diálogo de confirmação
     const dialogRefPessoaTarefa = this.dialog.open(DialogPessoaTarefaComponent, {
       width: '30rem',
       data: {
@@ -200,40 +283,83 @@ export class DashboardComponent implements OnInit {
           descricao: this.tarefaSelecionada.descricao,
           prazo: this.tarefaSelecionada.prazo,
           ordem_apresentacao: this.tarefaSelecionada.ordem_apresentacao,
-          pessoaId: this.pessoaSelecionada.id  // Incluindo a ID da pessoa na tarefa
+          departamentoId: tarefaDeptId,
+          pessoaId: this.pessoaSelecionada.id
         },
-        message: 'Deseja alocar esta pessoa na tarefa?'
+        message: `Deseja alocar "${this.pessoaSelecionada.nome}" na tarefa "${this.tarefaSelecionada.titulo}"?`
       },
     });
 
     dialogRefPessoaTarefa.afterClosed().subscribe(result => {
-      if (result === 'Sim') {
-        this.tarefaService.alocarPessoaNaTarefa(this.tarefaSelecionada.id, this.pessoaSelecionada.id).subscribe(
-          (response: any) => {
-            if (response.success) {
-              // A alocação foi bem-sucedida, atualize as listas de pessoas alocadas e tarefas alocadas
-              this.pessoasAlocadas.push(this.pessoaSelecionada);
-              this.tarefasAlocadas.push(this.tarefaSelecionada);
+        if (result?.result === 'Sim') {
+            this.showSuccess(result.mensagem || 'Pessoa alocada com sucesso!');
+            this.recarregarTodasAsListas();
+            this.tarefaSelecionada = null;
+            this.pessoaSelecionada = null;
+        } else if (result?.result === 'Erro') {
+            this.showError(result.mensagem);
+        }
+    });
+  }
 
-              // Limpe as seleções após a alocação bem-sucedida
-              this.tarefaSelecionada = null;
-              this.pessoaSelecionada = null;
 
-              // Exiba a mensagem de sucesso
-              this.showSuccess('A pessoa foi alocada com sucesso.');
-            } else {
-              // A alocação falhou, exiba uma mensagem de erro para o usuário
-              this.showError('Falha ao alocar a pessoa: ' + response.mensagem);
-            }
-          },
-          error => {
-            // Trate o erro aqui, exiba uma mensagem de erro ou faça outra ação apropriada
-            console.error('Erro ao alocar a pessoa:', error);
-          }
-        );
-      } else {
-        // Este trecho deve ser executado apenas se o usuário clicar em "Cancelar" na caixa de diálogo
-        this.showError('A alocação foi cancelada pelo usuário.');
+  private getDepartamentoIdDaTarefa(tarefa: Tarefa): number | undefined {
+    // Tenta diferentes formas de obter o ID do departamento
+    if (!tarefa) return undefined;
+
+    // Caso 1: departamentoId direto
+    if (tarefa.departamentoId) {
+        return tarefa.departamentoId;
+    }
+
+    // Caso 2: departamento como objeto
+    if (tarefa.departamento && typeof tarefa.departamento === 'object') {
+        return (tarefa.departamento as any).id;
+    }
+
+    // Caso 3: departamento como número
+    if (typeof tarefa.departamento === 'number') {
+        return tarefa.departamento;
+    }
+
+    return undefined;
+  }
+
+
+  // Método separado para enviar ao backend
+  private enviarAlocacaoParaBackend() {
+    this.tarefaService.alocarPessoaNaTarefa(
+      this.tarefaSelecionada.id,
+      this.pessoaSelecionada.id
+    ).subscribe({
+      next: (httpResponse: any) => {
+        console.log('✅ Resposta do backend:', httpResponse);
+
+        const response = httpResponse.body;
+
+        if (response && response.success) {
+          this.showSuccess('Pessoa alocada com sucesso!');
+
+          // Recarregar dados
+          this.recarregarTodasAsListas();
+
+          // Limpar seleções
+          this.tarefaSelecionada = null;
+          this.pessoaSelecionada = null;
+        } else {
+          this.showError('Falha: ' + (response.mensagem || 'Erro desconhecido'));
+        }
+      },
+      error: (error) => {
+        console.error('❌ Erro na requisição:', error);
+
+        if (error.status === 404) {
+          this.showError('Pessoa ou tarefa não encontrada no sistema.');
+        } else if (error.status === 500) {
+          this.showError('Erro interno no servidor.');
+        } else {
+          this.showError('Erro: ' + (error.message || 'Erro desconhecido'));
+        }
       }
     });
   }
@@ -380,17 +506,26 @@ export class DashboardComponent implements OnInit {
 
 
   salvarTarefa(){
-    this.dialogRefTask = this.dialog.open(AdicionarTarefaComponent, {
+    // Use uma variável local, não reutilize a variável de instância
+    const dialogRefTask = this.dialog.open(AdicionarTarefaComponent, {
       width: "30rem",
       data: {
         title: 'Adicionar Tarefa',
         tarefaButton: 'Create',
       },
-    })
-    this.dialogRefTask.afterClosed().subscribe(data => {
-      if(data){
+    });
+
+    dialogRefTask.afterClosed().subscribe(result => {
+      console.log('Diálogo fechado com resultado:', result);
+
+      if(result && result.success){
+        // Atualize a lista de tarefas
         this.tarefaService.getAllTarefa().subscribe((data: HttpResponse<Tarefa[]>) => {
-          this.tarefas = data.body;
+          this.tarefas = data.body || [];
+          console.log('Tarefas atualizadas após adicionar:', this.tarefas);
+          if(this.tarefas && this.tarefas.length > 0){
+            this.showSuccess('Tarefa adicionada com sucesso!');
+          }
         });
       }
     });
@@ -417,6 +552,26 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+
+  debugTarefas() {
+    console.log('=== DEBUG TAREFAS ===');
+    console.log('Número de tarefas:', this.tarefas.length);
+    console.log('Tarefas:', this.tarefas);
+    console.log('Departamentos:', this.departamentos);
+
+    // Verificar se há problemas com o departamento
+    this.tarefas.forEach((tarefa, index) => {
+      console.log(`Tarefa ${index + 1}:`, {
+        id: tarefa.id,
+        titulo: tarefa.titulo,
+        departamento: tarefa.departamento,
+        departamentoId: tarefa.departamento?.id,
+        departamentoTitulo: tarefa.departamento?.titulo
+      });
+    });
+  }
+
+
   removerTarefa(index: number, tarefa: Tarefa){
     const dialogRefTask = this.dialog.open(ConfirmacaoDialogTaskComponent, {
       width: '30rem',
@@ -435,6 +590,81 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
+
+
+  // Adicionar este método
+  carregarTarefasAlocadas(): void {
+    this.tarefaService.getAllTarefa().subscribe((data: HttpResponse<Tarefa[]>) => {
+      const todas = data.body || [];
+      // Filtra apenas tarefas que possuem pessoa alocada
+      this.tarefasAlocadas = todas.filter(t => t.pessoaId != null || t.pessoa != null);
+    });
+  }
+
+
+  recarregarTodasAsListas() {
+    console.log('=== RECARREGANDO TODAS AS LISTAS ===');
+
+    // Recarrega tarefas
+    this.tarefaService.getAllTarefa().subscribe((data: HttpResponse<Tarefa[]>) => {
+      this.tarefas = data.body || [];
+      console.log('Tarefas recarregadas:', this.tarefas.length, 'itens');
+      console.log('Tarefas:', this.tarefas);
+    });
+
+    // Recarrega pessoas
+    this.pessoaService.getAllPessoa().subscribe((data: HttpResponse<Pessoa[]>) => {
+      this.pessoas = data.body || [];
+    });
+
+    // Recarrega departamentos
+    this.departamentoService.getAllDepartamento().subscribe((data: HttpResponse<Departamento[]>) => {
+      this.departamentos = data.body || [];
+    });
+
+    // Recarrega tarefas pendentes
+    this.carregarTarefasPendentes();
+    this.carregarTarefasAlocadas();
+  }
+
+
+  // No dashboard.component.ts
+  reOrdemListPessoas(event: CdkDragDrop<Pessoa[]>){
+    moveItemInArray(this.pessoas, event.previousIndex, event.currentIndex);
+    this.pessoas.forEach((pessoa, index) => {
+      pessoa.ordem_apresentacao = index + 1;
+    });
+    this.pessoaService.salvarPessoaOrder(this.pessoas).subscribe(response => {
+      this.pessoaService.getAllPessoa().subscribe((data: HttpResponse<Pessoa[]>) => {
+        this.pessoas = data.body;
+      });
+    });
+  }
+
+  reOrdemListDepartamentos(event: CdkDragDrop<Departamento[]>){
+    moveItemInArray(this.departamentos, event.previousIndex, event.currentIndex);
+    this.departamentos.forEach((departamento, index) => {
+      departamento.ordem_apresentacao = index + 1;
+    });
+    this.departamentoService.salvarDepartamentoOrder(this.departamentos).subscribe(response => {
+      this.departamentoService.getAllDepartamento().subscribe((data: HttpResponse<Departamento[]>) => {
+        this.departamentos = data.body;
+      });
+    });
+  }
+
+  reOrdemListTarefas(event: CdkDragDrop<Tarefa[]>){
+    moveItemInArray(this.tarefas, event.previousIndex, event.currentIndex);
+    this.tarefas.forEach((tarefa, index) => {
+      tarefa.ordem_apresentacao = index + 1;
+    });
+    this.tarefaService.salvarTarefaOrder(this.tarefas).subscribe(response => {
+      this.tarefaService.getAllTarefa().subscribe((data: HttpResponse<Tarefa[]>) => {
+        this.tarefas = data.body;
+      });
+    });
+  }
+
 
   reOrdemListTask(event: CdkDragDrop<Tarefa[]>){
     moveItemInArray(this.tarefas, event.previousIndex, event.currentIndex);

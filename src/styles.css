@@ -1,56 +1,181 @@
-*{
+/* ═══════════════════════════════════════════════════════════════
+   TASKFLOW — STYLES.CSS GLOBAL
+   Combina os estilos originais do projeto com o tema escuro
+═══════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+/* ── RESET ORIGINAL (mantido) ─────────────────────────────────── */
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Times New Roman', sans-serif;
+  font-family: 'DM Sans', sans-serif; /* atualizado de Times New Roman */
 }
 
-html, body{
+/* ── TOKENS DE DESIGN (CSS Variables) ────────────────────────── */
+:root {
+  --bg-base:        #0d0f14;
+  --bg-surface:     #13161e;
+  --bg-elevated:    #1a1e2a;
+  --bg-hover:       #1f2436;
+
+  --border:         rgba(255,255,255,0.07);
+  --border-focus:   rgba(255,255,255,0.18);
+
+  --text-primary:   #f0f2f8;
+  --text-secondary: #8890a8;
+  --text-muted:     #4e5672;
+
+  --blue:           #4f9cf9;
+  --blue-glow:      rgba(79,156,249,0.25);
+  --teal:           #2dd4bf;
+  --teal-glow:      rgba(45,212,191,0.25);
+  --violet:         #a78bfa;
+  --violet-glow:    rgba(167,139,250,0.25);
+  --amber:          #fbbf24;
+  --amber-glow:     rgba(251,191,36,0.25);
+  --danger:         #f87171;
+  --danger-glow:    rgba(248,113,113,0.2);
+  --success:        #34d399;
+
+  --radius-sm:  6px;
+  --radius-md:  12px;
+  --radius-lg:  16px;
+  --radius-xl:  24px;
+
+  --shadow-sm:  0 2px 8px rgba(0,0,0,0.4);
+  --shadow-md:  0 4px 20px rgba(0,0,0,0.5);
+  --shadow-lg:  0 8px 40px rgba(0,0,0,0.6);
+}
+
+/* ── FUNDO ESCURO — sobrescreve Bootstrap/SBAdmin ─────────────── */
+html, body {
   height: 100%;
+  background-color: #0d0f14 !important;
+  background:       #0d0f14 !important;
+  color:            #4c4c4d !important;
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 
-.mensagem_boas_vindas {
-  margin-top: -300px;
-  margin-left: 10px;
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  top: 50%;
-  left: -200px; /* inicialmente fora da tela à esquerda */
-  transition: left 1s ease-in-out;
-  z-index: 9999;
-}
-.aceno_gif {
-  width: 70px; /* ajuste conforme necessário */
-  z-index: 9999;
+/* ── NEUTRALIZA SIDEBAR DO SBAdmin2 ───────────────────────────── */
+.sidebar,
+#accordionSidebar,
+.navbar-nav.sidebar {
+  display: none !important;
 }
 
-.sizeAlert{
-  max-width: 100%;
-  width: 100%;
+/* ── NEUTRALIZA WRAPPERS DO SBAdmin2 ──────────────────────────── */
+#wrapper {
+  display: contents !important;
+  background: transparent !important;
 }
 
-.mat-dialog-container{
+#content-wrapper,
+.content-wrapper,
+.tarefas-content-wrapper {
+  background: transparent !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.container-fluid {
   padding: 0 !important;
 }
 
+/* ── NEUTRALIZA CARDS DO BOOTSTRAP ───────────────────────────── */
+.card {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* ── DIALOGS (mantidos e melhorados) ──────────────────────────── */
 .mat-dialog-container {
+  padding: 0 !important;
   overflow: hidden !important;
+  background: #1a1e2a !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(255,255,255,0.07) !important;
+  color: #29292a !important;
 }
 
 .modal-header {
   padding: 1.2rem 1rem 0 1rem !important;
+  border-bottom: 1px solid rgba(255,255,255,0.07) !important;
+  color: #444445 !important;
 }
 
 .modal-footer {
   padding: 0 1rem 1.2rem 1rem !important;
+  border-top: 1px solid rgba(255,255,255,0.07) !important;
 }
 
-
+/* ── ANGULAR MATERIAL INPUTS ──────────────────────────────────── */
 .mat-input-element {
   max-width: 100% !important;
+  color: #3d3d3d !important;
 }
 
+.mat-form-field-flex,
+.mat-mdc-text-field-wrapper {
+  background-color: #1a1e2a !important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: rgba(255,255,255,0.07) !important;
+}
+
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  color: #fbbf24 !important;
+}
+
+.mat-form-field-label,
+.mat-mdc-floating-label {
+  color: #4e5672 !important;
+}
+
+.mat-select-value,
+.mat-mdc-select-value {
+  color: #f0f2f8 !important;
+}
+
+.mat-select-arrow,
+.mat-mdc-select-arrow {
+  color: #4e5672 !important;
+}
+
+/* ── ANGULAR MATERIAL SELECT PANEL ───────────────────────────── */
+.cdk-overlay-container {
+  z-index: 9999;
+}
+
+.mat-select-panel,
+.mat-mdc-select-panel {
+  background: #1a1e2a !important;
+  border: 1px solid rgba(255,255,255,0.07) !important;
+  border-radius: 12px !important;
+}
+
+.mat-option,
+.mat-mdc-option {
+  color: #f0f2f8 !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 13px !important;
+}
+
+.mat-option:hover:not(.mat-option-disabled),
+.mat-option.mat-active,
+.mat-mdc-option:hover,
+.mat-mdc-option.mat-mdc-option-active {
+  background: #1f2436 !important;
+  color: #fbbf24 !important;
+}
+
+/* ── SNACKBAR (mantido e melhorado) ───────────────────────────── */
 .mat-snack-bar-container {
   background: none !important;
   box-shadow: none !important;
@@ -60,4 +185,53 @@ html, body{
   transform: translateX(-35%);
   z-index: 9999;
   width: 100%;
+}
+
+/* ── CDK DRAG & DROP ──────────────────────────────────────────── */
+.cdk-drag-placeholder {
+  opacity: 0.3;
+  background: #1f2436 !important;
+  border: 2px dashed rgba(255,255,255,0.18) !important;
+  border-radius: 6px;
+}
+
+.cdk-drag-preview {
+  background: #1a1e2a !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6) !important;
+  opacity: 0.95;
+}
+
+/* ── NGX-TOASTR TEMA ESCURO ───────────────────────────────────── */
+.toast-container .ngx-toastr {
+  background-color: #1a1e2a !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+  color: #f0f2f8 !important;
+  border-radius: 12px !important;
+  font-family: 'DM Sans', sans-serif !important;
+}
+
+.toast-success { border-left: 3px solid #34d399 !important; }
+.toast-error   { border-left: 3px solid #f87171 !important; }
+.toast-warning { border-left: 3px solid #fbbf24 !important; }
+
+/* ── SCROLLBAR PERSONALIZADA ──────────────────────────────────── */
+::-webkit-scrollbar         { width: 6px; height: 6px; }
+::-webkit-scrollbar-track   { background: #0d0f14; }
+::-webkit-scrollbar-thumb   { background: #1f2436; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #2e3450; }
+
+
+/* ── ALERT SIZE (mantido) ─────────────────────────────────────── */
+.sizeAlert {
+  max-width: 100%;
+  width: 100%;
+}
+
+/* ── ANIMAÇÃO GLOBAL ──────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
 }

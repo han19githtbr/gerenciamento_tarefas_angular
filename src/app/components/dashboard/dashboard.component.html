@@ -1,494 +1,423 @@
-<div id="wrapper">
-  <!--<app-notification-bell>
-    <i class="fas fa-bell"></i>
-  </app-notification-bell>-->
-  <!-- Sidebar -->
-  <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-      <div id="mensagem_boas_vindas" class="mensagem_boas_vindas">
-        <div class="container_aceno_gif">
-          <img
-            id="aceno_gif"
-            class="aceno_gif"
-            src= "../../../assets/img/aceno.gif"
-            alt="minha foto"
-          >
-        </div>
-        <div class="container_texto_boas_vindas">
-          <h2 id="welcome_message"></h2>
-        </div>
+<!-- ╔══════════════════════════════════════════════════════════╗ -->
+<!-- ║  DASHBOARD — SISTEMA DE GERENCIAMENTO DE TAREFAS        ║ -->
+<!-- ╚══════════════════════════════════════════════════════════╝ -->
+
+<div class="app-shell">
+
+  <!-- ═══════════════════════════════════════════════════════════
+       TOP NAVIGATION BAR
+  ═══════════════════════════════════════════════════════════ -->
+  <header class="topbar">
+    <div class="topbar__brand">
+      <div class="topbar__icon">
+        <i class="fa fa-tasks"></i>
       </div>
-      <!-- Sidebar - Brand -->
-      <div class="navbar-brand d-flex align-items-center justify-content-center mt-4">
-        <i class="fa fa-tasks fa-sm fa-fw mr-2 mb-3 text-gray-400"></i>
-        <h2>SISTEMA DE GERENCIAMENTO DE TAREFAS</h2>
-        <!--<i class="fa fa-tasks fa-sm fa-fw mr-2 mb-3 text-gray-400"></i>-->
-
+      <div class="topbar__title">
+        <span class="topbar__title-main">TaskFlow</span>
+        <span class="topbar__title-sub">Sistema de Gerenciamento</span>
       </div>
-      <a class="sidebar-brand d-flex align-items-center justify-content-center mt-4 mb-4" routerLink="" routerLinkActive="active">
-          <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fa fa-laugh-wink"></i>
-          </div>
-          <div class="sidebar-brand-text mx-3">
-
-            <div class="navbar-brand text-align-center">
-              <i class="fa fa-users mb-3 text-gray-400" aria-hidden="true"></i>
-            </div>
-            <a class="navbar-brand text-align-center">
-              <h2>GERENCIAMENTO DE PESSOAS</h2>
-            </a>
-          </div>
-      </a>
-
-      <!-- Divider -->
-      <hr class="sidebar-divider">
-
-      <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
-
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-          (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseTwo">
-            <i class="fa fa-users fa-sm fa-fw ml-3 mr-2 text-gray-400"></i>
-            <span>Listar Pessoas</span>
-          </a>
-          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" (click)="savePessoa()">Adicionar pessoa</a>
-            </div>
-          </div>
-      </li>
-  </ul>
-  <!-- End of Sidebar -->
-
-  <!-- Content Wrapper -->
-  <div id="content-wrapper" class="d-flex flex-column">
-
-      <!-- Main Content -->
-      <div id="content">
-
-          <!-- Begin Page Content -->
-          <div class="container-fluid">
-
-              <!-- Content Row -->
-
-              <div class="row">
-                  <!-- Area Chart -->
-                  <div class="col-xl-12 col-lg-12">
-                      <div class="card shadow mb-4">
-                          <!-- Card Header - Dropdown -->
-                          <div
-                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold text-primary">Listar Pessoas</h6>
-                          </div>
-                          <!-- Card Body -->
-                          <div class="card-body">
-                              <div class="chart-area">
-                                  <div class="table-responsive-sm">
-                                      <table class="table table-striped">
-                                          <thead class="thead-light">
-                                            <tr>
-                                              <th scope="col">Id</th>
-                                              <th scope="col">Nome</th>
-                                              <th scope="col">Departamento</th>
-                                              <th scope="col">
-                                                  <a class="d-none d-sm-inline-block">
-                                                    <i class="fa fa-arrow-up fa-sm mr-2"></i>
-                                                  </a>
-                                                  <a class="d-none d-sm-inline-block">
-                                                    <i class="fa fa-arrow-down fa-sm"></i>
-                                                  </a>
-                                              </th>
-                                              <th scope="col">Operações</th>
-                                            </tr>
-                                          </thead>
-                                          <tbody cdkDropList (cdkDropListDropped)="reOrdemList($event)">
-                                            <tr *ngFor="let item of pessoas; let i = index" cdkDrag>
-                                              <th scope="row">{{ i + 1 }}</th>
-                                              <td>{{ item.nome }}</td>
-                                              <td>{{ item.departamento }}</td>
-                                              <td>
-                                                  <ng-container *ngIf="i !== 0">
-                                                    <a class="d-none d-sm-inline-block" (click)="upPeople(i)">
-                                                      <i class="fa fa-arrow-up fa-sm mr-2"></i>
-                                                    </a>
-                                                  </ng-container>
-
-                                                  <ng-container *ngIf="i !== pessoas.length - 1">
-                                                    <a class="d-none d-sm-inline-block" (click)="downPeople(i)">
-                                                      <i class="fa fa-arrow-down fa-sm"></i>
-                                                    </a>
-                                                  </ng-container>
-                                              </td>
-                                              <td class="d-flex">
-                                                  <a class="d-none d-sm-inline-block" (click)="removerPessoa(i, item)">
-                                                    <i class="fa fa-trash fa-sm"></i>
-                                                  </a>
-                                                  <a class="d-none d-sm-inline-block ml-5" (click)="alterarPessoa(i, item)">
-                                                    <i class="fa fa-edit fa-sm"></i>
-                                                  </a>
-                                              </td>
-                                            </tr>
-                                          </tbody>
-                                        </table>
-                                    </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-
-              <!-- Page Heading -->
-              <div class="d-sm-flex align-items-center justify-content-end mb-4">
-                <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm text-white" (click)="savePessoa()"><i class="fa fa-plus fa-sm text-white"></i> Adicionar pessoa</a>
-              </div>
-
-          </div>
-          <!-- /.container-fluid -->
-
-      </div>
-      <!-- End of Main Content -->
-
-  </div>
-  <!-- End of Content Wrapper -->
-
-</div>
-<!-- End of Page Wrapper -->
-
-
-
-
-<div id="wrapper">
-
-  <!-- Sidebar -->
-  <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-      <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center mt-4 mb-4" routerLink="" routerLinkActive="active">
-          <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fa fa-laugh-wink"></i>
-          </div>
-          <div class="sidebar-brand-text mx-3">
-            <div class="navbar-brand text-align-center">
-              <i class="fa fa-building-o mb-3 text-gray-400" aria-hidden="true"></i>
-            </div>
-            <a class="navbar-brand" >
-              <h2>GERENCIAMENTO DE DEPARTAMENTOS</h2>
-            </a>
-          </div>
-      </a>
-
-      <!-- Divider -->
-      <hr class="sidebar-divider">
-
-      <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
-
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-          (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseTwo">
-            <!--<i class="fa fa-fw fa-cog"></i>-->
-            <i class="fa fa-building-o fa-sm fa-fw ml-3 mr-2 text-gray-400"></i>
-            <span>Listar Departamentos</span>
-          </a>
-          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-
-              <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" (click)="saveDepartamento()">Adicionar departamento</a>
-              </div>
-          </div>
-      </li>
-  </ul>
-  <!-- End of Sidebar -->
-
-  <!-- Content Wrapper -->
-  <div id="content-wrapper" class="d-flex flex-column">
-
-      <!-- Main Content -->
-      <div id="content">
-
-          <!-- Begin Page Content -->
-          <div class="container-fluid">
-
-              <!-- Content Row -->
-
-              <div class="row">
-                  <!-- Area Chart -->
-                  <div class="col-xl-12 col-lg-12">
-                      <div class="card shadow mb-4">
-                          <!-- Card Header - Dropdown -->
-                          <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold text-primary">Listar Departamentos</h6>
-                          </div>
-                          <!-- Card Body -->
-                          <div class="card-body">
-                              <div class="chart-area">
-                                  <div class="table-responsive-sm">
-                                      <table class="table table-striped">
-                                          <thead class="thead-light">
-                                            <tr>
-                                              <th scope="col">Id</th>
-                                              <th scope="col">Titulo</th>
-                                              <th scope="col">
-                                                  <a class="d-none d-sm-inline-block">
-                                                    <i class="fa fa-arrow-up fa-sm mr-2"></i>
-                                                  </a>
-                                                  <a class="d-none d-sm-inline-block">
-                                                    <i class="fa fa-arrow-down fa-sm"></i>
-                                                  </a>
-                                              </th>
-                                              <th scope="col">Operações</th>
-                                            </tr>
-                                          </thead>
-                                          <tbody cdkDropList (cdkDropListDropped)="reOrdemList($event)">
-                                            <tr *ngFor="let item of departamentos; let i = index" cdkDrag>
-                                              <th scope="row">{{ i + 1 }}</th>
-                                              <td>{{ item.titulo }}</td>
-
-                                              <td>
-                                                  <ng-container *ngIf="i !== 0">
-                                                      <a class="d-none d-sm-inline-block" (click)="upDepartment(i)">
-                                                        <i class="fa fa-arrow-up fa-sm mr-2"></i>
-                                                      </a>
-                                                  </ng-container>
-
-                                                  <ng-container *ngIf="i !== departamentos.length - 1">
-                                                      <a class="d-none d-sm-inline-block" (click)="downDepartment(i)">
-                                                        <i class="fa fa-arrow-down fa-sm"></i>
-                                                      </a>
-                                                  </ng-container>
-                                              </td>
-                                              <td class="d-flex">
-                                                  <a class="d-none d-sm-inline-block" (click)="removerDepartamento(i, item)" >
-                                                    <i class="fa fa-trash fa-sm"></i>
-                                                  </a>
-                                                  <a class="d-none d-sm-inline-block ml-5" (click)="alterarDepartamento(i, item)" >
-                                                    <i class="fa fa-edit fa-sm"></i>
-                                                  </a>
-                                              </td>
-                                            </tr>
-                                          </tbody>
-                                        </table>
-                                    </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-
-              <!-- Page Heading -->
-              <div class="d-sm-flex align-items-center justify-content-end mb-4">
-                <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm text-white" (click)="saveDepartamento()"><i class="fa fa-plus fa-sm text-white"></i> Adicionar departamento</a>
-              </div>
-
-          </div>
-          <!-- /.container-fluid -->
-
-      </div>
-      <!-- End of Main Content -->
-
-  </div>
-  <!-- End of Content Wrapper -->
-
-</div>
-<!-- End of Page Wrapper -->
-
-
-
-
-<div id="wrapper">
-
-  <!-- Sidebar -->
-  <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-      <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center mt-4 mb-4" routerLink="" routerLinkActive="active">
-          <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fa fa-laugh-wink"></i>
-          </div>
-          <div class="sidebar-brand-text mx-3">
-            <div class="navbar-brand text-align-center">
-              <i class="fa fa-tasks mb-3 text-gray-400" aria-hidden="true"></i>
-            </div>
-            <a class="navbar-brand" >
-              <h2>GERENCIAMENTO DE TAREFAS</h2>
-            </a>
-          </div>
-      </a>
-
-      <!-- Divider -->
-      <hr class="sidebar-divider">
-
-      <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
-
-          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-          (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseTwo">
-              <!--<i class="fa fa-fw fa-cog"></i>-->
-              <i class="fa fa-tasks fa-sm fa-fw ml-3 mr-2 text-gray-400"></i>
-              <span>Listar Tarefas</span>
-          </a>
-          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-
-              <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" (click)="salvarTarefa()">Adicionar tarefa</a>
-              </div>
-          </div>
-      </li>
-  </ul>
-  <!-- End of Sidebar -->
-
-  <!-- Content Wrapper -->
-  <div id="content-wrapper" class="d-flex flex-column">
-
-      <!-- Main Content -->
-      <div id="content">
-
-          <!-- Begin Page Content -->
-          <div class="container-fluid">
-
-              <!-- Content Row -->
-
-              <div class="row">
-                  <!-- Area Chart -->
-                  <div class="col-xl-12 col-lg-12">
-                      <div class="card shadow mb-4">
-                          <!-- Card Header - Dropdown -->
-                          <div
-                              class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                              <h6 class="m-0 font-weight-bold text-primary">Listar Tarefas</h6>
-                          </div>
-                          <!-- Card Body -->
-                          <div class="card-body">
-                              <div class="chart-area">
-                                  <div class="table-responsive-sm">
-                                      <table class="table table-striped">
-                                          <thead class="thead-light">
-                                            <tr>
-                                              <th scope="col">Id</th>
-                                              <th scope="col">Departamento</th>
-                                              <th scope="col">Título</th>
-                                              <th scope="col">Descrição</th>
-                                              <th scope="col">Prazo</th>
-                                              <th scope="col">
-                                                <a class="d-none d-sm-inline-block">
-                                                  <i class="fa fa-arrow-up fa-sm mr-2"></i>
-                                                </a>
-                                                <a class="d-none d-sm-inline-block">
-                                                  <i class="fa fa-arrow-down fa-sm"></i>
-                                                </a>
-                                              </th>
-                                              <th scope="col">Operações</th>
-                                            </tr>
-                                          </thead>
-                                          <tbody cdkDropList (cdkDropListDropped)="reOrdemList($event)">
-                                            <tr *ngFor="let item of tarefas; let i = index" cdkDrag>
-                                              <th scope="row">{{ i + 1 }}</th>
-                                              <td>{{ item.departamento }}</td>
-                                              <td>{{ item.titulo }}</td>
-                                              <td>{{ item.descricao }}</td>
-                                              <td>{{ item.prazo }}</td>
-                                              <td>
-                                                  <ng-container *ngIf="i !== 0">
-                                                    <a class="d-none d-sm-inline-block" (click)="upTask(i)">
-                                                      <i class="fa fa-arrow-up fa-sm mr-2"></i>
-                                                    </a>
-                                                  </ng-container>
-
-                                                  <ng-container *ngIf="i !== tarefas.length - 1">
-                                                    <a class="d-none d-sm-inline-block" (click)="downTask(i)">
-                                                      <i class="fa fa-arrow-down fa-sm"></i>
-                                                    </a>
-                                                  </ng-container>
-                                              </td>
-                                              <td class="d-flex">
-                                                  <a class="d-none d-sm-inline-block" (click)="removerTarefa(i, item)">
-                                                    <i class="fa fa-trash fa-sm"></i>
-                                                  </a>
-                                                  <a class="d-none d-sm-inline-block ml-5" (click)="alterarTarefa(i, item)">
-                                                    <i class="fa fa-edit fa-sm"></i>
-                                                  </a>
-                                              </td>
-                                            </tr>
-                                          </tbody>
-                                        </table>
-                                    </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-
-              <!-- Page Heading -->
-              <div class="d-sm-flex align-items-center justify-content-end mb-4">
-                <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm text-white" (click)="salvarTarefa()"><i class="fa fa-plus fa-sm text-white"></i> Adicionar tarefa</a>
-              </div>
-
-          </div>
-          <!-- /.container-fluid -->
-
-      </div>
-      <!-- End of Main Content -->
-
-  </div>
-  <!-- End of Content Wrapper -->
-
-
-  <!-- Aqui você itera sobre as tarefas pendentes e exibe as informações -->
-
-  
-  <!-- Seção para alocar pessoa na tarefa -->
-  <section class="alocar-section">
-    <h2>Alocar Pessoa na Tarefa</h2>
-
-    <div class="form-container">
-      <mat-form-field class="select-field">
-        <mat-label>Selecione uma tarefa</mat-label>
-        <mat-select [(value)]="tarefaSelecionada" (selectionChange)="selecionarTarefa($event)">
-          <mat-option *ngFor="let tarefa of tarefas" [value]="tarefa">{{ tarefa.titulo }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field class="select-field">
-        <mat-label>Selecione uma pessoa</mat-label>
-        <mat-select [(value)]="pessoaSelecionada">
-          <mat-option *ngFor="let pessoa of pessoas" [value]="pessoa">{{ pessoa.nome }}</mat-option>
-        </mat-select>
-      </mat-form-field>
     </div>
 
-    <button mat-raised-button color="primary" class="alocar-button" (click)="alocarPessoaNaTarefa()">Alocar</button>
+    <nav class="topbar__nav">
+      <a class="topbar__nav-item topbar__nav-item--active" href="#">
+        <i class="fa fa-th-large"></i>
+        <span>Dashboard</span>
+      </a>
+      <a class="topbar__nav-item" (click)="savePessoa()" href="javascript:void(0)">
+        <i class="fa fa-users"></i>
+        <span>Pessoas</span>
+      </a>
+      <a class="topbar__nav-item" (click)="saveDepartamento()" href="javascript:void(0)">
+        <i class="fa fa-building"></i>
+        <span>Departamentos</span>
+      </a>
+      <a class="topbar__nav-item" (click)="salvarTarefa()" href="javascript:void(0)">
+        <i class="fa fa-check-square-o"></i>
+        <span>Tarefas</span>
+      </a>
+    </nav>
 
-    <!-- Tabela para exibir a pessoa e tarefa alocada -->
-    <section *ngIf="pessoaAlocada && tarefaAlocada">
-      <h2>Pessoa e Tarefa Alocadas</h2>
-      <div class="card-body">
-        <div class="chart-area">
-            <div class="table-responsive-sm">
-                <table class="table table-striped">
-                    <thead class="thead-light">
-                        <tr>
-                            <th scope="col">Nome da Pessoa</th>
-                            <th scope="col">Título da Tarefa</th>
-                            <th scope="col">Operações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let pessoa of pessoasAlocadas">
-                        <td>{{ pessoa.nome }}</td>
-                        <td>
-                            <div *ngFor="let tarefa of pessoa.tarefas">
-                                {{ tarefa.titulo }}
-                            </div>
-                        </td>
-                        <td>
-                            <!-- Botões de operações (editar, excluir, etc.) -->
-                        </td>
-                      </tr>
-                    </tbody>
-                </table>
-            </div>
-          </div>
+    <div class="topbar__actions">
+      <button class="btn-icon" (click)="recarregarTodasAsListas()" title="Recarregar dados">
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MAIN CONTENT
+  ═══════════════════════════════════════════════════════════ -->
+  <main class="main-content">
+
+    <!-- ── STAT CARDS ROW ─────────────────────────────────────── -->
+    <section class="stats-row">
+      <div class="stat-card stat-card--blue">
+        <div class="stat-card__icon"><i class="fa fa-users"></i></div>
+        <div class="stat-card__body">
+          <span class="stat-card__value">{{ pessoas.length }}</span>
+          <span class="stat-card__label">Pessoas</span>
+        </div>
+        <div class="stat-card__glow"></div>
       </div>
 
+      <div class="stat-card stat-card--teal">
+        <div class="stat-card__icon"><i class="fa fa-building"></i></div>
+        <div class="stat-card__body">
+          <span class="stat-card__value">{{ departamentos.length }}</span>
+          <span class="stat-card__label">Departamentos</span>
+        </div>
+        <div class="stat-card__glow"></div>
+      </div>
+
+      <div class="stat-card stat-card--violet">
+        <div class="stat-card__icon"><i class="fa fa-tasks"></i></div>
+        <div class="stat-card__body">
+          <span class="stat-card__value">{{ tarefas.length }}</span>
+          <span class="stat-card__label">Tarefas</span>
+        </div>
+        <div class="stat-card__glow"></div>
+      </div>
+
+      <div class="stat-card stat-card--amber">
+        <div class="stat-card__icon"><i class="fa fa-clock-o"></i></div>
+        <div class="stat-card__body">
+          <span class="stat-card__value">{{ tarefasPendentes.length }}</span>
+          <span class="stat-card__label">Pendentes</span>
+        </div>
+        <div class="stat-card__glow"></div>
+      </div>
     </section>
-  </section>
+
+    <!-- ── PEOPLE SECTION ─────────────────────────────────────── -->
+    <section class="content-section">
+      <div class="section-header">
+        <div class="section-header__left">
+          <div class="section-header__icon section-header__icon--blue">
+            <i class="fa fa-users"></i>
+          </div>
+          <div>
+            <h2 class="section-header__title">Pessoas</h2>
+            <p class="section-header__subtitle">Gerencie os colaboradores do sistema</p>
+          </div>
+        </div>
+        <button class="btn-primary" (click)="savePessoa()">
+          <i class="fa fa-plus"></i>
+          <span>Nova Pessoa</span>
+        </button>
+      </div>
+
+      <div class="data-table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="col-index">#</th>
+              <th>Nome</th>
+              <th>Departamento</th>
+              <th class="col-order">Ordem</th>
+              <th class="col-actions">Ações</th>
+            </tr>
+          </thead>
+          <tbody cdkDropList (cdkDropListDropped)="reOrdemList($event)">
+            <tr *ngIf="pessoas.length === 0">
+              <td colspan="5" class="empty-state">
+                <i class="fa fa-user-plus"></i>
+                <span>Nenhuma pessoa cadastrada</span>
+              </td>
+            </tr>
+            <tr *ngFor="let item of pessoas; let i = index" cdkDrag class="data-row">
+              <td class="col-index">
+                <span class="row-index">{{ i + 1 }}</span>
+              </td>
+              <td>
+                <div class="cell-with-avatar">
+                  <div class="avatar">{{ item.nome?.charAt(0) }}</div>
+                  <span>{{ item.nome }}</span>
+                </div>
+              </td>
+              <td>
+                <span class="badge-dept">{{ item.departamento }}</span>
+              </td>
+              <td class="col-order">
+                <div class="order-btns">
+                  <button class="btn-order" *ngIf="i !== 0" (click)="upPeople(i)" title="Mover acima">
+                    <i class="fa fa-chevron-up"></i>
+                  </button>
+                  <button class="btn-order" *ngIf="i !== pessoas.length - 1" (click)="downPeople(i)" title="Mover abaixo">
+                    <i class="fa fa-chevron-down"></i>
+                  </button>
+                </div>
+              </td>
+              <td class="col-actions">
+                <div class="action-btns">
+                  <button class="btn-action btn-action--danger" (click)="removerPessoa(i, item)" title="Remover">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                  <button class="btn-action btn-action--edit" (click)="alterarPessoa(i, item)" title="Editar">
+                    <i class="fa fa-pencil"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── DEPARTMENTS SECTION ────────────────────────────────── -->
+    <section class="content-section">
+      <div class="section-header">
+        <div class="section-header__left">
+          <div class="section-header__icon section-header__icon--teal">
+            <i class="fa fa-building"></i>
+          </div>
+          <div>
+            <h2 class="section-header__title">Departamentos</h2>
+            <p class="section-header__subtitle">Estrutura organizacional da empresa</p>
+          </div>
+        </div>
+        <button class="btn-primary btn-primary--teal" (click)="saveDepartamento()">
+          <i class="fa fa-plus"></i>
+          <span>Novo Departamento</span>
+        </button>
+      </div>
+
+      <div class="data-table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="col-index">#</th>
+              <th>Título</th>
+              <th class="col-order">Ordem</th>
+              <th class="col-actions">Ações</th>
+            </tr>
+          </thead>
+          <tbody cdkDropList (cdkDropListDropped)="reOrdemListDepartment($event)">
+            <tr *ngIf="departamentos.length === 0">
+              <td colspan="4" class="empty-state">
+                <i class="fa fa-building-o"></i>
+                <span>Nenhum departamento cadastrado</span>
+              </td>
+            </tr>
+            <tr *ngFor="let item of departamentos; let i = index" cdkDrag class="data-row">
+              <td class="col-index">
+                <span class="row-index">{{ i + 1 }}</span>
+              </td>
+              <td>
+                <div class="dept-name">
+                  <i class="fa fa-circle dept-dot"></i>
+                  {{ item.titulo }}
+                </div>
+              </td>
+              <td class="col-order">
+                <div class="order-btns">
+                  <button class="btn-order" *ngIf="i !== 0" (click)="upDepartment(i)" title="Mover acima">
+                    <i class="fa fa-chevron-up"></i>
+                  </button>
+                  <button class="btn-order" *ngIf="i !== departamentos.length - 1" (click)="downDepartment(i)" title="Mover abaixo">
+                    <i class="fa fa-chevron-down"></i>
+                  </button>
+                </div>
+              </td>
+              <td class="col-actions">
+                <div class="action-btns">
+                  <button class="btn-action btn-action--danger" (click)="removerDepartamento(i, item)" title="Remover">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                  <button class="btn-action btn-action--edit" (click)="alterarDepartamento(i, item)" title="Editar">
+                    <i class="fa fa-pencil"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── TASKS SECTION ──────────────────────────────────────── -->
+    <section class="content-section">
+      <div class="section-header">
+        <div class="section-header__left">
+          <div class="section-header__icon section-header__icon--violet">
+            <i class="fa fa-tasks"></i>
+          </div>
+          <div>
+            <h2 class="section-header__title">Tarefas</h2>
+            <p class="section-header__subtitle">Acompanhe e gerencie todas as tarefas</p>
+          </div>
+        </div>
+        <button class="btn-primary btn-primary--violet" (click)="salvarTarefa()">
+          <i class="fa fa-plus"></i>
+          <span>Nova Tarefa</span>
+        </button>
+      </div>
+
+      <div class="data-table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="col-index">#</th>
+              <th>Departamento</th>
+              <th>Título</th>
+              <th>Descrição</th>
+              <th>Prazo</th>
+              <th class="col-order">Ordem</th>
+              <th class="col-actions">Ações</th>
+            </tr>
+          </thead>
+          <tbody cdkDropList (cdkDropListDropped)="reOrdemListTarefas($event)">
+            <tr *ngIf="tarefas.length === 0">
+              <td colspan="7" class="empty-state">
+                <i class="fa fa-check-square-o"></i>
+                <span>Nenhuma tarefa cadastrada. Clique em "Nova Tarefa" para começar.</span>
+              </td>
+            </tr>
+            <tr *ngFor="let item of tarefas; let i = index" cdkDrag class="data-row">
+              <td class="col-index">
+                <span class="row-index">{{ item.id || i + 1 }}</span>
+              </td>
+              <td>
+                <span class="badge-dept">
+                  {{ item.departamento?.titulo || item.departamento || 'Sem departamento' }}
+                </span>
+              </td>
+              <td><strong>{{ item.titulo }}</strong></td>
+              <td class="cell-desc">{{ item.descricao }}</td>
+              <td>
+                <span class="date-chip">
+                  <i class="fa fa-calendar"></i>
+                  {{ item.prazo | date:'dd/MM/yyyy' }}
+                </span>
+              </td>
+              <td class="col-order">
+                <div class="order-btns">
+                  <button class="btn-order" *ngIf="i !== 0" (click)="upTask(i)" title="Mover acima">
+                    <i class="fa fa-chevron-up"></i>
+                  </button>
+                  <button class="btn-order" *ngIf="i !== tarefas.length - 1" (click)="downTask(i)" title="Mover abaixo">
+                    <i class="fa fa-chevron-down"></i>
+                  </button>
+                </div>
+              </td>
+              <td class="col-actions">
+                <div class="action-btns">
+                  <button class="btn-action btn-action--danger" (click)="removerTarefa(i, item)" title="Remover">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                  <button class="btn-action btn-action--edit" (click)="alterarTarefa(i, item)" title="Editar">
+                    <i class="fa fa-pencil"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── ALLOCATION SECTION ─────────────────────────────────── -->
+    <section class="content-section alloc-section">
+      <div class="section-header">
+        <div class="section-header__left">
+          <div class="section-header__icon section-header__icon--amber">
+            <i class="fa fa-link"></i>
+          </div>
+          <div>
+            <h2 class="section-header__title">Alocar Pessoa na Tarefa</h2>
+            <p class="section-header__subtitle">Associe colaboradores às tarefas do mesmo departamento</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="alloc-form">
+        <div class="alloc-form__fields">
+          <mat-form-field class="alloc-field" appearance="outline">
+            <mat-label>Selecione uma tarefa</mat-label>
+            <mat-select [(value)]="tarefaSelecionada" (selectionChange)="selecionarTarefa($event)">
+              <mat-option *ngFor="let tarefa of tarefas" [value]="tarefa">
+                {{ tarefa.titulo }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div class="alloc-form__connector">
+            <i class="fa fa-arrow-right"></i>
+          </div>
+
+          <mat-form-field class="alloc-field" appearance="outline">
+            <mat-label>Selecione uma pessoa</mat-label>
+            <mat-select [(value)]="pessoaSelecionada">
+              <mat-option *ngFor="let pessoa of pessoas" [value]="pessoa">
+                {{ pessoa.nome }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <button class="btn-alocar" (click)="alocarPessoaNaTarefa()">
+          <i class="fa fa-link"></i>
+          <span>Alocar</span>
+        </button>
+      </div>
+
+      <!-- Allocations Table -->
+      <div class="alloc-table-header">
+        <h3 class="alloc-table-title">
+          <i class="fa fa-list-ul"></i>
+          Alocações Realizadas
+        </h3>
+      </div>
+
+      <div class="data-table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Tarefa</th>
+              <th>Departamento</th>
+              <th>Pessoa Alocada</th>
+              <th>Prazo</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="tarefasAlocadas.length === 0">
+              <td colspan="5" class="empty-state">
+                <i class="fa fa-link"></i>
+                <span>Nenhuma alocação realizada ainda</span>
+              </td>
+            </tr>
+            <tr *ngFor="let tarefa of tarefasAlocadas" class="data-row">
+              <td><strong>{{ tarefa.titulo }}</strong></td>
+              <td><span class="badge-dept">{{ tarefa.departamento }}</span></td>
+              <td>
+                <div class="cell-with-avatar" *ngIf="tarefa.pessoa">
+                  <div class="avatar avatar--sm">{{ tarefa.pessoa?.nome?.charAt(0) }}</div>
+                  <span>{{ tarefa.pessoa?.nome }}</span>
+                </div>
+              </td>
+              <td>
+                <span class="date-chip">
+                  <i class="fa fa-calendar"></i>
+                  {{ tarefa.prazo | date:'dd/MM/yyyy' }}
+                </span>
+              </td>
+              <td>
+                <span class="status-badge" [ngClass]="tarefa.finalizado ? 'status-badge--done' : 'status-badge--pending'">
+                  <i class="fa" [ngClass]="tarefa.finalizado ? 'fa-check-circle' : 'fa-hourglass-half'"></i>
+                  {{ tarefa.finalizado ? 'Concluído' : 'Em andamento' }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- footer -->
+  <footer class="app-footer">
+    <span>© 2026 TaskFlow — Sistema de Gerenciamento de Tarefas</span>
+  </footer>
+
 </div>
-<!-- End of Page Wrapper -->

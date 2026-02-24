@@ -9,8 +9,8 @@ import { NotificationService } from './notification.service';
   providedIn: 'root'
 })
 export class TarefaService {
-  //public API = 'http://localhost:8090';
-  public API = 'https://desafio-backend-java.onrender.com/';
+  public API = 'http://localhost:8090';
+  //public API = 'https://desafio-backend-java.onrender.com/';
   public CONTROLLER = this.API + '/tarefas'
 
   constructor(private http: HttpClient, private notificationService: NotificationService) { }
@@ -26,14 +26,27 @@ export class TarefaService {
   alocarPessoaNaTarefa(tarefaId: number, pessoaId: number): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
 
-    return this.http.put<any>(`${this.CONTROLLER}/alocar/${tarefaId}/${pessoaId}`, {}, { headers: headers, observe: 'response' });
+    const url = `${this.CONTROLLER}/alocar/${tarefaId}/${pessoaId}`;
+
+    console.log('URL da alocação:', url);
+
+    return this.http.put(url, {}, {
+        headers: headers,
+        observe: 'response'
+    });
   }
 
 
-  finalizarTarefa(item: any) {
+  finalizarTarefa(tarefaId: number): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
 
-    return this.http.put(this.CONTROLLER + '/finalizar/{tarefaId}', item, { headers: headers, observe: 'response' });
+    // Corrigindo o endpoint - usando template string
+    const url = `${this.CONTROLLER}/finalizar/${tarefaId}`;
+
+    return this.http.put(url, {}, {
+        headers: headers,
+        observe: 'response'
+    });
   }
 
 

@@ -6,6 +6,8 @@ export class Tarefa {
   descricao: string | undefined;
   prazo: Date | undefined;
   departamento: Departamento | undefined;
+  departamentoId?: number;
+  pessoaId: number;
   duracao: number | undefined;
   finalizado: boolean | undefined;
   pessoa: Pessoa | undefined;
@@ -14,4 +16,8 @@ export class Tarefa {
   ordem_apresentacao: any;
   mensagem: string;
   success: boolean;
+
+  constructor() {
+    this.departamento = new Departamento(); // Inicializa o departamento
+  }
 }

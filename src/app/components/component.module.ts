@@ -67,11 +67,8 @@ const dialogMock = {
     AdicionarTarefaComponent,
     ConfirmacaoDialogComponent,
     ConfirmacaoDialogDepartmentComponent,
-    ConfirmacaoDialogTaskComponent,
-<<<<<<< HEAD
-=======
     AlocarPessoaTarefaComponent,
->>>>>>> becae804790385865d4176bd560fed0b243ca00d
+    ConfirmacaoDialogTaskComponent,
     FooterComponent,
     DialogPessoaTarefaComponent,
     DashboardComponent,
@@ -103,12 +100,6 @@ const dialogMock = {
     ConfirmacaoDialogDepartmentComponent,
     ConfirmacaoDialogTaskComponent,
     DashboardComponent,
-<<<<<<< HEAD
-=======
-    DialogPessoaTarefaComponent,
-    AlocarPessoaTarefaComponent,
-    NotificationBellComponent,
->>>>>>> becae804790385865d4176bd560fed0b243ca00d
     FooterComponent
   ],
   providers: [

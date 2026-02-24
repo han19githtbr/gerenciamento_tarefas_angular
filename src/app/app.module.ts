@@ -8,10 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
-<<<<<<< HEAD
 //import { EnvironmentProviders } from '@angular/core';
-=======
->>>>>>> becae804790385865d4176bd560fed0b243ca00d
 
 
 @NgModule({
@@ -27,14 +24,6 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
     ReactiveFormsModule,
     FormsModule,
     MatDialogModule,
-<<<<<<< HEAD
-=======
-    ToastrModule.forRoot({
-      timeOut: 3000,
-      positionClass: 'toast-bottom-right',
-      preventDuplicates: true, // Permite o uso de HTML nas notificações
-    })
->>>>>>> becae804790385865d4176bd560fed0b243ca00d
 
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right', // Posição da notificação

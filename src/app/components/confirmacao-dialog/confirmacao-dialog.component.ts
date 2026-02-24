@@ -7,6 +7,9 @@ import { PessoaService } from 'src/app/services/pessoa.service';
 import { AlertModalService } from 'src/app/services/alert-modal.service';
 import { Tarefa } from 'src/app/model/Tarefa.model';
 import { Departamento } from 'src/app/model/Departamento.model';
+import { ToastrService } from 'ngx-toastr';
+import { toastOptions } from 'src/app/config/toast.config';
+
 
 @Component({
     selector: 'app-confirmacao-dialog',
@@ -31,7 +34,9 @@ export class ConfirmacaoDialogComponent implements OnInit {
 
     constructor(
         private pessoaService: PessoaService,
-        public dialogRef: MatDialogRef<ConfirmacaoDialogComponent>, private alertModalService: AlertModalService,
+        public dialogRef: MatDialogRef<ConfirmacaoDialogComponent>,
+        private alertModalService: AlertModalService,
+        private toastr: ToastrService,
         @Inject(MAT_DIALOG_DATA) public data: ConfirmacaoDialogComponent,
     ) {
         this.title = data['title'];
@@ -47,12 +52,26 @@ export class ConfirmacaoDialogComponent implements OnInit {
         this.dialogRef.close();
     }
 
+    showSuccess(message: string) {
+      this.toastr.success(message, 'Sucesso', toastOptions);
+    }
+
+    showError(message: string) {
+      this.toastr.error(message, 'Erro', toastOptions);
+    }
+
     salvar(value: string) {
         if (value == 'Sim') {
-            this.pessoaService.removerPessoa(this.pessoa.id).subscribe(data => {
-                this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.SUCESSO);
+            this.pessoaService.removerPessoa(this.pessoa.id).subscribe(
+              data => {
+                this.showSuccess("A pessoa foi removida com sucesso.");
                 this.dialogRef.close(value);
-            })
+              },
+              error => {
+                this.showError("Erro ao remover a pessoa");
+                this.disableBox = false;
+              }
+            )
         }else{
             this.dialogRef.close();
         }

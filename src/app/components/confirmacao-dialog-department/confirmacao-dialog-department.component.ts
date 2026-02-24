@@ -6,7 +6,21 @@ import { Pessoa } from 'src/app/model/Pessoa.model';
 import { DepartamentoService } from 'src/app/services/departamento.service';
 import { AlertModalService } from 'src/app/services/alert-modal.service';
 import { Departamento } from 'src/app/model/Departamento.model';
+import { ToastrService } from 'ngx-toastr';
 
+
+function getToastOptions() {
+  return {
+    timeOut: 3000,
+    closeButton: true,
+    progressBar: true,
+    positionClass: 'toast-bottom-right',
+    tapToDismiss: true,
+    toastClass: 'ngx-toastr',
+    titleClass: 'toast-title',
+    messageClass: 'toast-message'
+  };
+}
 
 
 @Component({
@@ -31,7 +45,9 @@ export class ConfirmacaoDialogDepartmentComponent implements OnInit {
 
     constructor(
         private departamentoService: DepartamentoService,
-        public dialogRef: MatDialogRef<ConfirmacaoDialogDepartmentComponent>, private alertModalService: AlertModalService,
+        public dialogRef: MatDialogRef<ConfirmacaoDialogDepartmentComponent>,
+        private alertModalService: AlertModalService,
+        private toastr: ToastrService,
         @Inject(MAT_DIALOG_DATA) public data: ConfirmacaoDialogDepartmentComponent,
     ) {
         this.title = data['title'];
@@ -47,12 +63,26 @@ export class ConfirmacaoDialogDepartmentComponent implements OnInit {
       this.dialogRef.close();
     }
 
+    showSuccess(message: string) {
+      this.toastr.success(message, 'Sucesso', getToastOptions());
+    }
+
+    showError(message: string) {
+      this.toastr.error(message, 'Erro', getToastOptions());
+    }
+
     salvar(value: string) {
         if (value == 'Sim') {
-            this.departamentoService.removerDepartamento(this.departamento.id).subscribe(data => {
-              this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.SUCESSO);
-              this.dialogRef.close(value);
-            })
+            this.departamentoService.removerDepartamento(this.departamento.id).subscribe(
+                data => {
+                    this.showSuccess("O departamento foi removido com sucesso.");
+                    this.dialogRef.close(value);
+                },
+                error => {
+                    this.showError("Erro ao remover o departamento");
+                    this.disableBox = false;
+                }
+            )
         } else {
             this.dialogRef.close();
         }

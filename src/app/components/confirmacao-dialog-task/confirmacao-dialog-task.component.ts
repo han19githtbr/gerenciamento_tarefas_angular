@@ -5,6 +5,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { TarefaService } from 'src/app/services/tarefa.service';
 import { Tarefa } from 'src/app/model/Tarefa.model';
 import { AlertModalService } from 'src/app/services/alert-modal.service';
+import { ToastrService } from 'ngx-toastr';
+import { toastOptions } from 'src/app/config/toast.config';
 
 
 @Component({
@@ -29,6 +31,7 @@ export class ConfirmacaoDialogTaskComponent implements OnInit {
         private tarefaService: TarefaService,
         public dialogRef: MatDialogRef<ConfirmacaoDialogTaskComponent>,
         private alertModalService: AlertModalService,
+        private toastr: ToastrService,
         @Inject(MAT_DIALOG_DATA) public data: ConfirmacaoDialogTaskComponent,
     ) {
         this.title = data['title'];
@@ -46,12 +49,26 @@ export class ConfirmacaoDialogTaskComponent implements OnInit {
       this.dialogRef.close();
     }
 
+    showSuccess(message: string) {
+      this.toastr.success(message, 'Sucesso', toastOptions);
+    }
+
+    showError(message: string) {
+      this.toastr.error(message, 'Erro', toastOptions);
+    }
+
     salvar(value: string) {
         if (value == 'Sim') {
-            this.tarefaService.removerTarefa(this.tarefa.id).subscribe(data => {
-              this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.SUCESSO);
-              this.dialogRef.close(value);
-            })
+            this.tarefaService.removerTarefa(this.tarefa.id).subscribe(
+              data => {
+                this.showSuccess("A tarefa foi removida com sucesso.");
+                this.dialogRef.close(value);
+              },
+              error => {
+                this.showError("Erro ao remover a tarefa");
+                this.disableBox = false;
+              }
+            )
         } else {
             this.dialogRef.close();
         }

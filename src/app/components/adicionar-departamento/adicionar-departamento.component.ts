@@ -5,9 +5,11 @@ import { DepartamentoService } from 'src/app/services/departamento.service';
 import { AlertModalService } from 'src/app/services/alert-modal.service';
 import { ToastrService } from 'ngx-toastr';
 import { Departamento } from 'src/app/model/Departamento.model';
+import { toastOptions } from 'src/app/config/toast.config';
+
 
 // Definindo a função getToastOptions fora da classe
-function getToastOptions() {
+/*function getToastOptions() {
   return {
     timeOut: 3000,
     closeButton: true,
@@ -18,7 +20,7 @@ function getToastOptions() {
     titleClass: 'toast-title',
     messageClass: 'toast-message'
   };
-}
+}*/
 
 
 @Component({
@@ -76,11 +78,11 @@ export class AdicionarDepartamentoComponent implements OnInit {
   }
 
   showSuccess(message: string) {
-    this.toastr.success(message, 'Sucesso', getToastOptions());
+    this.toastr.success(message, 'Sucesso', toastOptions);
   }
 
   showError(message: string) {
-    this.toastr.error(message, 'Erro', getToastOptions());
+    this.toastr.error(message, 'Erro', toastOptions);
   }
 
 

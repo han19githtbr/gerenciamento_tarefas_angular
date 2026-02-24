@@ -5,6 +5,7 @@ export class Pessoa {
   id: number | undefined;
   nome: string | undefined;
   departamento: Departamento = new Departamento();
+  departamentoId?: number;
   tarefas: Array<Tarefa> = [];
   ordem_apresentacao: any;
   mensagem: string;

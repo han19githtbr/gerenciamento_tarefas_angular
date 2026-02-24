@@ -8,8 +8,8 @@ import { NotificationService } from './notification.service';
   providedIn: 'root'
 })
 export class DepartamentoService {
-  //public API = 'http://localhost:8090';
-  public API = 'https://desafio-backend-java.onrender.com/';
+  public API = 'http://localhost:8090';
+  //public API = 'https://desafio-backend-java.onrender.com/';
   public CONTROLLER = this.API + '/departamentos'
 
   constructor(private http: HttpClient, private notificationService: NotificationService) { }

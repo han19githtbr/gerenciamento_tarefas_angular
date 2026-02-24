@@ -12,51 +12,71 @@
 
                 <div class="form-outline formatar-mat-form">
 
-                    <label class="form-label" for="form2Example1">Departamento</label>
+                    <label class="form-label" for="departamentoSelect">Departamento</label>
 
-                    <form [formGroup]="formDepartment" id="contactForm" class="formDepartment">
-                      <select (change)="onDepartment()" class="departamento" formControlName="id" [(ngModel)]="tarefa.id" id="form2Example1">
-                        <option *ngFor="let item of departamentos" class="departamentoOption" [value]="item.id">{{ item.id }} - {{ item.titulo }}</option>
-                      </select>
-                    </form>
+
+                    <select (change)="onDepartment()" class="departamento" formControlName="departamentoId" id="departamentoSelect" required>
+                      <option value="">Selecione um departamento</option>
+                      <option *ngFor="let item of departamentos" [value]="item.id">
+                        {{ item.titulo }}
+                      </option>
+                    </select>
+
+                    <div *ngIf="form.get('departamentoId')?.dirty || form.get('departamentoId')?.touched">
+                      <mat-error class="erro" *ngIf="form.get('departamentoId').hasError('required')">
+                        O campo departamento é obrigatório.
+                      </mat-error>
+                    </div>
 
                 </div>
 
                 <!-- Departamento input -->
                 <div class="form-outline formatar-mat-form">
-                  <label class="form-label" for="form2Example1">Título</label>
-
-                  <input matInput formControlName="titulo" type="text" required [(ngModel)]="tarefa.titulo" id="form2Example1" class="form-control" />
+                  <label class="form-label" for="tituloInput">Título</label>
+                  <input matInput formControlName="titulo" type="text" required
+                         [(ngModel)]="tarefa.titulo" id="tituloInput" class="form-control" />
                   <div *ngIf="form.get('titulo')?.dirty || form.get('titulo')?.touched">
-                    <mat-error class="erro" *ngIf="form.get('titulo').hasError('required')">O campo título é obrigatório.</mat-error>
+                    <mat-error class="erro" *ngIf="form.get('titulo').hasError('required')">
+                      O campo título é obrigatório.
+                    </mat-error>
                   </div>
-
                 </div>
 
                 <div class="form-outline formatar-mat-form">
-                    <label class="form-label" for="form2Example1">Descrição</label>
-
-                    <input matInput formControlName="descricao" type="text" required [(ngModel)]="tarefa.descricao" id="form2Example1" class="form-control" />
+                    <label class="form-label" for="descricaoInput">Descrição</label>
+                    <input matInput formControlName="descricao" type="text" required
+                           [(ngModel)]="tarefa.descricao" id="descricaoInput" class="form-control" />
                     <div *ngIf="form.get('descricao')?.dirty || form.get('descricao')?.touched">
-                      <mat-error class="erro" *ngIf="form.get('descricao').hasError('required')">O campo descrição é obrigatório.</mat-error>
+                      <mat-error class="erro" *ngIf="form.get('descricao').hasError('required')">
+                        O campo descrição é obrigatório.
+                      </mat-error>
                     </div>
                 </div>
 
                 <div class="form-outline formatar-mat-formC" style="position: relative;">
-                  <label class="form-label" for="form2Example1">Prazo</label>
-                  <input matInput formControlName="prazo" type="date" required [(ngModel)]="tarefa.prazo" id="form2Example1" placeholder="ex: 0000/00/00" [disabled]="disableBox" id="form2Example1" class="form-control" />
+                  <label class="form-label" for="prazoInput">Prazo</label>
+                  <input matInput formControlName="prazo" type="date" required
+                         [(ngModel)]="tarefa.prazo" id="prazoInput" placeholder="ex: 0000/00/00"
+                         [disabled]="disableBox" class="form-control" />
                   <div *ngIf="form.get('prazo')?.dirty || form.get('prazo')?.touched">
-                    <mat-error class="erro" *ngIf="form.get('prazo').hasError('required')">O campo data limite é obrigatório.</mat-error>
-                    <mat-error class="erro" *ngIf="form.get('prazo').hasError('dataInvalida')">Data inválida, verifique o formato.</mat-error>
+                    <mat-error class="erro" *ngIf="form.get('prazo').hasError('required')">
+                      O campo data limite é obrigatório.
+                    </mat-error>
+                    <mat-error class="erro" *ngIf="form.get('prazo').hasError('dataInvalida')">
+                      Data inválida, verifique o formato.
+                    </mat-error>
                   </div>
                 </div>
 
             </div>
           </mat-dialog-content>
+
           <div class="modal-footer">
             <mat-dialog-actions class="justify-content-end">
               <button type="button" class="btn btn-secondary mr-1" mat-dialog-close>Cancelar</button>
-              <button class="btn btn-primary" [disabled]="disableBox" type="submit">Salvar</button>
+              <button class="btn btn-primary" [disabled]="disableBox || form.invalid" type="submit">
+                Salvar
+              </button>
             </mat-dialog-actions>
           </div>
       </form>

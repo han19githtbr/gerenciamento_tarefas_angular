@@ -6,15 +6,12 @@ import { Pessoa } from 'src/app/model/Pessoa.model';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { Departamento } from 'src/app/model/Departamento.model';
 import { DepartamentoService } from 'src/app/services/departamento.service';
-<<<<<<< HEAD
 import { HttpRequest } from '@angular/common/http';
-import { ToastrService } from 'ngx-toastr';
+import { AlertModalService } from 'src/app/services/alert-modal.service';
 
-=======
->>>>>>> becae804790385865d4176bd560fed0b243ca00d
 
 // Definindo a função getToastOptions fora da classe
-function getToastOptions() {
+/*function getToastOptions() {
   return {
     timeOut: 3000,
     closeButton: true,
@@ -25,7 +22,7 @@ function getToastOptions() {
     titleClass: 'toast-title',
     messageClass: 'toast-message'
   };
-}
+}*/
 
 @Component({
   selector: 'app-adicionar-pessoa',
@@ -52,8 +49,9 @@ export class AdicionarPessoaComponent implements OnInit {
   pessoas: Pessoa[] = [];
 
 
+  departamentoSelecionadoId: number = null;
+
   constructor(
-<<<<<<< HEAD
       private fb: FormBuilder,
       public dialogRef: MatDialogRef<AdicionarPessoaComponent>,
       private alertModalService: AlertModalService,
@@ -61,14 +59,6 @@ export class AdicionarPessoaComponent implements OnInit {
       private pessoaService: PessoaService,
       public departamentoService: DepartamentoService,
       private toastr: ToastrService
-=======
-    private fb: FormBuilder,
-    public dialogRef: MatDialogRef<AdicionarPessoaComponent>,
-    private toastr: ToastrService,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private pessoaService: PessoaService,
-    public departamentoService: DepartamentoService
->>>>>>> becae804790385865d4176bd560fed0b243ca00d
   ) {
     this.title = data['title'];
     this.pessoaButton = data['pessoaButton'];
@@ -76,6 +66,10 @@ export class AdicionarPessoaComponent implements OnInit {
     this.pessoa.nome = data['nome'];
     this.pessoa.ordem_apresentacao = data['ordem_apresentacao'];
     this.oldName = data['nome'];
+
+    if (!this.pessoa.departamento) {
+      this.pessoa.departamento = new Departamento();
+    }
   }
 
   ngOnInit() {
@@ -93,28 +87,40 @@ export class AdicionarPessoaComponent implements OnInit {
     });
   }
 
-<<<<<<< HEAD
+
   fecharCadastrarDialog(): void{
-=======
-  fecharCadastrarDialog(): void {
->>>>>>> becae804790385865d4176bd560fed0b243ca00d
     this.dialogRef.close();
   }
 
   onDepartment() {
-    this.pessoa.departamento.id = +this.formDepartment.controls['id'].value;
+    this.departamentoSelecionadoId = +this.formDepartment.controls['id'].value;
+    if (!this.pessoa.departamento) {
+      this.pessoa.departamento = new Departamento();
+    }
+    this.pessoa.departamento.id = this.departamentoSelecionadoId;
   }
 
-  showSuccess(message: string) {
+
+  /*showSuccess(message: string) {
     this.toastr.success(message, 'Sucesso', getToastOptions());
   }
 
   showError(message: string) {
     this.toastr.error(message, 'Erro', getToastOptions());
-  }
+  }*/
+
+  /*showSuccess(message: string) {
+    this.toastr.success(message, 'Sucesso', getToastOptions());
+  }*/
+
+  /*showError(message: string) {
+    this.toastr.error(message, 'Erro', getToastOptions());
+  }*/
 
   showSuccess() {
-    this.toastr.success(this.data.body.mensagem, 'Sucesso', {
+    const mensagem = this.data?.body?.mensagem || 'Operação realizada com sucesso!';
+
+    this.toastr.success(mensagem, 'Sucesso', {
       timeOut: 3000,
       closeButton: true,
       progressBar: true,
@@ -146,85 +152,83 @@ export class AdicionarPessoaComponent implements OnInit {
 
 
   submit(form: any) {
-    this.disableBox = true;
-    const nomeControl = form.get('nome');
-    if(!nomeControl.value) {
+      this.disableBox = true;
+      const nomeControl = form.get('nome');
+
+      if (!nomeControl.value) {
         this.disableBox = false;
-<<<<<<< HEAD
-        //this.alertModalService.mostrarMensagem("O campo tem que ser preenchido.", this.alertModalService.ERRO);
-        //this.toastr.error('O campo nome é obrigatório.', 'Erro');
         this.showError();
-=======
-        this.showError("O campo tem que ser preenchido.");
->>>>>>> becae804790385865d4176bd560fed0b243ca00d
-    } else {
-        if(this.pessoaButton == "Create") {
+        return;
+      }
 
-            this.pessoaService.savePessoa(this.pessoa).subscribe(data => {
-                if(data.body.success) {
-                    this.pessoa.id = data.body.id;
-                    this.pessoa.nome = data.body.nome;
-                    this.pessoa.departamento.id = data.body.departamento.id;
-                    this.pessoa.ordem_apresentacao = data.body.ordem_apresentacao;
-                    this.pessoa.mensagem = data.body.mensagem;
-<<<<<<< HEAD
-                    //this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.SUCESSO);
-                    //this.toastr.success(data.body.mensagem, 'Sucesso');
-                    this.showSuccess();
-                    this.dialogRef.close(this.pessoa);
-                } else {
-                    this.disableBox = false;
-                    //this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.ERRO);
-                    //this.toastr.error(data.body.mensagem, 'Erro');
-                    this.showError();
-=======
-                    this.showSuccess("A pessoa foi salva com sucesso.");
-                    this.dialogRef.close(this.pessoa);
-                } else {
-                    this.disableBox = false;
-                    this.showError("Erro ao salvar a pessoa");
->>>>>>> becae804790385865d4176bd560fed0b243ca00d
-                }
-            });
-        } else {
-            const nomePessoa = encodeURIComponent(this.oldName);
-            this.pessoaService.alterarPessoa(nomePessoa, this.pessoa).subscribe(data => {
-                if(data.body.success){
-                    this.pessoa.id = data.body.id;
-                    this.pessoa.nome = data.body.nome;
-                    this.pessoa.departamento.id = data.body.departamento.id;
-                    this.pessoa.ordem_apresentacao = data.body.ordem_apresentacao;
-                    this.pessoa.mensagem = data.body.mensagem;
-<<<<<<< HEAD
-                    //this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.SUCESSO);
-                    //this.toastr.success(data.body.mensagem, 'Sucesso');
-                    this.showSuccess();
-                    this.dialogRef.close(this.pessoa);
-                } else{
-                    this.disableBox = false;
-                    //this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.ERRO);
-                    this.showError();
-=======
-                    this.showSuccess("A pessoa foi salva com sucesso.");
-                    this.dialogRef.close(this.pessoa);
-                } else{
-                    this.disableBox = false;
-                    this.showError("Erro ao salvar a pessoa");
->>>>>>> becae804790385865d4176bd560fed0b243ca00d
-                }
-          });
+      if (this.pessoaButton == "Create") {
+        this.pessoaService.savePessoa(this.pessoa).subscribe({
+          next: (data) => {
+            if (data.body && data.body.success) {
+              // Prepara o objeto pessoa com os dados retornados
+              const pessoaSalva: Pessoa = {
+                ...this.pessoa,
+                id: data.body.id,
+                nome: data.body.nome,
+                ordem_apresentacao: data.body.ordem_apresentacao,
+                mensagem: data.body.mensagem
+              };
 
-          // Função para remover a pessoa
-          /*this.pessoaService.removerPessoa(this.pessoa.id).subscribe(response => {
-            if (response.status === 200) {
-              this.showSuccess("A pessoa foi removida com sucesso.");
-              this.dialogRef.close(this.pessoa);
+              // Garante que o departamento está configurado
+              if (!pessoaSalva.departamento) {
+                pessoaSalva.departamento = new Departamento();
+              }
+              pessoaSalva.departamento.id = this.departamentoSelecionadoId;
+
+              this.showSuccess();
+
+              // IMPORTANTE: Fecha o modal e retorna a pessoa salva
+              this.dialogRef.close(pessoaSalva);
             } else {
               this.disableBox = false;
-              this.showError("Erro ao remover a pessoa");
+              this.showError();
             }
-          });*/
-        }
+          },
+          error: (error) => {
+            this.disableBox = false;
+            this.showError();
+            console.error('Erro ao salvar pessoa:', error);
+          }
+        });
+      } else {
+        // Caso de edição - similar ao de criação
+        const nomePessoa = encodeURIComponent(this.oldName);
+        this.pessoaService.alterarPessoa(nomePessoa, this.pessoa).subscribe({
+          next: (data) => {
+            if (data.body && data.body.success) {
+              const pessoaAlterada: Pessoa = {
+                ...this.pessoa,
+                id: data.body.id,
+                nome: data.body.nome,
+                ordem_apresentacao: data.body.ordem_apresentacao,
+                mensagem: data.body.mensagem
+              };
+
+              if (!pessoaAlterada.departamento) {
+                pessoaAlterada.departamento = new Departamento();
+              }
+              pessoaAlterada.departamento.id = this.departamentoSelecionadoId;
+
+              this.showSuccess();
+
+              // Fecha o modal e retorna a pessoa alterada
+              this.dialogRef.close(pessoaAlterada);
+            } else {
+              this.disableBox = false;
+              this.showError();
+            }
+          },
+          error: (error) => {
+            this.disableBox = false;
+            this.showError();
+            console.error('Erro ao alterar pessoa:', error);
+          }
+        });
       }
     }
 

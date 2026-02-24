@@ -66,6 +66,10 @@ export class AdicionarTarefaComponent implements OnInit {
       this.tarefa.ordem_apresentacao = data['ordem_apresentacao'];
       this.oldTitle = data['titulo'];
       this.tarefaButton = data['tarefaButton'];
+
+      if (!this.tarefa.departamento) {
+        this.tarefa.departamento = new Departamento();
+      }
   }
 
   ngOnInit() {
@@ -73,16 +77,26 @@ export class AdicionarTarefaComponent implements OnInit {
         titulo: ['', [Validators.required, Validators.maxLength(255)]],
         descricao: ['', Validators.required],
         prazo: ['', [Validators.required, this.dataValida]],
+        departamentoId: ['', Validators.required]
       });
-      this.formDepartment = this.fb.group({
-        id: ["", Validators.required]
-      });
-      this.tarefaService.getAllTarefa().subscribe((data: any) => {
-        this.tarefas = data.body;
-        console.log(this.tarefas);
-      });
+
+      // Carrega os departamentos primeiro
       this.departamentoService.getAllDepartamento().subscribe((data: any) => {
         this.departamentos = data.body;
+
+        // Se está editando, configura o departamento selecionado
+        if (this.tarefa.departamento?.id && this.tarefaButton === 'Edit') {
+          this.form.patchValue({
+            departamentoId: this.tarefa.departamento.id
+          });
+          this.onDepartment(); // Atualiza o departamento
+        }
+
+        console.log('Departamentos carregados:', this.departamentos);
+      });
+
+      this.tarefaService.getAllTarefa().subscribe((data: any) => {
+        this.tarefas = data.body;
       });
   }
 
@@ -92,7 +106,27 @@ export class AdicionarTarefaComponent implements OnInit {
   }
 
   onDepartment() {
-    this.tarefa.departamento.id = +this.formDepartment.controls['id'].value;
+    // Pega o valor do formulário principal
+    const deptId = this.form.get('departamentoId')?.value;
+
+    if (deptId) {
+      // Garante que o departamento existe
+      if (!this.tarefa.departamento) {
+        this.tarefa.departamento = new Departamento();
+      }
+
+      // Encontra o departamento completo na lista
+      const selectedDept = this.departamentos.find(dept => dept.id === +deptId);
+      if (selectedDept) {
+        // Atribui o departamento completo à tarefa
+        this.tarefa.departamento = selectedDept;
+      } else {
+        // Se não encontrou na lista, pelo menos define o ID
+        this.tarefa.departamento.id = +deptId;
+      }
+
+      console.log('Departamento selecionado:', this.tarefa.departamento);
+    }
   }
 
   showSuccess(message: string) {
@@ -117,53 +151,100 @@ export class AdicionarTarefaComponent implements OnInit {
 
   submit(form: any) {
     this.disableBox = true;
-    const tituloControl = form.get('titulo');
-    if(!tituloControl.value){
-        this.disableBox = false;
-        this.showError("O campo tem que ser preenchido.")
-        //this.alertModalService.mostrarMensagem("O campo tem que ser preenchido.", this.alertModalService.ERRO);
-    } else {
-        if(this.tarefaButton == "Create"){
 
-            this.tarefaService.salvarTarefa(this.tarefa).subscribe(data => {
-                if(data.body.success){
-                    this.tarefa.id = data.body.id;
-                    this.tarefa.departamento.id = data.body.departamento.id;
-                    this.tarefa.titulo = data.body.titulo;
-                    this.tarefa.descricao = data.body.descricao;
-                    this.tarefa.prazo = data.body.prazo;
-                    this.tarefa.ordem_apresentacao = data.body.ordem_apresentacao;
-                    this.tarefa.mensagem = data.body.mensagem;
-                    this.showSuccess("A tarefa foi salva com sucesso.")
-                    //this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.SUCESSO);
-                    this.dialogRef.close(this.tarefa);
-                } else{
-                    this.disableBox = false;
-                    //this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.ERRO);
-                    this.showError("Erro ao salvar a tarefa")
-                }
-            })
-          } else {
-                const nomeTarefa = encodeURIComponent(this.oldTitle);
-                this.tarefaService.alterarTarefa(nomeTarefa, this.tarefa).subscribe(data => {
-                  if(data.body.success){
-                      this.tarefa.id = data.body.id;
-                      this.tarefa.departamento.id = data.body.departamento.id;
-                      this.tarefa.titulo = data.body.titulo;
-                      this.tarefa.descricao = data.body.descricao;
-                      this.tarefa.prazo = data.body.prazo;
-                      this.tarefa.ordem_apresentacao = data.body.ordem_apresentacao;
-                      this.tarefa.mensagem = data.body.mensagem;
-                      //this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.SUCESSO);
-                      this.showSuccess("A tarefa foi alterada com sucesso.")
-                      this.dialogRef.close(this.tarefa);
-                  } else {
-                      this.disableBox = false;
-                      //this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.ERRO);
-                      this.showError("Erro ao alterar a tarefa")
-                  }
-                })
-      }
+    // Validação do formulário
+    if (this.form.invalid) {
+      this.disableBox = false;
+      this.marcarCamposComoMarcados();
+      return;
+    }
+
+    // Chama onDepartment para garantir que o departamento está definido
+    this.onDepartment();
+
+    // Validação do departamento
+    const deptId = this.form.get('departamentoId')?.value;
+    if (!deptId) {
+        this.disableBox = false;
+        this.showError("Selecione um departamento.");
+        return;
+    }
+
+    // DEBUG: Mostra os dados que serão enviados
+    console.log('Dados da tarefa a enviar:', {
+      titulo: this.tarefa.titulo,
+      descricao: this.tarefa.descricao,
+      prazo: this.tarefa.prazo,
+      departamento: this.tarefa.departamento,
+      departamentoId: deptId
+    });
+
+    if(this.tarefaButton == "Create"){
+        this.tarefaService.salvarTarefa(this.tarefa).subscribe({
+          next: (response: any) => {
+            console.log('Resposta do servidor:', response);
+
+            if(response.body?.success){
+                this.showSuccess(response.body.mensagem || "A tarefa foi salva com sucesso.");
+                this.dialogRef.close({
+                  success: true,
+                  tarefa: response.body.tarefa || this.tarefa
+                });
+            } else{
+                this.disableBox = false;
+                const errorMsg = response.body?.mensagem || 'Erro ao salvar a tarefa';
+                this.showError(errorMsg);
+            }
+          },
+          error: (error) => {
+            this.disableBox = false;
+            console.error('Erro na requisição:', error);
+            this.showError('Erro de conexão com o servidor. Verifique se o back-end está rodando.');
+          }
+        });
+    } else {
+        const nomeTarefa = encodeURIComponent(this.oldTitle);
+        this.tarefaService.alterarTarefa(nomeTarefa, this.tarefa).subscribe({
+          next: (response: any) => {
+            if(response.body?.success){
+                this.showSuccess(response.body.mensagem || "A tarefa foi alterada com sucesso.");
+                this.dialogRef.close(response.body);
+            } else {
+                this.disableBox = false;
+                const errorMsg = response.body?.mensagem || 'Erro ao alterar a tarefa';
+                this.showError(errorMsg);
+            }
+          },
+          error: (error) => {
+            this.disableBox = false;
+            console.error('Erro na requisição:', error);
+            this.showError('Erro de conexão com o servidor.');
+          }
+        });
     }
   }
+
+
+  // Método para marcar todos os campos como tocados (para mostrar erros)
+  private marcarCamposComoMarcados() {
+    Object.keys(this.form.controls).forEach(key => {
+      const control = this.form.get(key);
+      control?.markAsTouched();
+    });
+
+    if (this.form.get('titulo')?.hasError('required')) {
+      this.showError('O título é obrigatório.');
+    }
+    if (this.form.get('descricao')?.hasError('required')) {
+      this.showError('A descrição é obrigatória.');
+    }
+    if (this.form.get('prazo')?.hasError('required')) {
+      this.showError('O prazo é obrigatório.');
+    }
+    if (this.form.get('departamentoId')?.hasError('required')) {
+      this.showError('Selecione um departamento.');
+    }
+  }
+
+
 }
