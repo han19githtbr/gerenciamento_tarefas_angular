@@ -1,0 +1,12 @@
+{
+  "buildCommand": "ng build --configuration=production",
+  "outputDirectory": "dist/gerenciamento-tarefas-angular",
+  "devCommand": "ng serve",
+  "installCommand": "npm install",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
