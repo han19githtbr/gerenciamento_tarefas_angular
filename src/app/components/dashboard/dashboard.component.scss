@@ -453,9 +453,10 @@ body {
 
 .data-table {
   width: 100%;
+  min-width: 560px;
   border-collapse: collapse;
   position: relative;
-  table-layout: fixed;
+  table-layout: auto;
 
   thead tr {
     border-bottom: 1px solid var(--border);
@@ -507,12 +508,22 @@ body {
     &:active { cursor: grabbing; }
   }
 
-  .col-index  { width: 48px; }
-  .col-order  { width: 80px; }
+  .col-index  { width: 48px; min-width: 48px; }
+  .col-order  { width: 80px; min-width: 80px; }
 
   .col-actions {
     width: 100px;
     min-width: 100px;
+  }
+
+  th, td {
+    white-space: nowrap; // evita quebra forçada — o scroll cuida do overflow
+  }
+
+  td.cell-desc {
+    white-space: normal;
+    min-width: 120px;
+    color: var(--text-secondary);
   }
 
   .cell-desc {
@@ -982,9 +993,36 @@ body {
   .topbar {
     padding: 0 16px;
     gap: 16px;
+    gap: 8px;
+    height: auto;
+    min-height: 64px;
+    flex-wrap: wrap;
+    padding-top: 8px;
+    padding-bottom: 8px;
 
-    &__nav { display: none; }
+    &__brand { flex-shrink: 0; }
     &__title-sub { display: none; }
+
+    // Nav vira barra de ícones + texto compacto na segunda linha
+    &__nav {
+      order: 3;
+      width: 100%;
+      justify-content: center;
+      gap: 2px;
+      padding: 4px 0 8px;
+      border-top: 1px solid var(--border);
+    }
+
+    &__nav-item {
+      flex-direction: column;
+      gap: 3px;
+      padding: 6px 10px;
+      font-size: 10px;
+
+      i { font-size: 15px; }
+    }
+
+    &__actions { margin-left: auto; }
   }
 
   .main-content { padding: 16px; gap: 20px; }
@@ -1146,4 +1184,3 @@ body {
 
   }
 }
-

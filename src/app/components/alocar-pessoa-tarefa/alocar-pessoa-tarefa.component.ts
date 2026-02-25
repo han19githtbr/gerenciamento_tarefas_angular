@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TarefaService } from '../../services/tarefa.service';
 import { ToastrService } from 'ngx-toastr';
-//import { PessoaService } from 'src/app/services/pessoa.service';
+
 
 // Definindo a função getToastOptions fora da classe
 function getToastOptions() {

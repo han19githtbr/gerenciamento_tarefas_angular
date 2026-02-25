@@ -7,22 +7,6 @@ import { ToastrService } from 'ngx-toastr';
 import { Departamento } from 'src/app/model/Departamento.model';
 import { toastOptions } from 'src/app/config/toast.config';
 
-
-// Definindo a função getToastOptions fora da classe
-/*function getToastOptions() {
-  return {
-    timeOut: 3000,
-    closeButton: true,
-    progressBar: true,
-    positionClass: 'toast-bottom-right',
-    tapToDismiss: true,
-    toastClass: 'ngx-toastr',
-    titleClass: 'toast-title',
-    messageClass: 'toast-message'
-  };
-}*/
-
-
 @Component({
   selector: 'app-adicionar-departamento',
   templateUrl: './adicionar-departamento.component.html',
@@ -131,17 +115,6 @@ export class AdicionarDepartamentoComponent implements OnInit {
               });
 
 
-              // Função para remover a pessoa
-              /*this.departamentoService.removerDepartamento(this.departamento.id).subscribe(response => {
-                if (response.status === 200) {
-                  this.showSuccess("O departamento foi removido com sucesso.");
-                  this.dialogRef.close(this.departamento);
-                } else {
-                  this.disableBox = false;
-                  this.showError("Erro ao remover o departamento");
-                }
-              });
-            }*/
           }
 
         }

@@ -245,6 +245,4 @@ export class AdicionarTarefaComponent implements OnInit {
       this.showError('Selecione um departamento.');
     }
   }
-
-
 }

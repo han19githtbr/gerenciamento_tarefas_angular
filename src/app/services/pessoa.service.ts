@@ -3,14 +3,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Pessoa } from '../model/Pessoa.model';
 import { NotificationService } from './notification.service';
-
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PessoaService {
-  public API = 'http://localhost:8090';
-  //public API = 'https://desafio-backend-java.onrender.com/';
+  public API = environment.apiUrl;
+
   public CONTROLLER = this.API + '/pessoas';
 
   constructor(private http: HttpClient, private notificationService: NotificationService) { }

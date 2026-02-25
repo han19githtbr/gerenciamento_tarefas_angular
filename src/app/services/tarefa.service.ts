@@ -4,13 +4,14 @@ import { Observable, tap } from 'rxjs';
 import { Pessoa } from '../model/Pessoa.model';
 import { Tarefa } from '../model/Tarefa.model';
 import { NotificationService } from './notification.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TarefaService {
-  public API = 'http://localhost:8090';
-  //public API = 'https://desafio-backend-java.onrender.com/';
+  public API = environment.apiUrl;
+
   public CONTROLLER = this.API + '/tarefas'
 
   constructor(private http: HttpClient, private notificationService: NotificationService) { }

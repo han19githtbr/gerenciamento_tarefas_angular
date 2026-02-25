@@ -36,4 +36,3 @@ export class DepartamentoPessoasComponent implements OnInit {
     );
   }
 }
-

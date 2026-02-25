@@ -53,7 +53,6 @@ import { ConfirmacaoDialogDepartmentComponent } from './confirmacao-dialog-depar
 import { ConfirmacaoDialogTaskComponent } from './confirmacao-dialog-task/confirmacao-dialog-task.component';
 import { AlocarPessoaTarefaComponent } from './alocar-pessoa-tarefa/alocar-pessoa-tarefa.component';
 import { DialogPessoaTarefaComponent } from './dialog-pessoa-tarefa/dialog-pessoa-tarefa.component';
-import { NotificationBellComponent } from './notification-bell/notification-bell.component';
 
 
 const dialogMock = {
@@ -72,7 +71,7 @@ const dialogMock = {
     FooterComponent,
     DialogPessoaTarefaComponent,
     DashboardComponent,
-    NotificationBellComponent
+    
   ],
   imports: [
     CommonModule, MatTreeModule, MatTooltipModule, MatToolbarModule, MatTabsModule, MatSortModule, MatSnackBarModule,
