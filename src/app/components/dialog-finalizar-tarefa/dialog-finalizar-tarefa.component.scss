@@ -1,0 +1,366 @@
+// Variáveis de cores (combinando com seu dashboard)
+$colors: (
+  'success': #10b981,
+  'success-dark': #059669,
+  'success-light': rgba(16, 185, 129, 0.1),
+  'gray-50': #f9fafb,
+  'gray-100': #f3f4f6,
+  'gray-200': #e5e7eb,
+  'gray-300': #d1d5db,
+  'gray-400': #9ca3af,
+  'gray-500': #6b7280,
+  'gray-600': #4b5563,
+  'gray-700': #374151,
+  'gray-800': #1f2937,
+  'gray-900': #111827,
+  'overlay': rgba(0, 0, 0, 0.5),
+  'shadow': rgba(0, 0, 0, 0.1)
+);
+
+.modal-container {
+  position: relative;
+  animation: slideIn 0.3s ease-out;
+
+  .modal-content {
+    background: map-get($colors, 'gray-50');
+    border-radius: 1.5rem;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+    .modal-header {
+      padding: 1.5rem 2rem;
+      background: linear-gradient(135deg, #ffffff, map-get($colors, 'gray-50'));
+      border-bottom: 1px solid map-get($colors, 'gray-200');
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .modal-title {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: map-get($colors, 'gray-800');
+        letter-spacing: -0.025em;
+        position: relative;
+
+        &::before {
+          content: '';
+          position: absolute;
+          left: -1rem;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 4px;
+          height: 70%;
+          background: linear-gradient(135deg, map-get($colors, 'success'), map-get($colors, 'success-dark'));
+          border-radius: 4px;
+        }
+      }
+
+      .close {
+        background: transparent;
+        border: none;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        color: map-get($colors, 'gray-500');
+        font-size: 1.5rem;
+
+        &:hover {
+          background: map-get($colors, 'gray-200');
+          color: map-get($colors, 'gray-700');
+          transform: rotate(90deg);
+        }
+      }
+    }
+
+    .modal-body {
+      padding: 2rem;
+
+      .confirmation-message {
+        text-align: center;
+
+        .confirmation-icon {
+          font-size: 4rem;
+          color: map-get($colors, 'success');
+          margin-bottom: 1rem;
+          animation: pulse 2s infinite;
+
+          &::before {
+            content: '\f00c'; // Código do fa-check
+            font-family: 'FontAwesome';
+          }
+        }
+
+        .confirmation-text {
+          font-size: 1.2rem;
+          color: map-get($colors, 'gray-700');
+          margin-bottom: 2rem;
+          line-height: 1.6;
+          font-weight: 400;
+        }
+
+        .task-details {
+          background: white;
+          border-radius: 1rem;
+          padding: 1.5rem;
+          box-shadow: 0 4px 6px -1px map-get($colors, 'shadow'), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+          border: 1px solid map-get($colors, 'gray-200');
+          text-align: left;
+          margin-top: 1rem;
+
+          p {
+            margin: 0.75rem 0;
+            color: map-get($colors, 'gray-600');
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            strong {
+              color: map-get($colors, 'gray-800');
+              min-width: 100px;
+              font-weight: 600;
+            }
+
+            &:first-child {
+              margin-top: 0;
+            }
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
+
+          // Badge para status (se quiser mostrar)
+          .task-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            background: map-get($colors, 'success-light');
+            color: map-get($colors, 'success');
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-left: 0.5rem;
+
+            i {
+              font-size: 0.75rem;
+            }
+          }
+        }
+      }
+    }
+
+    .modal-footer {
+      padding: 1.5rem 2rem;
+      background: map-get($colors, 'gray-100');
+      border-top: 1px solid map-get($colors, 'gray-200');
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+
+      .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.75rem;
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition: all 0.2s;
+        cursor: pointer;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        &-secondary {
+          background: white;
+          color: map-get($colors, 'gray-700');
+          border: 1px solid map-get($colors, 'gray-300');
+
+          &:hover {
+            background: map-get($colors, 'gray-50');
+            border-color: map-get($colors, 'gray-400');
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+          }
+
+          &:active {
+            transform: translateY(0);
+            box-shadow: none;
+          }
+        }
+
+        &-success {
+          background: linear-gradient(135deg, map-get($colors, 'success'), map-get($colors, 'success-dark'));
+          color: white;
+          box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
+
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+          }
+
+          &:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px -1px rgba(16, 185, 129, 0.2);
+          }
+
+          i {
+            font-size: 1rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Animações
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+// Responsividade
+@media (max-width: 768px) {
+  .modal-container {
+    .modal-content {
+      border-radius: 1rem;
+
+      .modal-header {
+        padding: 1rem 1.5rem;
+
+        .modal-title {
+          font-size: 1.25rem;
+        }
+      }
+
+      .modal-body {
+        padding: 1.5rem;
+
+        .confirmation-message {
+          .confirmation-icon {
+            font-size: 3rem;
+          }
+
+          .confirmation-text {
+            font-size: 1rem;
+          }
+
+          .task-details {
+            padding: 1rem;
+
+            p {
+              flex-direction: column;
+              align-items: flex-start;
+              gap: 0.25rem;
+
+              strong {
+                min-width: auto;
+              }
+            }
+          }
+        }
+      }
+
+      .modal-footer {
+        padding: 1rem 1.5rem;
+        flex-direction: column-reverse;
+        gap: 0.5rem;
+
+        .btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+    }
+  }
+}
+
+// Opção de tema escuro (se quiser suportar)
+@media (prefers-color-scheme: dark) {
+  .modal-container {
+    .modal-content {
+      background: map-get($colors, 'gray-800');
+
+      .modal-header {
+        background: linear-gradient(135deg, map-get($colors, 'gray-800'), map-get($colors, 'gray-900'));
+        border-bottom-color: map-get($colors, 'gray-700');
+
+        .modal-title {
+          color: white;
+
+          &::before {
+            background: linear-gradient(135deg, #34d399, #10b981);
+          }
+        }
+
+        .close {
+          color: map-get($colors, 'gray-400');
+
+          &:hover {
+            background: map-get($colors, 'gray-700');
+            color: white;
+          }
+        }
+      }
+
+      .modal-body {
+        .confirmation-message {
+          .confirmation-text {
+            color: map-get($colors, 'gray-300');
+          }
+
+          .task-details {
+            background: map-get($colors, 'gray-900');
+            border-color: map-get($colors, 'gray-700');
+
+            p {
+              color: map-get($colors, 'gray-400');
+
+              strong {
+                color: white;
+              }
+            }
+          }
+        }
+      }
+
+      .modal-footer {
+        background: map-get($colors, 'gray-900');
+        border-top-color: map-get($colors, 'gray-700');
+
+        .btn-secondary {
+          background: map-get($colors, 'gray-800');
+          color: white;
+          border-color: map-get($colors, 'gray-700');
+
+          &:hover {
+            background: map-get($colors, 'gray-700');
+            border-color: map-get($colors, 'gray-600');
+          }
+        }
+      }
+    }
+  }
+}

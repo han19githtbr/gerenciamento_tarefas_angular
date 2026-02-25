@@ -20,6 +20,8 @@ import { AlocarPessoaTarefaComponent } from '../alocar-pessoa-tarefa/alocar-pess
 import { MatSelectChange } from '@angular/material/select';
 import { ToastrService } from 'ngx-toastr';
 import { DialogPessoaTarefaComponent } from '../dialog-pessoa-tarefa/dialog-pessoa-tarefa.component';
+import { DialogFinalizarTarefaComponent } from '../dialog-finalizar-tarefa/dialog-finalizar-tarefa.component';
+
 
 // Definindo a função getToastOptions fora da classe
 function getToastOptions() {
@@ -60,6 +62,9 @@ export class DashboardComponent implements OnInit {
   tarefasAlocadas: Tarefa[] = [];
 
   tarefasPendentes: Tarefa[] = [];
+
+  filtroAlocacoes: 'todas' | 'pendentes' | 'finalizadas' = 'todas';
+  tarefasAlocadasFiltradas: Tarefa[] = [];
 
   pessoaAlocada: Pessoa;
   tarefaAlocada: Tarefa;
@@ -299,6 +304,62 @@ export class DashboardComponent implements OnInit {
         } else if (result?.result === 'Erro') {
             this.showError(result.mensagem);
         }
+    });
+  }
+
+
+  abrirDialogFinalizarTarefa(tarefa: Tarefa) {
+    const dialogRef = this.dialog.open(DialogFinalizarTarefaComponent, {
+      width: '35rem',
+      data: {
+        title: 'Finalizar Tarefa',
+        message: `Deseja finalizar a tarefa "${tarefa.titulo}"?`,
+        tarefa: tarefa
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'Sim') {
+        this.finalizarTarefa(tarefa.id);
+      }
+    });
+  }
+
+
+  finalizarTarefa(tarefaId: number) {
+    this.tarefaService.finalizarTarefa(tarefaId).subscribe({
+      next: (response: any) => {
+        const data = response.body || response;
+
+        if (data && data.success) {
+          this.showSuccess('Tarefa finalizada com sucesso!');
+
+          // Atualizar a tarefa na lista local
+          const tarefaIndex = this.tarefasAlocadas.findIndex(t => t.id === tarefaId);
+          if (tarefaIndex !== -1) {
+            this.tarefasAlocadas[tarefaIndex].finalizado = true;
+            // Se quiser atualizar também a duração
+            if (data.duracao) {
+              this.tarefasAlocadas[tarefaIndex].duracao = data.duracao;
+            }
+          }
+
+          // Também atualizar na lista geral de tarefas
+          const tarefaGeralIndex = this.tarefas.findIndex(t => t.id === tarefaId);
+          if (tarefaGeralIndex !== -1) {
+            this.tarefas[tarefaGeralIndex].finalizado = true;
+          }
+
+          // Recarregar listas para garantir consistência
+          this.recarregarTodasAsListas();
+        } else {
+          this.showError(data?.mensagem || 'Erro ao finalizar tarefa');
+        }
+      },
+      error: (error) => {
+        console.error('Erro ao finalizar tarefa:', error);
+        this.showError('Erro ao finalizar tarefa: ' + (error.error?.mensagem || error.message));
+      }
     });
   }
 
@@ -598,6 +659,11 @@ export class DashboardComponent implements OnInit {
       const todas = data.body || [];
       // Filtra apenas tarefas que possuem pessoa alocada
       this.tarefasAlocadas = todas.filter(t => t.pessoaId != null || t.pessoa != null);
+
+      this.tarefasAlocadas.forEach(t => {
+        console.log(`Tarefa: ${t.titulo}, Finalizada: ${t.finalizado}, Status: ${t.finalizado ? 'Concluída' : 'Em andamento'}`);
+      });
+
     });
   }
 
@@ -626,6 +692,7 @@ export class DashboardComponent implements OnInit {
     this.carregarTarefasPendentes();
     this.carregarTarefasAlocadas();
   }
+
 
 
   // No dashboard.component.ts

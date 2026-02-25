@@ -14,7 +14,7 @@
       </div>
       <div class="topbar__title">
         <span class="topbar__title-main">TaskFlow</span>
-        <span class="topbar__title-sub">Sistema de Gerenciamento</span>
+        <span class="topbar__title-sub">Sistema de Gerenciamento de tarefas</span>
       </div>
     </div>
 
@@ -354,6 +354,8 @@
           </mat-form-field>
         </div>
 
+
+
         <button class="btn-alocar" (click)="alocarPessoaNaTarefa()">
           <i class="fa fa-link"></i>
           <span>Alocar</span>
@@ -377,11 +379,12 @@
               <th>Pessoa Alocada</th>
               <th>Prazo</th>
               <th>Status</th>
+              <th class="col-actions">Ações</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngIf="tarefasAlocadas.length === 0">
-              <td colspan="5" class="empty-state">
+              <td colspan="6" class="empty-state">
                 <i class="fa fa-link"></i>
                 <span>Nenhuma alocação realizada ainda</span>
               </td>
@@ -406,6 +409,23 @@
                   <i class="fa" [ngClass]="tarefa.finalizado ? 'fa-check-circle' : 'fa-hourglass-half'"></i>
                   {{ tarefa.finalizado ? 'Concluído' : 'Em andamento' }}
                 </span>
+              </td>
+              <td class="col-actions">
+                <div class="action-btns">
+                  <!-- Botão de finalizar só aparece se NÃO estiver finalizado -->
+                  <button
+                    *ngIf="!tarefa.finalizado"
+                    class="btn-action btn-action--success"
+                    (click)="abrirDialogFinalizarTarefa(tarefa)"
+                    title="Finalizar Tarefa">
+                    <i class="fa fa-check"></i>
+                  </button>
+
+                  <!-- Indicador de concluída (opcional) -->
+                  <span *ngIf="tarefa.finalizado" class="badge-completed">
+                    <i class="fa fa-check-circle"></i> Concluída
+                  </span>
+                </div>
               </td>
             </tr>
           </tbody>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Pessoa } from '../model/Pessoa.model';
 import { Tarefa } from '../model/Tarefa.model';
@@ -37,7 +37,7 @@ export class TarefaService {
   }
 
 
-  finalizarTarefa(tarefaId: number): Observable<any> {
+  finalizarTarefa(tarefaId: number): Observable<HttpResponse<any>> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
 
     // Corrigindo o endpoint - usando template string

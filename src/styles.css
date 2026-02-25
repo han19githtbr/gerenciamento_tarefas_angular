@@ -27,7 +27,7 @@
   --text-secondary: #8890a8;
   --text-muted:     #4e5672;
 
-  --blue:           #4f9cf9;
+  --blue:           #438afe;
   --blue-glow:      rgba(79,156,249,0.25);
   --teal:           #2dd4bf;
   --teal-glow:      rgba(45,212,191,0.25);
@@ -35,7 +35,7 @@
   --violet-glow:    rgba(167,139,250,0.25);
   --amber:          #fbbf24;
   --amber-glow:     rgba(251,191,36,0.25);
-  --danger:         #f87171;
+  --danger:         #fe2e2e;
   --danger-glow:    rgba(248,113,113,0.2);
   --success:        #34d399;
 

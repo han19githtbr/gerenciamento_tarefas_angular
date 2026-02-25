@@ -5,15 +5,18 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentesModule } from './components/component.module';
 import { HttpClientModule } from '@angular/common/http';
+import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 //import { EnvironmentProviders } from '@angular/core';
+import { DialogFinalizarTarefaComponent } from './components/dialog-finalizar-tarefa/dialog-finalizar-tarefa.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    DialogFinalizarTarefaComponent
   ],
   imports: [
     BrowserModule,
@@ -22,6 +25,8 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
     ComponentesModule,
     HttpClientModule,
     ReactiveFormsModule,
+    MatDialogModule,
+    MatButtonModule,
     FormsModule,
     MatDialogModule,
 

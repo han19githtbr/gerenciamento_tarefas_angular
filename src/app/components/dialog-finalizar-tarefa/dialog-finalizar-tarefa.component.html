@@ -1,0 +1,36 @@
+<div class="modal-container">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" mat-dialog-title>{{data.title || 'Finalizar Tarefa'}}</h5>
+      <button type="button" class="close" mat-dialog-close>
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <mat-dialog-content>
+      <div class="modal-body">
+        <div class="confirmation-message">
+          <i class="fa fa-check-circle confirmation-icon"></i>
+          <p class="confirmation-text">
+            {{ data.message || 'Deseja finalizar esta tarefa?' }}
+          </p>
+          <div class="task-details" *ngIf="data.tarefa">
+            <p><strong>Tarefa:</strong> {{ data.tarefa.titulo }}</p>
+            <p><strong>Descrição:</strong> {{ data.tarefa.descricao }}</p>
+            <p><strong>Departamento:</strong> {{ data.tarefa.departamento }}</p>
+            <p *ngIf="data.tarefa.pessoa">
+              <strong>Responsável:</strong> {{ data.tarefa.pessoa.nome }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+
+    <div class="modal-footer">
+      <mat-dialog-actions class="justify-content-end">
+        <button type="button" class="btn btn-secondary mr-2" mat-dialog-close>Cancelar</button>
+        <button class="btn btn-success" [mat-dialog-close]="'Sim'">Finalizar Tarefa</button>
+      </mat-dialog-actions>
+    </div>
+  </div>
+</div>
