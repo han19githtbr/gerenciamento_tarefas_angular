@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://desafio-backend-java.onrender.com'
+  apiUrl: 'https://gerenciamento-tarefas-back-end.onrender.com'
 };
