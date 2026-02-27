@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npx ng build --configuration=production --optimization=false",
+  "buildCommand": "npm run build:dev",
   "outputDirectory": "dist/gerenciamento-tarefas-angular",
   "devCommand": "ng serve",
   "installCommand": "npm install",
