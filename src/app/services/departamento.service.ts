@@ -13,7 +13,10 @@ export class DepartamentoService {
   public API = environment.apiUrl;
   public CONTROLLER = this.API + '/departamentos'
 
-  constructor(private http: HttpClient, private notificationService: NotificationService) { }
+  constructor(private http: HttpClient, private notificationService: NotificationService) {
+    console.log('🔥 API URL em produção:', this.API);
+    console.log('🔥 Controller URL:', this.CONTROLLER);
+  }
 
   saveDepartamento(item: any): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
