@@ -1,0 +1,57 @@
+.login-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.login-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(0,180,216,0.3);
+  border-radius: 20px;
+  padding: 3rem 2.5rem;
+  text-align: center;
+  width: 360px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 80px rgba(0,180,216,0.08);
+
+  .login-logo {
+    margin-bottom: 1.5rem;
+    svg { width: 64px; height: 64px; }
+  }
+
+  h1 {
+    color: #fff;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem;
+    span { color: #00b4d8; }
+  }
+
+  p { color: rgba(255,255,255,0.5); font-size: 0.9rem; margin: 0 0 2rem; }
+
+  .google-btn-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .login-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+
+    .divider { color: rgba(255,255,255,0.2); }
+
+    a {
+      color: rgba(255,255,255,0.4);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+      &:hover { color: #00b4d8; }
+    }
+  }
+}

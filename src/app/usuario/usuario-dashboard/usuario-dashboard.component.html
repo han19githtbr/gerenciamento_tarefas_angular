@@ -1,0 +1,177 @@
+<div class="user-layout">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-brand">
+      <svg viewBox="0 0 32 32" fill="none">
+        <rect width="32" height="32" rx="8" fill="#00b4d8"/>
+        <path d="M16 5L27 11V21L16 27L5 21V11L16 5Z" fill="rgba(255,255,255,0.2)"/>
+        <circle cx="16" cy="16" r="4" fill="white"/>
+      </svg>
+      <span>TaskFlow <strong>Portal</strong></span>
+    </div>
+
+    <div class="topbar-right">
+      <!-- Notificações -->
+      <div class="notif-bell" *ngIf="notificacoes.length > 0">
+        <span class="notif-count">{{ notificacoes.length }}</span>
+        🔔
+      </div>
+      <div class="user-chip">
+        <span class="user-avatar">{{ userEmail[0]?.toUpperCase() }}</span>
+        <span class="user-email-short">{{ userEmail }}</span>
+      </div>
+      <button class="btn-logout" (click)="logout()">Sair</button>
+    </div>
+  </header>
+
+  <!-- Notification Banner -->
+  <div class="notif-banners" *ngIf="notificacoes.length > 0">
+    <div class="notif-item" *ngFor="let n of notificacoes">
+      <span class="notif-icon">⏰</span>
+      <span class="notif-text">{{ n.mensagem }}</span>
+      <button class="notif-close" (click)="dispensarNotificacao(n)">✕</button>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <main class="user-main">
+
+    <!-- Welcome -->
+    <div class="welcome-section">
+      <h1>Olá, <span>{{ userEmail.split('@')[0] }}</span> 👋</h1>
+      <p>Aqui estão suas tarefas alocadas</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="mini-stats">
+      <div class="mini-stat">
+        <span class="ms-value">{{ totalTarefas }}</span>
+        <span class="ms-label">Total</span>
+      </div>
+      <div class="mini-stat ms-yellow">
+        <span class="ms-value">{{ pendentes }}</span>
+        <span class="ms-label">Pendentes</span>
+      </div>
+      <div class="mini-stat ms-blue">
+        <span class="ms-value">{{ emAndamento }}</span>
+        <span class="ms-label">Em Andamento</span>
+      </div>
+      <div class="mini-stat ms-green">
+        <span class="ms-value">{{ concluidas }}</span>
+        <span class="ms-label">Concluídas</span>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Carregando suas tarefas...</p>
+    </div>
+
+    <!-- Empty -->
+    <div *ngIf="!isLoading && minhasTarefas.length === 0" class="empty-state">
+      <div class="empty-icon">📭</div>
+      <h3>Nenhuma tarefa alocada</h3>
+      <p>Você ainda não possui tarefas atribuídas.</p>
+    </div>
+
+    <!-- Tasks -->
+    <div class="tasks-list" *ngIf="!isLoading && minhasTarefas.length > 0">
+      <div class="task-card" *ngFor="let tarefa of minhasTarefas"
+           [class.task-concluida]="tarefa.finalizado"
+           [class.task-andamento]="tarefa.emAndamento && !tarefa.finalizado"
+           [class.task-prazo-proximo]="isPrazoProximo(tarefa.prazo) && !tarefa.finalizado">
+
+        <!-- Task Header -->
+        <div class="task-header">
+          <div class="task-title-wrap">
+            <h3>{{ tarefa.titulo }}</h3>
+            <span class="task-dept" *ngIf="tarefa.departamento">{{ tarefa.departamento }}</span>
+          </div>
+          <span class="status-badge" [ngClass]="getStatusClass(tarefa)">
+            {{ getStatusLabel(tarefa) }}
+          </span>
+        </div>
+
+        <!-- Task Body -->
+        <div class="task-body">
+          <p class="task-desc">{{ tarefa.descricao }}</p>
+
+          <div class="task-meta">
+            <span class="meta-item" [class.prazo-urgente]="isPrazoProximo(tarefa.prazo) && !tarefa.finalizado">
+              📅 Prazo: {{ tarefa.prazo | date:'dd/MM/yyyy' }}
+              <span *ngIf="isPrazoProximo(tarefa.prazo) && !tarefa.finalizado" class="urgente-tag">Urgente!</span>
+            </span>
+            <span class="meta-item" *ngIf="tarefa.duracao">
+              ⏱ {{ tarefa.duracao }}h estimadas
+            </span>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="task-actions">
+            <button class="btn-iniciar"
+                    *ngIf="!tarefa.emAndamento && !tarefa.finalizado"
+                    (click)="iniciarTarefa(tarefa.id)">
+              ▶ Iniciar Tarefa
+            </button>
+            <div class="status-pill andamento-pill" *ngIf="tarefa.emAndamento && !tarefa.finalizado">
+              <span class="pulse-dot"></span> Em Andamento
+            </div>
+            <div class="status-pill concluida-pill" *ngIf="tarefa.finalizado">
+              ✅ Tarefa Concluída
+            </div>
+
+            <button class="btn-msg-toggle" (click)="toggleMensagens(tarefa.id)">
+              💬 Mensagens
+              <span class="msg-count" *ngIf="tarefa.mensagens?.length > 0">
+                {{ tarefa.mensagens.length }}
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Messages Section -->
+        <div class="mensagens-section" *ngIf="tarefasExpandidas[tarefa.id]">
+          <div class="mensagens-header">💬 Dúvidas e Mensagens</div>
+
+          <div class="mensagens-lista" *ngIf="tarefa.mensagens?.length > 0">
+            <div class="mensagem-item" *ngFor="let msg of tarefa.mensagens">
+              <div class="msg-usuario">
+                <span class="msg-author">Você</span>
+                <p>{{ msg.texto }}</p>
+                <span class="msg-time">{{ msg.dataCriacao | date:'dd/MM HH:mm' }}</span>
+              </div>
+              <div class="msg-admin" *ngIf="msg.respondida">
+                <span class="msg-author admin-author">Admin</span>
+                <p>{{ msg.resposta }}</p>
+                <span class="msg-time">{{ msg.dataResposta | date:'dd/MM HH:mm' }}</span>
+              </div>
+              <div class="msg-aguardando" *ngIf="!msg.respondida">
+                <span>⏳ Aguardando resposta do administrador...</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="no-msgs" *ngIf="!tarefa.mensagens || tarefa.mensagens.length === 0">
+            Nenhuma mensagem ainda.
+          </div>
+
+          <div class="nova-mensagem">
+            <textarea
+              [(ngModel)]="novasMensagens[tarefa.id]"
+              placeholder="Escreva sua dúvida ou mensagem sobre esta tarefa..."
+              rows="3">
+            </textarea>
+            <button class="btn-enviar"
+                    [disabled]="!novasMensagens[tarefa.id]?.trim()"
+                    (click)="enviarMensagem(tarefa.id)">
+              Enviar Mensagem
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>

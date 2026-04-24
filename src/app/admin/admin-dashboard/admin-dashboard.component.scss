@@ -1,0 +1,350 @@
+$bg: #0f0f1a;
+$surface: #1a1a2e;
+$border: rgba(255,255,255,0.08);
+$accent: #e94560;
+$text: #e8e8f0;
+$muted: rgba(255,255,255,0.45);
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: $bg;
+  color: $text;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+// ── Sidebar ──────────────────────────────────────────
+.sidebar {
+  width: 240px;
+  background: $surface;
+  border-right: 1px solid $border;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+
+  .sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    padding: 0 0.5rem;
+    svg { width: 36px; height: 36px; }
+    span { font-size: 1.2rem; font-weight: 700; color: $text; letter-spacing: -0.5px; }
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    button {
+      background: none;
+      border: none;
+      color: $muted;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: all 0.2s;
+      width: 100%;
+
+      .nav-icon { font-size: 1.1rem; }
+
+      &:hover { background: rgba(255,255,255,0.05); color: $text; }
+      &.active { background: rgba($accent, 0.15); color: $accent; font-weight: 600; }
+    }
+  }
+
+  .sidebar-footer {
+    border-top: 1px solid $border;
+    padding-top: 1rem;
+
+    .admin-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+
+      .admin-avatar {
+        width: 36px; height: 36px;
+        background: $accent;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 700; font-size: 0.95rem; color: white;
+        flex-shrink: 0;
+      }
+
+      .admin-meta {
+        display: flex; flex-direction: column;
+        overflow: hidden;
+
+        .admin-label { font-size: 0.75rem; color: $accent; font-weight: 600; }
+        .admin-email { font-size: 0.75rem; color: $muted; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      }
+    }
+
+    .btn-logout {
+      width: 100%;
+      background: rgba($accent, 0.1);
+      border: 1px solid rgba($accent, 0.3);
+      color: $accent;
+      padding: 0.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+      &:hover { background: $accent; color: white; }
+    }
+  }
+}
+
+// ── Main Content ──────────────────────────────────────
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+
+  .content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+
+    h1 { font-size: 1.6rem; font-weight: 700; color: $text; }
+    p { color: $muted; font-size: 0.9rem; margin-top: 0.25rem; }
+
+    .btn-secondary {
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border: 1px solid $border;
+      border-radius: 8px;
+      color: $muted;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+      &:hover { border-color: $accent; color: $accent; }
+    }
+  }
+}
+
+// ── Loading ───────────────────────────────────────────
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  gap: 1rem;
+  color: $muted;
+
+  .spinner {
+    width: 40px; height: 40px;
+    border: 3px solid $border;
+    border-top-color: $accent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+// ── Stats Grid ────────────────────────────────────────
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 14px;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: transform 0.2s;
+
+  &:hover { transform: translateY(-2px); }
+
+  .stat-icon { font-size: 2rem; }
+  .stat-info { display: flex; flex-direction: column; }
+  .stat-value { font-size: 1.8rem; font-weight: 700; line-height: 1; }
+  .stat-label { font-size: 0.8rem; color: $muted; margin-top: 0.25rem; }
+
+  &.stat-blue  { border-left: 3px solid #3b82f6; .stat-value { color: #3b82f6; } }
+  &.stat-purple{ border-left: 3px solid #8b5cf6; .stat-value { color: #8b5cf6; } }
+  &.stat-orange{ border-left: 3px solid #f97316; .stat-value { color: #f97316; } }
+  &.stat-yellow{ border-left: 3px solid #eab308; .stat-value { color: #eab308; } }
+  &.stat-red   { border-left: 3px solid $accent;  .stat-value { color: $accent; } }
+  &.stat-green { border-left: 3px solid #22c55e; .stat-value { color: #22c55e; } }
+}
+
+// ── Progress ──────────────────────────────────────────
+.progress-section {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 14px;
+  padding: 1.5rem;
+
+  h2 { font-size: 1rem; margin-bottom: 1rem; color: $muted; }
+
+  .progress-bar-wrap {
+    background: rgba(255,255,255,0.06);
+    border-radius: 999px;
+    height: 10px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #22c55e, #16a34a);
+    border-radius: 999px;
+    transition: width 1s ease;
+    min-width: 4px;
+  }
+  .progress-label { font-size: 0.85rem; color: #22c55e; font-weight: 600; }
+}
+
+// ── Table ─────────────────────────────────────────────
+.tab-content {
+  h2 {
+    font-size: 1.2rem; margin-bottom: 1.25rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+}
+
+.count-badge {
+  background: rgba($accent, 0.15);
+  color: $accent;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.data-table {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 14px;
+  overflow: hidden;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+      padding: 0.85rem 1rem;
+      text-align: left;
+      font-size: 0.78rem;
+      color: $muted;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-bottom: 1px solid $border;
+    }
+
+    td {
+      padding: 0.9rem 1rem;
+      font-size: 0.88rem;
+      border-bottom: 1px solid $border;
+      vertical-align: top;
+
+      small { color: $muted; font-size: 0.78rem; display: block; margin-top: 0.2rem; }
+      &.id-cell { color: $muted; font-family: monospace; font-size: 0.82rem; }
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+    .empty-row { text-align: center; color: $muted; padding: 2rem; }
+  }
+}
+
+// ── Badges ────────────────────────────────────────────
+.badge {
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+
+  &.badge-concluida { background: rgba(34,197,94,0.15); color: #22c55e; }
+  &.badge-andamento { background: rgba(234,179,8,0.15); color: #eab308; }
+  &.badge-pendente  { background: rgba(233,69,96,0.15); color: $accent; }
+}
+
+// ── People Grid ───────────────────────────────────────
+.people-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.person-card {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  transition: transform 0.2s;
+  &:hover { transform: translateY(-2px); }
+
+  .person-avatar {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, $accent, #9b2335);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; color: white; font-size: 1.1rem; flex-shrink: 0;
+  }
+
+  .person-info {
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    strong { font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    span { font-size: 0.78rem; color: $muted; margin-top: 0.2rem; }
+  }
+}
+
+// ── Dept Grid ─────────────────────────────────────────
+.dept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.dept-card {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  transition: transform 0.2s, border-color 0.2s;
+  &:hover { transform: translateY(-2px); border-color: rgba($accent, 0.4); }
+
+  .dept-icon { font-size: 2rem; }
+  strong { font-size: 0.9rem; }
+}
+
+.empty-state {
+  grid-column: 1/-1;
+  text-align: center;
+  color: $muted;
+  padding: 3rem;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 12px;
+}
