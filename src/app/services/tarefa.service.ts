@@ -5,6 +5,7 @@ import { Pessoa } from '../model/Pessoa.model';
 import { Tarefa } from '../model/Tarefa.model';
 import { NotificationService } from './notification.service';
 import { environment } from '../../environments/environment';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,12 +15,23 @@ export class TarefaService {
 
   public CONTROLLER = this.API + '/tarefas'
 
-  constructor(private http: HttpClient, private notificationService: NotificationService) { }
+  constructor(
+    private http: HttpClient,
+    private notificationService: NotificationService,
+    private auth: AuthService
+  ) { }
+
+  private authHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      'Content-Type': 'application/json; charset=utf-8',
+      'Authorization': 'Bearer ' + this.auth.getToken()
+    });
+  }
 
   salvarTarefa(item: any): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
     //this.notificationService.addNotification('Você adicionou uma tarefa.');
-    return this.http.post(this.CONTROLLER + '/salvarTarefa', item, { headers: headers, observe: 'response' }).pipe(
+    return this.http.post(this.CONTROLLER + '/salvarTarefa', item, { headers: this.authHeaders(), observe: 'response' }).pipe(
       tap(() => this.notificationService.addNotification('adicionou', 'tarefa'))
     );
   }
@@ -32,7 +44,7 @@ export class TarefaService {
     console.log('URL da alocação:', url);
 
     return this.http.put(url, {}, {
-        headers: headers,
+        headers: this.authHeaders(),
         observe: 'response'
     });
   }
@@ -45,7 +57,7 @@ export class TarefaService {
     const url = `${this.CONTROLLER}/finalizar/${tarefaId}`;
 
     return this.http.put(url, {}, {
-        headers: headers,
+        headers: this.authHeaders(),
         observe: 'response'
     });
   }
@@ -54,7 +66,7 @@ export class TarefaService {
   removerTarefa(item: any): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
     //this.notificationService.addNotification('Você removeu uma tarefa.');
-    return this.http.delete(this.CONTROLLER + '/removerTarefa/' + item, { headers: headers, observe: 'response' }).pipe(
+    return this.http.delete(this.CONTROLLER + '/removerTarefa/' + item, { headers: this.authHeaders(), observe: 'response' }).pipe(
       tap(() => this.notificationService.addNotification('removeu', 'tarefa'))
     );
   }
@@ -63,21 +75,21 @@ export class TarefaService {
   listarTarefasPendentes(): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
 
-    return this.http.get(this.CONTROLLER + '/pendentes', { headers: headers, observe: 'response' });
+    return this.http.get(this.CONTROLLER + '/pendentes', { headers: this.authHeaders(), observe: 'response' });
   }
 
 
   getAllTarefa(): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
 
-    return this.http.get(this.CONTROLLER + '/getAllTarefa', { headers: headers, observe: 'response' });
+    return this.http.get(this.CONTROLLER + '/getAllTarefa', { headers: this.authHeaders(), observe: 'response' });
   }
 
 
   alterarTarefa(titulo: string, item: any): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
     //this.notificationService.addNotification('Você alterou uma tarefa.');
-    return this.http.put(this.CONTROLLER + '/alterarTarefa/' + titulo, item, { headers: headers, observe: 'response' }).pipe(
+    return this.http.put(this.CONTROLLER + '/alterarTarefa/' + titulo, item, { headers: this.authHeaders(), observe: 'response' }).pipe(
       tap(() => this.notificationService.addNotification('alterou', 'tarefa'))
     );
   }
@@ -86,6 +98,6 @@ export class TarefaService {
   salvarTarefaOrder(tarefas: Tarefa[]): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
 
-    return this.http.put(this.CONTROLLER + '/salvarTarefaOrder', tarefas, { headers: headers });
+    return this.http.put(this.CONTROLLER + '/salvarTarefaOrder', tarefas, { headers: this.authHeaders() });
   }
 }
