@@ -63,6 +63,8 @@ export class DashboardComponent implements OnInit {
 
   tarefasPendentes: Tarefa[] = [];
 
+  tarefasEmAndamento: number = 0;
+
   filtroAlocacoes: 'todas' | 'pendentes' | 'finalizadas' = 'todas';
   tarefasAlocadasFiltradas: Tarefa[] = [];
 
@@ -95,8 +97,16 @@ export class DashboardComponent implements OnInit {
     });
     this.carregarTarefasPendentes();
     this.carregarTarefasAlocadas();
+    this.carregarContagemEmAndamento();
   }
 
+
+  carregarContagemEmAndamento(): void {
+    this.tarefaService.getContagemEmAndamento().subscribe({
+      next: (data) => { this.tarefasEmAndamento = data?.total ?? 0; },
+      error: () => {}
+    });
+  }
 
   carregarTarefasPendentes(): void {
     this.tarefaService.listarTarefasPendentes().subscribe(
@@ -688,9 +698,9 @@ export class DashboardComponent implements OnInit {
       this.departamentos = data.body || [];
     });
 
-    // Recarrega tarefas pendentes
     this.carregarTarefasPendentes();
     this.carregarTarefasAlocadas();
+    this.carregarContagemEmAndamento();
   }
 
 

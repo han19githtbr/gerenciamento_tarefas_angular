@@ -100,4 +100,8 @@ export class TarefaService {
 
     return this.http.put(this.CONTROLLER + '/salvarTarefaOrder', tarefas, { headers: this.authHeaders() });
   }
+
+  getContagemEmAndamento(): Observable<{ total: number }> {
+    return this.http.get<{ total: number }>(this.CONTROLLER + '/contagemEmAndamento', { headers: this.authHeaders() });
+  }
 }
