@@ -25,7 +25,7 @@ export class DepartamentoService {
   // Substitua o método authHeaders():
   private authHeaders(): HttpHeaders {
     return new HttpHeaders({
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json; charset=utf-8',
       'Authorization': 'Bearer ' + this.auth.getToken()
     });
   }

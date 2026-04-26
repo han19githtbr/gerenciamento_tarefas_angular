@@ -8,11 +8,16 @@ import { AuthService } from './auth.service';
 export class AdminService {
   private API = environment.apiUrl + '/admin';
   private TAREFAS_API = environment.apiUrl + '/tarefas';
+  private PESSOAS_API = environment.apiUrl + '/pessoas';
+  private DEPT_API = environment.apiUrl + '/departamentos';
 
   constructor(private http: HttpClient, private auth: AuthService) {}
 
   private authHeaders(): HttpHeaders {
-    return new HttpHeaders({ Authorization: 'Bearer ' + this.auth.getToken() });
+    return new HttpHeaders({
+      'Content-Type': 'application/json; charset=utf-8',
+      'Authorization': 'Bearer ' + this.auth.getToken()
+    });
   }
 
   getDashboard(): Observable<any> {
@@ -24,11 +29,32 @@ export class AdminService {
   }
 
   responderMensagem(mensagemId: number, resposta: string): Observable<any> {
-    return this.http.put(this.API + '/mensagem/' + mensagemId + '/responder',
-      { resposta }, { headers: this.authHeaders() });
+    return this.http.put(
+      this.API + '/mensagem/' + mensagemId + '/responder',
+      { resposta },
+      { headers: this.authHeaders() }
+    );
   }
 
   getContagemEmAndamento(): Observable<{ total: number }> {
-    return this.http.get<{ total: number }>(this.TAREFAS_API + '/contagemEmAndamento', { headers: this.authHeaders() });
+    return this.http.get<{ total: number }>(
+      this.TAREFAS_API + '/contagemEmAndamento',
+      { headers: this.authHeaders() }
+    );
   }
+
+
+  getAllTarefas(): Observable<any[]> {
+    return this.http.get<any[]>(this.TAREFAS_API + '/getAllTarefa', { headers: this.authHeaders() });
+  }
+
+  getAllPessoas(): Observable<any[]> {
+    return this.http.get<any[]>(this.PESSOAS_API + '/getAllPessoa', { headers: this.authHeaders() });
+  }
+
+  getAllDepartamentos(): Observable<any[]> {
+    return this.http.get<any[]>(this.DEPT_API + '/getAllDepartamento', { headers: this.authHeaders() });
+  }
+
+
 }

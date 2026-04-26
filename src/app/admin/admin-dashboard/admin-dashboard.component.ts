@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+//import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { AdminService } from '../../services/admin.service';
-import { environment } from '../../../environments/environment';
+//import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -34,7 +34,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   constructor(
     private auth: AuthService,
     private adminService: AdminService,
-    private http: HttpClient,
+    //private http: HttpClient,
     private router: Router,
     private ngZone: NgZone
   ) {}
@@ -62,13 +62,18 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   carregarDados(): void {
-    const headers = new HttpHeaders({ Authorization: 'Bearer ' + this.auth.getToken() });
-    this.http.get<any[]>(environment.apiUrl + '/tarefas/getAllTarefa', { headers })
-      .subscribe(d => this.todasTarefas = d || []);
-    this.http.get<any[]>(environment.apiUrl + '/pessoas/getAllPessoa', { headers })
-      .subscribe(d => this.todasPessoas = d || []);
-    this.http.get<any[]>(environment.apiUrl + '/departamentos/getAllDepartamento', { headers })
-      .subscribe(d => this.todosDepartamentos = d || []);
+    this.adminService.getAllTarefas().subscribe({
+      next: (d: any) => { this.todasTarefas = d || []; },
+      error: () => {}
+    });
+    this.adminService.getAllPessoas().subscribe({
+      next: (d: any) => { this.todasPessoas = d || []; },
+      error: () => {}
+    });
+    this.adminService.getAllDepartamentos().subscribe({
+      next: (d: any) => { this.todosDepartamentos = d || []; },
+      error: () => {}
+    });
     this.carregarMensagensPendentes();
   }
 
