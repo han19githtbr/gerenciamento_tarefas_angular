@@ -31,10 +31,12 @@ export class DepartamentoService {
   }
 
   saveDepartamento(item: any): Observable<any> {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
-
-    return this.http.post(this.CONTROLLER + '/salvarDepartamento', item, { headers: this.authHeaders(), observe: 'response' }).pipe(
-      tap(() => this.notificationService.addNotification('adicionou', 'departamento'))
+    return this.http.post(
+        this.CONTROLLER + '/salvarDepartamento',
+        item,
+        { headers: this.authHeaders(), observe: 'response' }
+    ).pipe(
+        tap(() => this.notificationService.addNotification('adicionou', 'departamento'))
     );
   }
 
