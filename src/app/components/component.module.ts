@@ -53,7 +53,7 @@ import { ConfirmacaoDialogDepartmentComponent } from './confirmacao-dialog-depar
 import { ConfirmacaoDialogTaskComponent } from './confirmacao-dialog-task/confirmacao-dialog-task.component';
 import { AlocarPessoaTarefaComponent } from './alocar-pessoa-tarefa/alocar-pessoa-tarefa.component';
 import { DialogPessoaTarefaComponent } from './dialog-pessoa-tarefa/dialog-pessoa-tarefa.component';
-
+import { HomeSelectorComponent } from './home-selector/home-selector.component';
 
 const dialogMock = {
   close: () => { }
@@ -67,11 +67,12 @@ const dialogMock = {
     ConfirmacaoDialogComponent,
     ConfirmacaoDialogDepartmentComponent,
     AlocarPessoaTarefaComponent,
+    HomeSelectorComponent,
     ConfirmacaoDialogTaskComponent,
     FooterComponent,
     DialogPessoaTarefaComponent,
     DashboardComponent,
-    
+
   ],
   imports: [
     CommonModule, MatTreeModule, MatTooltipModule, MatToolbarModule, MatTabsModule, MatSortModule, MatSnackBarModule,
@@ -99,7 +100,8 @@ const dialogMock = {
     ConfirmacaoDialogDepartmentComponent,
     ConfirmacaoDialogTaskComponent,
     DashboardComponent,
-    FooterComponent
+    FooterComponent,
+    HomeSelectorComponent
   ],
   providers: [
     {provide: MatDialogTitle, useValue: []},
