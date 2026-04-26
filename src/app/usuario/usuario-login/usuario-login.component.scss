@@ -1,57 +1,158 @@
+/* ============================================================
+   USER LOGIN — Dark Premium Blue
+   ============================================================ */
 .login-wrapper {
   min-height: 100vh;
+  background: #07090f;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-  font-family: 'Segoe UI', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.bg-glow--blue {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, #0077a8, transparent);
+  top: -150px; right: -100px;
+}
+
+.bg-glow--teal {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, #00b4d8, transparent);
+  bottom: -100px; left: -80px;
 }
 
 .login-card {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(0,180,216,0.3);
-  border-radius: 20px;
-  padding: 3rem 2.5rem;
+  position: relative;
+  z-index: 1;
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 28px;
+  padding: 52px 48px;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
   text-align: center;
-  width: 360px;
   backdrop-filter: blur(20px);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 80px rgba(0,180,216,0.08);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04);
 
-  .login-logo {
-    margin-bottom: 1.5rem;
-    svg { width: 64px; height: 64px; }
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,180,216,0.6), transparent);
   }
+}
 
-  h1 {
-    color: #fff;
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin: 0 0 0.5rem;
-    span { color: #00b4d8; }
+.login-logo svg {
+  width: 72px;
+  height: 72px;
+  filter: drop-shadow(0 0 24px rgba(0,180,216,0.5));
+}
+
+.login-badge {
+  background: rgba(0,180,216,0.12);
+  color: #00b4d8;
+  border: 1px solid rgba(0,180,216,0.25);
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+  letter-spacing: -0.5px;
+
+  span {
+    background: linear-gradient(135deg, #00b4d8, #00e5ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
+}
 
-  p { color: rgba(255,255,255,0.5); font-size: 0.9rem; margin: 0 0 2rem; }
+p {
+  color: rgba(255,255,255,0.4);
+  font-size: 0.875rem;
+  line-height: 1.7;
+  margin: 0;
+}
 
-  .google-btn-wrapper {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1.5rem;
-  }
+.features-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+  background: rgba(0,180,216,0.05);
+  border: 1px solid rgba(0,180,216,0.1);
+  border-radius: 14px;
+  padding: 16px 18px;
+}
 
-  .login-footer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.55);
+}
 
-    .divider { color: rgba(255,255,255,0.2); }
+.feature-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00b4d8;
+  flex-shrink: 0;
+}
 
-    a {
-      color: rgba(255,255,255,0.4);
-      text-decoration: none;
-      font-size: 0.85rem;
-      transition: color 0.2s;
-      &:hover { color: #00b4d8; }
+.google-btn-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 4px 0;
+}
+
+.login-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+
+  a {
+    color: rgba(255,255,255,0.3);
+    font-size: 0.82rem;
+    text-decoration: none;
+    transition: color 0.2s;
+
+    &:hover {
+      color: rgba(0,180,216,0.8);
     }
+  }
+
+  .sep {
+    color: rgba(255,255,255,0.15);
+    font-size: 0.8rem;
   }
 }

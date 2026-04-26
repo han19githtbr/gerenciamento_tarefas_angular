@@ -1,20 +1,40 @@
 <div class="login-wrapper">
+  <div class="bg-glow bg-glow--red"></div>
+  <div class="bg-glow bg-glow--purple"></div>
+
   <div class="login-card">
     <div class="login-logo">
-      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="48" height="48" rx="12" fill="#1a1a2e"/>
-        <path d="M24 8L38 16V32L24 40L10 32V16L24 8Z" fill="#e94560" opacity="0.9"/>
-        <path d="M24 14L32 19V29L24 34L16 29V19L24 14Z" fill="#1a1a2e"/>
-        <circle cx="24" cy="24" r="4" fill="#e94560"/>
+      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="64" height="64" rx="16" fill="url(#adminGrad)"/>
+        <path d="M32 10L50 20V44L32 54L14 44V20L32 10Z" fill="rgba(255,255,255,0.1)"/>
+        <path d="M32 18L44 25V39L32 46L20 39V25L32 18Z" fill="rgba(255,255,255,0.06)"/>
+        <circle cx="32" cy="32" r="7" fill="white" opacity="0.95"/>
+        <defs>
+          <linearGradient id="adminGrad" x1="0" y1="0" x2="64" y2="64">
+            <stop offset="0%" stop-color="#e94560"/>
+            <stop offset="100%" stop-color="#7b2ff7"/>
+          </linearGradient>
+        </defs>
       </svg>
     </div>
+
+    <div class="login-badge">Admin</div>
     <h1>TaskFlow <span>Admin</span></h1>
-    <p>Acesso restrito ao administrador do sistema</p>
+    <p>Acesso restrito ao administrador do sistema.<br>Apenas contas autorizadas podem entrar.</p>
+
+    <div class="lock-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20">
+        <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke="rgba(233,69,96,0.7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Acesso protegido por e-mail autorizado
+    </div>
+
     <div class="google-btn-wrapper">
       <div id="google-btn"></div>
     </div>
+
     <div class="login-footer">
-      <a routerLink="/">← Voltar ao sistema</a>
+      <a routerLink="/">← Voltar à tela inicial</a>
     </div>
   </div>
 </div>

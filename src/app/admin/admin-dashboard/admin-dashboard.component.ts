@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { AdminService } from '../../services/admin.service';
@@ -10,7 +10,7 @@ import { environment } from '../../../environments/environment';
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.scss']
 })
-export class AdminDashboardComponent implements OnInit {
+export class AdminDashboardComponent implements OnInit, OnDestroy {
   adminEmail: string = '';
   statsGerais: any = {
     totalPessoas: 0,
@@ -24,8 +24,12 @@ export class AdminDashboardComponent implements OnInit {
   todasTarefas: any[] = [];
   todasPessoas: any[] = [];
   todosDepartamentos: any[] = [];
+  mensagensPendentes: any[] = [];
+  respostas: { [id: number]: string } = {};
   isLoading = true;
-  activeTab: 'overview' | 'tarefas' | 'pessoas' | 'departamentos' = 'overview';
+  activeTab: 'overview' | 'tarefas' | 'pessoas' | 'departamentos' | 'mensagens' = 'overview';
+
+  private pollingInterval: any;
 
   constructor(
     private auth: AuthService,
@@ -38,6 +42,12 @@ export class AdminDashboardComponent implements OnInit {
     this.adminEmail = this.auth.getAdminEmail();
     this.carregarStatsGerais();
     this.carregarDados();
+    // Poll stats every 30 seconds
+    this.pollingInterval = setInterval(() => this.carregarStatsGerais(), 30000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.pollingInterval) clearInterval(this.pollingInterval);
   }
 
   carregarStatsGerais(): void {
@@ -51,14 +61,42 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   carregarDados(): void {
-    const headers = new HttpHeaders({ Authorization: 'Bearer ' + this.auth.getToken() });
-    this.http.get<any[]>(environment.apiUrl + '/tarefas/getAllTarefa').subscribe(d => this.todasTarefas = d || []);
-    this.http.get<any[]>(environment.apiUrl + '/pessoas/getAllPessoa').subscribe(d => this.todasPessoas = d || []);
-    this.http.get<any[]>(environment.apiUrl + '/departamentos/getAllDepartamento').subscribe(d => this.todosDepartamentos = d || []);
+    this.http.get<any[]>(environment.apiUrl + '/tarefas/getAllTarefa')
+      .subscribe(d => this.todasTarefas = d || []);
+    this.http.get<any[]>(environment.apiUrl + '/pessoas/getAllPessoa')
+      .subscribe(d => this.todasPessoas = d || []);
+    this.http.get<any[]>(environment.apiUrl + '/departamentos/getAllDepartamento')
+      .subscribe(d => this.todosDepartamentos = d || []);
+    this.carregarMensagensPendentes();
   }
 
-  setTab(tab: 'overview' | 'tarefas' | 'pessoas' | 'departamentos'): void {
+  carregarMensagensPendentes(): void {
+    this.adminService.getMensagensPendentes().subscribe({
+      next: (data: any[]) => {
+        this.mensagensPendentes = data || [];
+      },
+      error: () => {}
+    });
+  }
+
+  responderMensagem(mensagemId: number): void {
+    const resposta = this.respostas[mensagemId];
+    if (!resposta?.trim()) return;
+
+    this.adminService.responderMensagem(mensagemId, resposta).subscribe({
+      next: () => {
+        this.respostas[mensagemId] = '';
+        this.carregarMensagensPendentes();
+      },
+      error: () => alert('Erro ao responder mensagem')
+    });
+  }
+
+  setTab(tab: 'overview' | 'tarefas' | 'pessoas' | 'departamentos' | 'mensagens'): void {
     this.activeTab = tab;
+    if (tab === 'mensagens') {
+      this.carregarMensagensPendentes();
+    }
   }
 
   logout(): void {
@@ -67,13 +105,21 @@ export class AdminDashboardComponent implements OnInit {
 
   getStatusBadge(tarefa: any): string {
     if (tarefa.finalizado) return 'concluida';
-    if (tarefa.pessoaId || tarefa.pessoa) return 'andamento';
+    if (tarefa.emAndamento) return 'andamento';
+    if (tarefa.pessoaId || tarefa.pessoa) return 'alocada';
     return 'pendente';
   }
 
   getStatusLabel(tarefa: any): string {
     if (tarefa.finalizado) return 'Concluída';
-    if (tarefa.pessoaId || tarefa.pessoa) return 'Em Andamento';
+    if (tarefa.emAndamento) return 'Em Andamento';
+    if (tarefa.pessoaId || tarefa.pessoa) return 'Alocada';
     return 'Pendente';
+  }
+
+  isPrazoUrgente(prazo: any): boolean {
+    if (!prazo) return false;
+    const diff = new Date(prazo).getTime() - Date.now();
+    return diff > 0 && diff < 86400000 * 3;
   }
 }

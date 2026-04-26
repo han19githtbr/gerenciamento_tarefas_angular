@@ -1,21 +1,49 @@
 <div class="login-wrapper">
+  <div class="bg-glow bg-glow--blue"></div>
+  <div class="bg-glow bg-glow--teal"></div>
+
   <div class="login-card">
     <div class="login-logo">
-      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="48" height="48" rx="12" fill="#0f2027"/>
-        <path d="M24 8L38 16V32L24 40L10 32V16L24 8Z" fill="#00b4d8" opacity="0.8"/>
-        <path d="M24 14L32 19V29L24 34L16 29V19L24 14Z" fill="#0f2027"/>
-        <circle cx="24" cy="24" r="4" fill="#00b4d8"/>
+      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="64" height="64" rx="16" fill="url(#userGrad)"/>
+        <path d="M32 10L50 20V44L32 54L14 44V20L32 10Z" fill="rgba(255,255,255,0.1)"/>
+        <path d="M32 18L44 25V39L32 46L20 39V25L32 18Z" fill="rgba(255,255,255,0.06)"/>
+        <circle cx="32" cy="32" r="7" fill="white" opacity="0.95"/>
+        <defs>
+          <linearGradient id="userGrad" x1="0" y1="0" x2="64" y2="64">
+            <stop offset="0%" stop-color="#00b4d8"/>
+            <stop offset="100%" stop-color="#0077a8"/>
+          </linearGradient>
+        </defs>
       </svg>
     </div>
+
+    <div class="login-badge">Portal do Colaborador</div>
     <h1>TaskFlow <span>Portal</span></h1>
-    <p>Acesse suas tarefas com sua conta Google</p>
+    <p>Acesse suas tarefas, acompanhe prazos e interaja com sua equipe.</p>
+
+    <div class="features-list">
+      <div class="feature-item">
+        <span class="feature-dot"></span>
+        <span>Veja suas tarefas alocadas</span>
+      </div>
+      <div class="feature-item">
+        <span class="feature-dot"></span>
+        <span>Acompanhe prazos e status</span>
+      </div>
+      <div class="feature-item">
+        <span class="feature-dot"></span>
+        <span>Envie dúvidas ao administrador</span>
+      </div>
+    </div>
+
     <div class="google-btn-wrapper">
       <div id="google-btn-user"></div>
     </div>
+
     <div class="login-footer">
-      <a routerLink="/">← Voltar ao sistema</a>
-      <span class="divider">•</span>
+      <a routerLink="/">← Voltar à tela inicial</a>
+      <span class="sep">·</span>
       <a routerLink="/admin/login">Área Admin</a>
     </div>
   </div>

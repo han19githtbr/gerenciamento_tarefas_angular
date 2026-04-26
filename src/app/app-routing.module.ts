@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DepartamentoPessoasComponent } from './components/departamento-pessoas/departamento-pessoas.component';
+import { HomeSelectorComponent } from './components/home-selector/home-selector.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'admin/login', pathMatch: 'full' },
+  { path: '', component: HomeSelectorComponent },
   {
     path: 'admin',
     loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
@@ -12,7 +13,8 @@ const routes: Routes = [
     path: 'usuario',
     loadChildren: () => import('./usuario/usuario.module').then(m => m.UsuarioModule)
   },
-  { path: 'departamentos/:departamentoId/pessoas', component: DepartamentoPessoasComponent }
+  { path: 'departamentos/:departamentoId/pessoas', component: DepartamentoPessoasComponent },
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
