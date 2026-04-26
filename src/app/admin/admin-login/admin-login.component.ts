@@ -15,10 +15,18 @@ export class AdminLoginComponent implements AfterViewInit {
       this.router.navigate(['/admin/dashboard']);
       return;
     }
-    if ((window as any).google) {
+    this.aguardarGoogleSDK(() => {
       this.auth.initGoogleSignIn(() => {
         this.router.navigate(['/admin/dashboard']);
       });
+    });
+  }
+
+  private aguardarGoogleSDK(callback: () => void, tentativas = 0): void {
+    if ((window as any).google) {
+      callback();
+    } else if (tentativas < 20) {
+      setTimeout(() => this.aguardarGoogleSDK(callback, tentativas + 1), 300);
     }
   }
 
