@@ -45,15 +45,14 @@ export class AdicionarDepartamentoComponent implements OnInit {
   }
 
   ngOnInit() {
-      this.form = this.fb.group({
-        titulo: ["", [Validators.required, Validators.maxLength(255)]],
-        id: ["", Validators.required]
-      });
+    this.form = this.fb.group({
+      titulo: ["", [Validators.required, Validators.maxLength(255)]],
+      id: [""]
+    });
 
-      this.departamentoService.getAllDepartamento().subscribe((data: any) => {
-        this.departamentos = data.body;
-        console.log(this.departamentos);
-      })
+    this.departamentoService.getAllDepartamento().subscribe((data: any) => {
+      this.departamentos = data.body;
+    });
   }
 
 
@@ -71,52 +70,58 @@ export class AdicionarDepartamentoComponent implements OnInit {
 
 
   submit(form: any) {
-    this.disableBox = true;
-    const tituloControl = form.get('titulo');
-    if(!tituloControl.value) {
+      this.disableBox = true;
+      const tituloControl = form.get('titulo');
+      if (!tituloControl || !tituloControl.value || !tituloControl.value.trim()) {
         this.disableBox = false;
-        //this.alertModalService.mostrarMensagem("O campo tem que ser preenchido.", this.alertModalService.ERRO);
-        this.showError("O campo tem que ser preenchido.");
-    } else {
-        if(this.departamentoButton == "Create") {
-
-            this.departamentoService.saveDepartamento(this.departamento).subscribe(data => {
-                if(data.body.success){
-                    this.departamento.id = data.body.id;
-                    this.departamento.titulo = data.body.titulo;
-                    this.departamento.ordem_apresentacao = data.body.ordem_apresentacao;
-                    this.departamento.mensagem = data.body.mensagem;
-                    //this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.SUCESSO);
-                    this.showSuccess("O departamento foi salvo com sucesso.");
-                    this.dialogRef.close(this.departamento);
-                } else{
-                    this.disableBox = false;
-                    //this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.ERRO);
-                    this.showError("Erro ao salvar o departamento");
-                }
-            })
-        } else {
-              const nomeDepartamento = encodeURIComponent(this.oldTitle);
-
-              this.departamentoService.alterarDepartamento(nomeDepartamento, this.departamento).subscribe(data => {
-                  if(data.body.success){
-                      this.departamento.id = data.body.id;
-                      this.departamento.titulo = data.body.titulo;
-                      this.departamento.ordem_apresentacao = data.body.ordem_apresentacao;
-                      this.departamento.mensagem = data.body.mensagem;
-                      //this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.SUCESSO);
-                      this.showSuccess("O departamento foi alterado com sucesso.");
-                      this.dialogRef.close(this.departamento);
-                  } else{
-                      this.disableBox = false;
-                      this.showError("Erro ao alterar o departamento");
-                      //this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.ERRO);
-                  }
-              });
-
-
-          }
-
-        }
-        }
+        this.showError("O campo título deve ser preenchido.");
+        return;
       }
+
+      this.departamento.titulo = tituloControl.value.trim();
+
+      if (this.departamentoButton === 'Create') {
+        this.departamentoService.saveDepartamento(this.departamento).subscribe({
+          next: (data: any) => {
+            // O backend retorna DepartamentoDTO diretamente no body (sem wrapper success)
+            const body = data.body || data;
+            if (body && body.titulo) {
+              this.departamento.id = body.id;
+              this.departamento.titulo = body.titulo;
+              this.departamento.ordem_apresentacao = body.ordem_apresentacao;
+              this.showSuccess("O departamento foi salvo com sucesso.");
+              this.dialogRef.close(this.departamento);
+            } else {
+              this.disableBox = false;
+              this.showError("Erro ao salvar o departamento.");
+            }
+          },
+          error: (err: any) => {
+            this.disableBox = false;
+            this.showError("Erro ao salvar o departamento: " + (err?.message || 'tente novamente'));
+          }
+        });
+      } else {
+        const nomeDepartamento = encodeURIComponent(this.oldTitle);
+        this.departamentoService.alterarDepartamento(nomeDepartamento, this.departamento).subscribe({
+          next: (data: any) => {
+            const body = data.body || data;
+            if (body && body.titulo) {
+              this.departamento.id = body.id;
+              this.departamento.titulo = body.titulo;
+              this.departamento.ordem_apresentacao = body.ordem_apresentacao;
+              this.showSuccess("O departamento foi alterado com sucesso.");
+              this.dialogRef.close(this.departamento);
+            } else {
+              this.disableBox = false;
+              this.showError("Erro ao alterar o departamento.");
+            }
+          },
+          error: (err: any) => {
+            this.disableBox = false;
+            this.showError("Erro ao alterar o departamento: " + (err?.message || 'tente novamente'));
+          }
+        });
+      }
+  }
+}

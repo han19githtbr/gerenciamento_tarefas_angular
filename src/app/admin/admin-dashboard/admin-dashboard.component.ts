@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -35,7 +35,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     private auth: AuthService,
     private adminService: AdminService,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private ngZone: NgZone
   ) {}
 
   ngOnInit(): void {
@@ -105,7 +106,9 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   voltarInicio(): void {
-    this.router.navigate(['/']);
+    this.ngZone.run(() => {
+      this.router.navigate(['/']);
+    });
   }
 
   getStatusBadge(tarefa: any): string {
