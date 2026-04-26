@@ -36,14 +36,14 @@ export class TarefaService {
     );
   }
 
-  alocarPessoaNaTarefa(tarefaId: number, pessoaId: number): Observable<any> {
+  alocarPessoaNaTarefa(tarefaId: number, pessoaId: number, emailPessoa?: string): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
 
     const url = `${this.CONTROLLER}/alocar/${tarefaId}/${pessoaId}`;
-
+    const body = emailPessoa ? { emailPessoa } : {};
     console.log('URL da alocação:', url);
 
-    return this.http.put(url, {}, {
+    return this.http.put(url, body, {
         headers: this.authHeaders(),
         observe: 'response'
     });

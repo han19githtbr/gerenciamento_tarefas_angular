@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgZone } from '@angular/core';
 import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -17,7 +18,7 @@ export class AuthService {
         if (payload.email === this.ADMIN_EMAIL) {
           localStorage.setItem('admin_token', response.credential);
           localStorage.setItem('admin_email', payload.email);
-          callback(response.credential);
+          this.ngZone.run(() => callback(response.credential));
         } else {
           alert('Acesso negado. Somente o administrador pode entrar aqui.');
         }
@@ -38,7 +39,7 @@ export class AuthService {
         const payload = this.parseJwt(response.credential);
         localStorage.setItem('user_token', response.credential);
         localStorage.setItem('user_email', payload.email);
-        callback(response.credential, payload.email);
+        this.ngZone.run(() => callback(response.credential, payload.email));
       }
     });
     const btnEl = document.getElementById('google-btn-user');

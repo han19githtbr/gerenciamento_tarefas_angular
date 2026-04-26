@@ -27,6 +27,7 @@ export class AlocarPessoaTarefaComponent implements OnInit {
 
   tarefaId: number;
   pessoaId: number;
+  emailPessoa: string = '';
 
   constructor(private tarefaService: TarefaService, private toastr: ToastrService) { }
 
@@ -44,7 +45,7 @@ export class AlocarPessoaTarefaComponent implements OnInit {
   }
 
   alocarPessoaNaTarefa(): void {
-    this.tarefaService.alocarPessoaNaTarefa(this.tarefaId, this.pessoaId).subscribe(
+    this.tarefaService.alocarPessoaNaTarefa(this.tarefaId, this.pessoaId, this.emailPessoa).subscribe(
       response => {
         if (response.success) {
           this.showSuccess("A pessoa foi alocada com sucesso."); // ou faça qualquer outra coisa com a resposta
