@@ -8,7 +8,7 @@ export class AuthService {
   private readonly CLIENT_ID = environment.googleClientId || 'SEU_GOOGLE_CLIENT_ID';
   private readonly ADMIN_EMAIL = environment.adminEmail || 'SEU_EMAIL@gmail.com';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private ngZone: NgZone) {}
 
   initGoogleSignIn(callback: (token: string) => void): void {
     (window as any).google.accounts.id.initialize({
