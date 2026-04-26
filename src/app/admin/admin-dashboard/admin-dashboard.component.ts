@@ -103,6 +103,10 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     this.auth.logoutAdmin();
   }
 
+  voltarInicio(): void {
+    this.router.navigate(['/']);
+  }
+
   getStatusBadge(tarefa: any): string {
     if (tarefa.finalizado) return 'concluida';
     if (tarefa.emAndamento) return 'andamento';

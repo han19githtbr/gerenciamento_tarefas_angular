@@ -1,3 +1,51 @@
-<p>
-  home-selector works!
-</p>
+<div class="home-wrapper">
+  <div class="bg-glow bg-glow--red"></div>
+  <div class="bg-glow bg-glow--blue"></div>
+
+  <div class="home-card">
+    <div class="home-logo">
+      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="64" height="64" rx="16" fill="url(#homeGrad)"/>
+        <path d="M32 10L50 20V44L32 54L14 44V20L32 10Z" fill="rgba(255,255,255,0.1)"/>
+        <circle cx="32" cy="32" r="7" fill="white" opacity="0.95"/>
+        <defs>
+          <linearGradient id="homeGrad" x1="0" y1="0" x2="64" y2="64">
+            <stop offset="0%" stop-color="#e94560"/>
+            <stop offset="100%" stop-color="#7b2ff7"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+
+    <h1>Task<span>Flow</span></h1>
+    <p>Escolha como deseja acessar o sistema</p>
+
+    <div class="access-options">
+      <button class="btn-option btn-user" (click)="goUsuario()">
+        <div class="option-icon">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="24">
+            <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
+          </svg>
+        </div>
+        <div class="option-info">
+          <strong>Área do Colaborador</strong>
+          <span>Acesse suas tarefas e acompanhe prazos</span>
+        </div>
+        <span class="option-arrow">→</span>
+      </button>
+
+      <button class="btn-option btn-admin" (click)="goAdmin()">
+        <div class="option-icon">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="24">
+            <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <div class="option-info">
+          <strong>Área do Administrador</strong>
+          <span>Gerencie tarefas, pessoas e departamentos</span>
+        </div>
+        <span class="option-arrow">→</span>
+      </button>
+    </div>
+  </div>
+</div>

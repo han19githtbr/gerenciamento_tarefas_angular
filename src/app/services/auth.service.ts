@@ -70,7 +70,7 @@ export class AuthService {
   logoutAdmin(): void {
     localStorage.removeItem('admin_token');
     localStorage.removeItem('admin_email');
-    this.router.navigate(['/admin/login']);
+    this.router.navigate(['/']);
   }
 
   logoutUser(): void {

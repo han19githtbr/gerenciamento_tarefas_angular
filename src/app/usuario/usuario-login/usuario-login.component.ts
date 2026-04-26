@@ -21,4 +21,8 @@ export class UsuarioLoginComponent implements AfterViewInit {
       });
     }
   }
+
+  voltarInicio(): void {
+    this.router.navigate(['/']);
+  }
 }
