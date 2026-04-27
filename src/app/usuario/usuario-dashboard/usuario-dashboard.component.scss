@@ -373,3 +373,81 @@ $red: #e94560;
     &:disabled { opacity: 0.4; cursor: default; }
   }
 }
+
+
+/* ── RESPONSIVIDADE MOBILE ───────────────────────────── */
+@media (max-width: 768px) {
+
+  .topbar {
+    padding: 0.7rem 1rem;
+
+    .topbar-brand span { font-size: 0.9rem; }
+
+    .topbar-right {
+      gap: 0.5rem;
+
+      .user-chip .user-email-short {
+        max-width: 80px;
+        font-size: 0.72rem;
+      }
+
+      .btn-logout { padding: 0.35rem 0.65rem; font-size: 0.75rem; }
+    }
+  }
+
+  .notif-banners { padding: 0.5rem 1rem; }
+
+  .user-main { padding: 1.25rem 1rem; }
+
+  .welcome-section {
+    h1 { font-size: 1.25rem; }
+    p  { font-size: 0.82rem; }
+  }
+
+  /* Stats: 2x2 no mobile */
+  .mini-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .mini-stat {
+    padding: 0.75rem;
+    .ms-value { font-size: 1.4rem; }
+    .ms-label { font-size: 0.68rem; }
+  }
+
+  /* Task cards */
+  .task-header { padding: 1rem 1rem 0; }
+
+  .task-body { padding: 0.85rem 1rem 1rem; }
+
+  .task-actions {
+    gap: 0.5rem;
+
+    .btn-msg-toggle { margin-left: 0; width: 100%; justify-content: center; }
+  }
+
+  /* Formulário de mensagem */
+  .nova-mensagem .btn-enviar { align-self: stretch; text-align: center; }
+
+  /* Status badge menor */
+  .status-badge { font-size: 0.7rem; padding: 0.2rem 0.55rem; }
+}
+
+@media (max-width: 400px) {
+
+  .topbar .topbar-right .user-chip { display: none; }
+
+  .mini-stats { grid-template-columns: repeat(2, 1fr); }
+
+  .task-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .task-actions { flex-direction: column; align-items: stretch; }
+
+  .btn-iniciar { text-align: center; }
+}

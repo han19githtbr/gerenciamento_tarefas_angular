@@ -69,3 +69,11 @@
   font-size: small;
   display: block;
 }
+
+@media (max-width: 540px) {
+  .modal-content {
+    width: calc(100vw - 32px);
+    max-width: 100%;
+    margin: 0 16px;
+  }
+}

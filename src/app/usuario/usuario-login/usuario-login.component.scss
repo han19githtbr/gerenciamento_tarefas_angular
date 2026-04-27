@@ -241,3 +241,25 @@ h1 {
 }
 
 .sep { color: rgba(255,255,255,0.15); font-size: 0.75rem; }
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 36px 20px 32px;
+    border-radius: 20px;
+    margin: 16px;
+    width: calc(100% - 32px);
+    gap: 16px;
+  }
+
+  h1 { font-size: 1.65rem; }
+
+  .login-desc { font-size: 0.82rem; }
+
+  .lock-box { font-size: 0.78rem; padding: 10px 12px; }
+
+  .login-footer {
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+  }
+}
