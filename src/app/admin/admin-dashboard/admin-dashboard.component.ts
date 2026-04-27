@@ -25,6 +25,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   todasPessoas: any[] = [];
   todosDepartamentos: any[] = [];
   mensagensPendentes: any[] = [];
+  mensagensOcultas: Set<number> = new Set();
   respostas: { [id: number]: string } = {};
   isLoading = true;
   activeTab: 'overview' | 'tarefas' | 'pessoas' | 'departamentos' | 'mensagens' = 'overview';
@@ -86,6 +87,25 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.mensagensPendentes = data || [];
       },
       error: () => {}
+    });
+  }
+
+  toggleOcultarMensagem(id: number): void {
+    if (this.mensagensOcultas.has(id)) {
+      this.mensagensOcultas.delete(id);
+    } else {
+      this.mensagensOcultas.add(id);
+    }
+  }
+
+  excluirMensagemAdmin(mensagemId: number): void {
+    if (!confirm('Remover esta mensagem do painel?')) return;
+    this.adminService.excluirMensagem(mensagemId).subscribe({
+      next: () => {
+        this.mensagensPendentes = this.mensagensPendentes.filter(m => m.id !== mensagemId);
+        this.mensagensOcultas.delete(mensagemId);
+      },
+      error: () => alert('Erro ao excluir mensagem')
     });
   }
 

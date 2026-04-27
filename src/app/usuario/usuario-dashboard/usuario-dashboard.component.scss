@@ -111,6 +111,58 @@ $red: #e94560;
   padding: 2rem 1.5rem;
 }
 
+/* ── AÇÕES DE MENSAGEM ───────────────────────────────── */
+.msg-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+.msg-item-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.btn-msg-mini {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all 0.2s;
+  &:hover { background: rgba(255,255,255,0.12); transform: scale(1.1); }
+}
+
+.btn-excluir-mini:hover {
+  background: rgba(233,69,96,0.15);
+  border-color: rgba(233,69,96,0.3);
+}
+
+.msg-oculta {
+  opacity: 0.55;
+}
+
+.msg-oculta-hint {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.25);
+  font-style: italic;
+  margin-top: 0.15rem;
+
+  span {
+    color: $accent;
+    cursor: pointer;
+    text-decoration: underline;
+    &:hover { opacity: 0.8; }
+  }
+}
+
+
 .welcome-section {
   margin-bottom: 1.75rem;
   h1 { font-size: 1.6rem; font-weight: 700;

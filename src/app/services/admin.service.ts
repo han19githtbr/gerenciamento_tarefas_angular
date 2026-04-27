@@ -43,6 +43,12 @@ export class AdminService {
     );
   }
 
+  excluirMensagem(mensagemId: number): Observable<any> {
+    return this.http.delete(
+      this.API + '/mensagem/' + mensagemId,
+      { headers: this.authHeaders() }
+    );
+  }
 
   getAllTarefas(): Observable<any[]> {
     return this.http.get<any[]>(this.TAREFAS_API + '/getAllTarefa', { headers: this.authHeaders() });

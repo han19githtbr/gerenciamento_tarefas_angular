@@ -13,6 +13,7 @@ export class UsuarioDashboardComponent implements OnInit, OnDestroy {
   minhasTarefas: any[] = [];
   notificacoes: any[] = [];
   novasMensagens: { [tarefaId: number]: string } = {};
+  mensagensOcultas: Set<number> = new Set();
   tarefasExpandidas: { [tarefaId: number]: boolean } = {};
   isLoading = true;
   private pollingInterval: any;
@@ -66,6 +67,28 @@ export class UsuarioDashboardComponent implements OnInit, OnDestroy {
         this.carregarMinhasTarefas();
       },
       error: () => alert('Erro ao enviar mensagem')
+    });
+  }
+
+  toggleOcultarMensagem(msgId: number): void {
+    if (this.mensagensOcultas.has(msgId)) {
+      this.mensagensOcultas.delete(msgId);
+    } else {
+      this.mensagensOcultas.add(msgId);
+    }
+  }
+
+  excluirMensagemUsuario(tarefaId: number, msgId: number): void {
+    if (!confirm('Remover esta mensagem?')) return;
+    this.usuarioService.excluirMensagem(msgId).subscribe({
+      next: () => {
+        const tarefa = this.minhasTarefas.find(t => t.id === tarefaId);
+        if (tarefa) {
+          tarefa.mensagens = tarefa.mensagens.filter((m: any) => m.id !== msgId);
+        }
+        this.mensagensOcultas.delete(msgId);
+      },
+      error: () => alert('Erro ao excluir mensagem')
     });
   }
 

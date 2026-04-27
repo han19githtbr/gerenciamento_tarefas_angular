@@ -273,7 +273,8 @@
       </div>
 
       <div class="messages-list" *ngIf="mensagensPendentes.length > 0">
-        <div class="message-card" *ngFor="let msg of mensagensPendentes">
+        <div class="message-card" *ngFor="let msg of mensagensPendentes"
+            [class.msg-oculta]="mensagensOcultas.has(msg.id)">
           <div class="msg-header">
             <div class="msg-from">
               <span class="msg-avatar">{{ msg.remetenteEmail?.[0]?.toUpperCase() }}</span>
@@ -282,9 +283,21 @@
                 <span class="msg-tarefa">Tarefa: {{ msg.tarefaTitulo || '#' + msg.tarefaId }}</span>
               </div>
             </div>
-            <span class="msg-date">{{ msg.dataCriacao | date:'dd/MM HH:mm' }}</span>
+            <div class="msg-header-actions">
+              <span class="msg-date">{{ msg.dataCriacao | date:'dd/MM HH:mm' }}</span>
+              <button class="btn-msg-action btn-ocultar"
+                      (click)="toggleOcultarMensagem(msg.id)"
+                      [title]="mensagensOcultas.has(msg.id) ? 'Mostrar mensagem' : 'Ocultar mensagem'">
+                {{ mensagensOcultas.has(msg.id) ? '👁' : '🙈' }}
+              </button>
+              <button class="btn-msg-action btn-excluir-msg"
+                      (click)="excluirMensagemAdmin(msg.id)"
+                      title="Excluir mensagem">
+                🗑
+              </button>
+            </div>
           </div>
-          <div class="msg-body">
+          <div class="msg-body" *ngIf="!mensagensOcultas.has(msg.id)">
             <p class="msg-text">{{ msg.texto }}</p>
             <div class="msg-reply-form">
               <textarea [(ngModel)]="respostas[msg.id]"
@@ -296,6 +309,9 @@
                 Responder
               </button>
             </div>
+          </div>
+          <div class="msg-oculta-hint" *ngIf="mensagensOcultas.has(msg.id)">
+            Mensagem oculta — <span (click)="toggleOcultarMensagem(msg.id)">clique no 👁 para ver</span>
           </div>
         </div>
       </div>

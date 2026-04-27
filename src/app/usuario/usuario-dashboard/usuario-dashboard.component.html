@@ -136,19 +136,39 @@
           <div class="mensagens-header">💬 Dúvidas e Mensagens</div>
 
           <div class="mensagens-lista" *ngIf="tarefa.mensagens?.length > 0">
-            <div class="mensagem-item" *ngFor="let msg of tarefa.mensagens">
-              <div class="msg-usuario">
+            <div class="mensagem-item" *ngFor="let msg of tarefa.mensagens"
+                [class.msg-oculta]="mensagensOcultas.has(msg.id)">
+              <div class="msg-item-header">
                 <span class="msg-author">Você</span>
+                <div class="msg-item-actions">
+                  <button class="btn-msg-mini btn-ocultar-mini"
+                          (click)="toggleOcultarMensagem(msg.id)"
+                          [title]="mensagensOcultas.has(msg.id) ? 'Mostrar' : 'Ocultar'">
+                    {{ mensagensOcultas.has(msg.id) ? '👁' : '🙈' }}
+                  </button>
+                  <button class="btn-msg-mini btn-excluir-mini"
+                          (click)="excluirMensagemUsuario(tarefa.id, msg.id)"
+                          title="Excluir mensagem">
+                    🗑
+                  </button>
+                </div>
+              </div>
+
+              <ng-container *ngIf="!mensagensOcultas.has(msg.id)">
                 <p>{{ msg.texto }}</p>
                 <span class="msg-time">{{ msg.dataCriacao | date:'dd/MM HH:mm' }}</span>
-              </div>
-              <div class="msg-admin" *ngIf="msg.respondida">
-                <span class="msg-author admin-author">Admin</span>
-                <p>{{ msg.resposta }}</p>
-                <span class="msg-time">{{ msg.dataResposta | date:'dd/MM HH:mm' }}</span>
-              </div>
-              <div class="msg-aguardando" *ngIf="!msg.respondida">
-                <span>⏳ Aguardando resposta do administrador...</span>
+                <div class="msg-admin" *ngIf="msg.respondida">
+                  <span class="msg-author admin-author">Admin</span>
+                  <p>{{ msg.resposta }}</p>
+                  <span class="msg-time">{{ msg.dataResposta | date:'dd/MM HH:mm' }}</span>
+                </div>
+                <div class="msg-aguardando" *ngIf="!msg.respondida">
+                  <span>⏳ Aguardando resposta do administrador...</span>
+                </div>
+              </ng-container>
+
+              <div class="msg-oculta-hint" *ngIf="mensagensOcultas.has(msg.id)">
+                Oculta — <span (click)="toggleOcultarMensagem(msg.id)">mostrar</span>
               </div>
             </div>
           </div>

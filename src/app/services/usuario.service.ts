@@ -28,6 +28,10 @@ export class UsuarioService {
       { texto }, { headers: this.authHeaders() });
   }
 
+  excluirMensagem(msgId: number): Observable<any> {
+    return this.http.delete(this.API + '/mensagem/' + msgId, { headers: this.authHeaders() });
+  }
+
   getNotificacoes(): Observable<any[]> {
     return this.http.get<any[]>(this.NOTIF_API + '/pendentes', { headers: this.authHeaders() });
   }
