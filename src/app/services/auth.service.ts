@@ -24,10 +24,11 @@ export class AuthService {
         }
       }
     });
+    // Renderiza botão oculto apenas para o SDK funcionar, o visual é customizado
     const btnEl = document.getElementById('google-btn');
     if (btnEl) {
       (window as any).google.accounts.id.renderButton(btnEl, {
-        theme: 'filled_blue', size: 'large', text: 'signin_with'
+        theme: 'filled_blue', size: 'large', text: 'signin_with', width: 400
       });
     }
   }
@@ -45,7 +46,7 @@ export class AuthService {
     const btnEl = document.getElementById('google-btn-user');
     if (btnEl) {
       (window as any).google.accounts.id.renderButton(btnEl, {
-        theme: 'filled_blue', size: 'large'
+        theme: 'filled_blue', size: 'large', width: 400
       });
     }
   }

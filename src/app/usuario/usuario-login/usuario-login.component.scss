@@ -202,9 +202,17 @@ h1 {
 
 .google-btn-wrapper {
   width: 100%;
-  display: flex;
-  justify-content: center;
-  div { width: 100% !important; }
+
+  .google-sdk-btn {
+    width: 100%;
+
+    // Força o iframe injetado pelo SDK a ocupar toda a largura
+    > div, iframe {
+      width: 100% !important;
+      min-width: unset !important;
+      max-width: 100% !important;
+    }
+  }
 }
 
 .login-footer {
