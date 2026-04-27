@@ -28,7 +28,7 @@ export class AuthService {
     const btnEl = document.getElementById('google-btn');
     if (btnEl) {
       (window as any).google.accounts.id.renderButton(btnEl, {
-        theme: 'outline', size: 'large', text: 'signin_with', width: 400
+        theme: 'filled_black', size: 'large', text: 'signin_with', width: 400
       });
     }
   }
@@ -46,7 +46,7 @@ export class AuthService {
     const btnEl = document.getElementById('google-btn-user');
     if (btnEl) {
       (window as any).google.accounts.id.renderButton(btnEl, {
-        theme: 'outline', size: 'large', width: 400
+        theme: 'filled_black', size: 'large', width: 400
       });
     }
   }
