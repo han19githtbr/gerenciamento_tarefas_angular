@@ -44,15 +44,17 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     this.adminEmail = this.auth.getAdminEmail();
     this.carregarStatsGerais();
     this.carregarDados();
-    // Poll stats every 30 seconds
-    this.pollingInterval = setInterval(() => this.carregarStatsGerais(), 30000);
-  }
-
-  ngOnDestroy(): void {
+    // Atualiza stats E mensagens a cada 30 segundos
     this.pollingInterval = setInterval(() => {
       this.carregarStatsGerais();
       this.carregarMensagensPendentes();
     }, 30000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.pollingInterval) {
+      clearInterval(this.pollingInterval);
+    }
   }
 
   carregarStatsGerais(): void {

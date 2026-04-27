@@ -16,9 +16,11 @@ export class AdminLoginComponent implements AfterViewInit {
       return;
     }
     this.aguardarGoogleSDK(() => {
-      this.auth.initGoogleSignIn(() => {
-        this.router.navigate(['/admin/dashboard']);
-      });
+      setTimeout(() => {
+        this.auth.initGoogleSignIn(() => {
+          this.router.navigate(['/admin/dashboard']);
+        });
+      }, 100);
     });
   }
 

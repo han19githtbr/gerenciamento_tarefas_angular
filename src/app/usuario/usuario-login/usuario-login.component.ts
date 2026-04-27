@@ -16,11 +16,15 @@ export class UsuarioLoginComponent implements AfterViewInit {
       return;
     }
     this.aguardarGoogleSDK(() => {
-      this.auth.initUserSignIn((_token, _email) => {
-        this.router.navigate(['/usuario/dashboard']);
-      });
+      setTimeout(() => {
+        this.auth.initUserSignIn((_token, _email) => {
+          this.router.navigate(['/usuario/dashboard']);
+        });
+      }, 100);
     });
   }
+
+
 
   private aguardarGoogleSDK(callback: () => void, tentativas = 0): void {
     if ((window as any).google) {

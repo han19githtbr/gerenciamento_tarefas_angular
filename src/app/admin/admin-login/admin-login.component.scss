@@ -206,24 +206,23 @@ h1 {
 }
 
 /* Google button */
+/* DEPOIS */
 .google-btn-wrapper {
   width: 100%;
-  border-radius: 8px;
-  border: 2px solid blue;
-  overflow: hidden;
 
   .google-sdk-btn {
     width: 100%;
     display: flex;
     justify-content: center;
-    overflow: hidden;
-    border-radius: 6px;
 
-    > div, iframe {
+    > div {
+      width: 100% !important;
+    }
+
+    iframe {
       width: 100% !important;
       min-width: unset !important;
       max-width: 100% !important;
-      border-radius: 0 !important;
     }
   }
 }
