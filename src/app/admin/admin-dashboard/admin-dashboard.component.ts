@@ -48,7 +48,10 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.pollingInterval) clearInterval(this.pollingInterval);
+    this.pollingInterval = setInterval(() => {
+      this.carregarStatsGerais();
+      this.carregarMensagensPendentes();
+    }, 30000);
   }
 
   carregarStatsGerais(): void {
