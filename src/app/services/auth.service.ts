@@ -25,7 +25,7 @@ export class AuthService {
       }
     });
     // Renderiza botão oculto apenas para o SDK funcionar, o visual é customizado
-    /*const btnEl = document.getElementById('google-btn');
+    const btnEl = document.getElementById('google-btn');
     if (btnEl) {
       (window as any).google.accounts.id.renderButton(btnEl, {
         type: 'standard',
@@ -34,9 +34,10 @@ export class AuthService {
         text: 'signin_with',
         logo_alignment: 'left',
         width: Math.min(btnEl.offsetWidth || 360, 400),
-        shape: 'rectangular'
+        shape: 'rectangular',
+        data_type: 'icon'
       });
-    }*/
+    }
   }
 
   triggerAdminGoogleSignIn(): void {
@@ -54,7 +55,7 @@ export class AuthService {
         this.ngZone.run(() => callback(response.credential, payload.email));
       }
     });
-    /*const btnEl = document.getElementById('google-btn-user');
+    const btnEl = document.getElementById('google-btn-user');
     if (btnEl) {
       (window as any).google.accounts.id.renderButton(btnEl, {
         type: 'standard',
@@ -63,9 +64,10 @@ export class AuthService {
         text: 'signin_with',
         logo_alignment: 'left',
         width: Math.min(btnEl.offsetWidth || 360, 400),
-        shape: 'rectangular'
+        shape: 'rectangular',
+        data_type: 'icon'
       });
-    }*/
+    }
   }
 
 
