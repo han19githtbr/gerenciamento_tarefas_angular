@@ -34,6 +34,10 @@ export class UsuarioLoginComponent implements AfterViewInit {
     }
   }
 
+  signInGoogle(): void {
+    this.auth.triggerUserGoogleSignIn();
+  }
+
   voltarInicio(): void {
     this.router.navigate(['/']);
   }

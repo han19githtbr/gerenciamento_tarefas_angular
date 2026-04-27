@@ -32,6 +32,10 @@ export class AdminLoginComponent implements AfterViewInit {
     }
   }
 
+  signInGoogle(): void {
+    this.auth.triggerAdminGoogleSignIn();
+  }
+
   voltarInicio(): void {
     this.router.navigate(['/']);
   }
