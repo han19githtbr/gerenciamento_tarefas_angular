@@ -205,6 +205,7 @@ h1 {
 
   .google-sdk-btn {
     width: 100%;
+    overflow: hidden;
 
     // Força o iframe injetado pelo SDK a ocupar toda a largura
     > div, iframe {
