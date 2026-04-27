@@ -3,6 +3,7 @@ import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { AdminService } from '../../services/admin.service';
+//import { UsuarioService } from '../../services/usuario.service';
 //import { environment } from '../../../environments/environment';
 
 @Component({
@@ -25,6 +26,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   todasPessoas: any[] = [];
   todosDepartamentos: any[] = [];
   mensagensPendentes: any[] = [];
+  notificacoesAdmin: any[] = [];
   mensagensOcultas: Set<number> = new Set();
   respostas: { [id: number]: string } = {};
   isLoading = true;
@@ -44,10 +46,12 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     this.adminEmail = this.auth.getAdminEmail();
     this.carregarStatsGerais();
     this.carregarDados();
+    this.verificarNotificacoesAdmin();
     // Atualiza stats E mensagens a cada 30 segundos
     this.pollingInterval = setInterval(() => {
       this.carregarStatsGerais();
       this.carregarMensagensPendentes();
+      this.verificarNotificacoesAdmin();
     }, 30000);
   }
 
@@ -87,6 +91,24 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     this.adminService.getMensagensPendentes().subscribe({
       next: (data: any[]) => {
         this.mensagensPendentes = data || [];
+      },
+      error: () => {}
+    });
+  }
+
+  verificarNotificacoesAdmin(): void {
+    this.adminService.getMinhasNotificacoes().subscribe({
+      next: (notifs: any[]) => {
+        this.notificacoesAdmin = notifs || [];
+      },
+      error: () => {}
+    });
+  }
+
+  dispensarNotificacaoAdmin(notif: any): void {
+    this.adminService.marcarNotificacaoLida(notif.id).subscribe({
+      next: () => {
+        this.notificacoesAdmin = this.notificacoesAdmin.filter(n => n.id !== notif.id);
       },
       error: () => {}
     });

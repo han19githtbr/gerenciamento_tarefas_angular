@@ -76,6 +76,14 @@
       </div>
     </header>
 
+    <!-- NOTIFICAÇÕES DO ADMIN -->
+    <div *ngIf="notificacoesAdmin.length > 0" class="admin-notificacoes">
+      <div *ngFor="let notif of notificacoesAdmin" class="notif-item">
+        <span>🔔 {{ notif.mensagem }}</span>
+        <button (click)="dispensarNotificacaoAdmin(notif)">✕</button>
+      </div>
+    </div>
+
     <!-- Loading -->
     <div *ngIf="isLoading" class="loading-state">
       <div class="spinner"></div>

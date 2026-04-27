@@ -28,6 +28,21 @@ export class AdminService {
     return this.http.get<any[]>(this.API + '/mensagens/pendentes', { headers: this.authHeaders() });
   }
 
+  getMinhasNotificacoes(): Observable<any[]> {
+    return this.http.get<any[]>(
+      environment.apiUrl + '/notificacoes/pendentes',
+      { headers: this.authHeaders() }
+    );
+  }
+
+  marcarNotificacaoLida(id: number): Observable<any> {
+    return this.http.put(
+      environment.apiUrl + '/notificacoes/ler/' + id,
+      {},
+      { headers: this.authHeaders() }
+    );
+  }
+
   responderMensagem(mensagemId: number, resposta: string): Observable<any> {
     return this.http.put(
       this.API + '/mensagem/' + mensagemId + '/responder',
