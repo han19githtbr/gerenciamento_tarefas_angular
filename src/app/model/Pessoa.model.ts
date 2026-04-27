@@ -4,6 +4,7 @@ import { Tarefa } from "./Tarefa.model";
 export class Pessoa {
   id: number | undefined;
   nome: string | undefined;
+  email: string | undefined;
   departamento: Departamento = new Departamento();
   departamentoId?: number;
   tarefas: Array<Tarefa> = [];

@@ -15,6 +15,7 @@ export class DialogPessoaTarefaComponent implements OnInit {
     disableBox = false;
     msg: string = '';
     pessoaId: number;
+    emailPessoa: string = '';
     tarefa: Tarefa = new Tarefa();
 
     constructor(
@@ -25,6 +26,7 @@ export class DialogPessoaTarefaComponent implements OnInit {
     ) {
         this.title = data.title;
         this.tarefa = data.tarefa;
+        this.emailPessoa = data.emailAtual || '';
     }
 
     ngOnInit() {
@@ -38,14 +40,13 @@ export class DialogPessoaTarefaComponent implements OnInit {
     salvar(value: string) {
       if (value == 'Sim') {
           this.disableBox = true; // evita duplo clique
-          this.tarefaService.alocarPessoaNaTarefa(this.data.tarefa.id, this.pessoaId).subscribe({
+          this.tarefaService.alocarPessoaNaTarefa(this.data.tarefa.id, this.pessoaId, this.emailPessoa).subscribe({
               next: (data) => {
-                  //this.alertModalService.mostrarMensagem(data.body.mensagem, this.alertModalService.SUCESSO);
                   this.dialogRefPessoaTarefa.close({ result: 'Sim', mensagem: data.body.mensagem });
               },
               error: (err) => {
                   console.error('Erro ao alocar:', err);
-                  this.disableBox = false; // reabilita o botão
+                  this.disableBox = false;
                   this.dialogRefPessoaTarefa.close({ result: 'Erro', mensagem: 'Erro ao alocar pessoa.' });
               }
           });

@@ -301,6 +301,8 @@ export class DashboardComponent implements OnInit {
           departamentoId: tarefaDeptId,
           pessoaId: this.pessoaSelecionada.id
         },
+        nomePessoa: this.pessoaSelecionada.nome,  // ← ADICIONAR
+        emailAtual: this.pessoaSelecionada.email || '',
         message: `Deseja alocar "${this.pessoaSelecionada.nome}" na tarefa "${this.tarefaSelecionada.titulo}"?`
       },
     });
