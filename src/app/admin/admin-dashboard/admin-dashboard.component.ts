@@ -30,6 +30,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   mensagensOcultas: Set<number> = new Set();
   respostas: { [id: number]: string } = {};
   isLoading = true;
+  isRefreshing = false;
+  mensagensRecolhidas = false;
   activeTab: 'overview' | 'tarefas' | 'pessoas' | 'departamentos' | 'mensagens' = 'overview';
 
   private pollingInterval: any;
@@ -85,6 +87,10 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
       error: () => {}
     });
     this.carregarMensagensPendentes();
+  }
+
+  toggleMensagens(): void {
+    this.mensagensRecolhidas = !this.mensagensRecolhidas;
   }
 
   carregarMensagensPendentes(): void {
@@ -167,6 +173,16 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
       this.router.navigate(['/']);
     });
   }
+
+  atualizarTudo(): void {
+    if (this.isRefreshing) return;
+    this.isRefreshing = true;
+    this.carregarStatsGerais();
+    this.carregarDados();
+    this.verificarNotificacoesAdmin();
+    setTimeout(() => { this.isRefreshing = false; }, 1500);
+  }
+
 
   getStatusBadge(tarefa: any): string {
     if (tarefa.finalizado) return 'concluida';

@@ -4,7 +4,7 @@
 
 .login-wrapper {
   min-height: 100vh;
-  background: #060810;
+  background: #000000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -240,6 +240,84 @@ h1 {
 }
 
 .sep { color: rgba(255,255,255,0.15); font-size: 0.75rem; }
+
+
+/* ── FOOTER NAV ─────────────────────────────────────── */
+.login-footer-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+  justify-content: center;
+}
+
+.nav-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  letter-spacing: 0.2px;
+  border: 1px solid transparent;
+
+  svg { flex-shrink: 0; }
+}
+
+.nav-pill--ghost {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.45);
+
+  &:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.85);
+    transform: translateX(-2px);
+  }
+}
+
+.nav-pill--admin {
+  background: rgba(233,69,96,0.1);
+  border-color: rgba(233,69,96,0.25);
+  color: #ff8fa3;
+
+  &:hover {
+    background: rgba(233,69,96,0.2);
+    border-color: rgba(233,69,96,0.5);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(233,69,96,0.2);
+    transform: translateY(-1px);
+  }
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 36px 20px 32px;
+    border-radius: 20px;
+    margin: 16px;
+    width: calc(100% - 32px);
+    gap: 16px;
+  }
+
+  h1 { font-size: 1.65rem; }
+  .login-desc { font-size: 0.82rem; }
+
+  .login-footer-nav {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .nav-pill {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 
 @media (max-width: 480px) {
   .login-card {

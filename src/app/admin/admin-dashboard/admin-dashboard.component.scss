@@ -84,6 +84,15 @@
   }
 }
 
+.spin-anim {
+  animation: spin 0.8s linear infinite;
+}
+
+.btn-refresh.refreshing {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 .nav-count {
   margin-left: auto;
   background: rgba(255,255,255,0.1);
@@ -1060,4 +1069,43 @@
   .dept-grid   { grid-template-columns: 1fr; }
 
   .sidebar-nav button { font-size: 0.62rem; padding: 6px 7px; }
+}
+
+
+/* Tab header com collapse */
+.tab-header--collapsible {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 10px 12px;
+  margin: -10px -12px 14px;
+  border-radius: 10px;
+  transition: background 0.2s;
+
+  &:hover { background: rgba(255,255,255,0.04); }
+
+  h2 { margin: 0; display: flex; align-items: center; gap: 10px; }
+}
+
+.tab-icon { color: rgba(255,255,255,0.4); }
+
+.btn-collapse {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: rgba(255,255,255,0.4);
+  transition: all 0.2s;
+  flex-shrink: 0;
+
+  &:hover {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.8);
+  }
 }
