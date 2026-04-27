@@ -203,20 +203,23 @@ h1 {
 /* Google button */
 .google-btn-wrapper {
   width: 100%;
-  overflow: hidden;
   border-radius: 8px;
+  border: 2px solid blue;
+  background: #000;
+  overflow: hidden;
 
   .google-sdk-btn {
     width: 100%;
+    display: flex;
+    justify-content: center;
     overflow: hidden;
-    border-radius: 8px;
+    border-radius: 6px;
 
-    // Força o iframe injetado pelo SDK a ocupar toda a largura
     > div, iframe {
       width: 100% !important;
       min-width: unset !important;
       max-width: 100% !important;
-      border-radius: 8px !important;
+      border-radius: 0 !important;
     }
   }
 }
