@@ -451,3 +451,51 @@ $red: #e94560;
 
   .btn-iniciar { text-align: center; }
 }
+
+// ══════════════════════════════════════════════════════
+// LIGHT THEME OVERRIDES
+// ══════════════════════════════════════════════════════
+:host-context(html[data-theme="light"]) {
+  .user-layout { background: var(--bg-base) !important; }
+
+  .topbar {
+    background: rgba(255,255,255,0.92) !important;
+    border-bottom-color: var(--border) !important;
+    backdrop-filter: blur(12px);
+  }
+
+  .topbar-brand span { color: var(--text-primary) !important; }
+
+  .user-chip {
+    background: var(--bg-elevated) !important;
+    border-color: var(--border) !important;
+    .user-email-short { color: var(--text-secondary) !important; }
+  }
+
+  .btn-logout {
+    background: var(--bg-elevated) !important;
+    color: var(--danger) !important;
+    border-color: var(--border) !important;
+  }
+
+  .user-main { background: var(--bg-base) !important; }
+
+  .welcome-section {
+    h1 { color: var(--text-primary) !important; }
+    p  { color: var(--text-secondary) !important; }
+  }
+
+  .mini-stat {
+    background: var(--bg-surface) !important;
+    border-color: var(--border) !important;
+    .ms-value { color: var(--text-primary) !important; }
+    .ms-label { color: var(--text-secondary) !important; }
+  }
+
+  .task-card {
+    background: var(--bg-surface) !important;
+    border-color: var(--border) !important;
+    &__title { color: var(--text-primary) !important; }
+    &__meta  { color: var(--text-secondary) !important; }
+  }
+}

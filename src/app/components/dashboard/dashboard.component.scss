@@ -1184,3 +1184,71 @@ body {
 
   }
 }
+
+// ══════════════════════════════════════════════════════
+// LIGHT THEME OVERRIDES
+// ══════════════════════════════════════════════════════
+:host-context(html[data-theme="light"]) {
+  .app-shell {
+    background: var(--bg-base) !important;
+  }
+
+  .topbar {
+    background: rgba(255,255,255,0.9) !important;
+    border-bottom-color: var(--border) !important;
+    backdrop-filter: blur(12px);
+  }
+
+  .topbar__title-main { color: var(--text-primary) !important; }
+  .topbar__title-sub  { color: var(--text-secondary) !important; }
+
+  .topbar__nav-item {
+    color: var(--text-secondary) !important;
+    &:hover, &--active { color: var(--amber) !important; background: var(--amber-glow) !important; }
+  }
+
+  .btn-icon {
+    color: var(--text-secondary) !important;
+    background: var(--bg-elevated) !important;
+    border-color: var(--border) !important;
+    &:hover { color: var(--text-primary) !important; }
+  }
+
+  .stat-card {
+    background: var(--bg-surface) !important;
+    border-color: var(--border) !important;
+    box-shadow: var(--shadow-sm) !important;
+    &__value, &__label { color: var(--text-primary) !important; }
+  }
+
+  .section-card {
+    background: var(--bg-surface) !important;
+    border-color: var(--border) !important;
+    box-shadow: var(--shadow-sm) !important;
+  }
+
+  .section-title { color: var(--text-primary) !important; }
+
+  .task-card {
+    background: var(--bg-elevated) !important;
+    border-color: var(--border) !important;
+    &__name { color: var(--text-primary) !important; }
+    &__meta { color: var(--text-secondary) !important; }
+  }
+
+  .person-row {
+    background: var(--bg-elevated) !important;
+    border-color: var(--border) !important;
+    &:hover { background: var(--bg-hover) !important; }
+    td { color: var(--text-primary) !important; }
+  }
+
+  .dept-card {
+    background: var(--bg-elevated) !important;
+    border-color: var(--border) !important;
+    &__name { color: var(--text-primary) !important; }
+    &__meta { color: var(--text-secondary) !important; }
+  }
+
+  .empty-state { color: var(--text-muted) !important; }
+}

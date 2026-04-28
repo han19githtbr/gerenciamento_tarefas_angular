@@ -296,3 +296,27 @@ h1 {
     text-align: center;
   }
 }
+
+// ══════════════════════════════════════════════════════
+// LIGHT THEME OVERRIDES
+// ══════════════════════════════════════════════════════
+:host-context(html[data-theme="light"]) {
+  .login-wrapper { background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 50%, #e8eaf6 100%) !important; }
+
+  .login-card {
+    background: rgba(255,255,255,0.92) !important;
+    border-color: rgba(0,0,0,0.08) !important;
+    backdrop-filter: blur(20px);
+  }
+
+  .login-title { color: var(--text-primary) !important; }
+  .login-subtitle { color: var(--text-secondary) !important; }
+
+  .form-group label { color: var(--text-secondary) !important; }
+  .form-input {
+    background: var(--bg-elevated) !important;
+    border-color: var(--border) !important;
+    color: var(--text-primary) !important;
+    &:focus { border-color: var(--blue) !important; }
+  }
+}

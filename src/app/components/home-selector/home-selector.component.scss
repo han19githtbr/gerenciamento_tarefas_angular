@@ -184,3 +184,26 @@ p {
     .option-info span   { font-size: 0.73rem; }
   }
 }
+
+// ══════════════════════════════════════════════════════
+// LIGHT THEME OVERRIDES
+// ══════════════════════════════════════════════════════
+:host-context(html[data-theme="light"]) {
+  .home-wrapper { background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 100%) !important; }
+
+  .home-card {
+    background: rgba(255,255,255,0.88) !important;
+    border-color: rgba(0,0,0,0.08) !important;
+    backdrop-filter: blur(20px);
+  }
+
+  h1 { color: var(--text-primary) !important; }
+  p  { color: var(--text-secondary) !important; }
+
+  .btn-option {
+    background: var(--bg-elevated) !important;
+    border-color: var(--border) !important;
+    color: var(--text-primary) !important;
+    &:hover { background: var(--bg-hover) !important; }
+  }
+}

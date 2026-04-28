@@ -1109,3 +1109,58 @@
     color: rgba(255,255,255,0.8);
   }
 }
+
+// ══════════════════════════════════════════════════════
+// LIGHT THEME OVERRIDES
+// ══════════════════════════════════════════════════════
+:host-context(html[data-theme="light"]) {
+  .admin-layout { background: var(--bg-base) !important; }
+
+  .sidebar {
+    background: rgba(255,255,255,0.95) !important;
+    border-right-color: var(--border) !important;
+    .sidebar-brand span { color: var(--text-primary) !important; }
+  }
+
+  .sidebar-nav button {
+    color: var(--text-secondary) !important;
+    &:hover, &.active {
+      color: var(--text-primary) !important;
+      background: var(--bg-hover) !important;
+    }
+  }
+
+  .admin-info .admin-label { color: var(--text-muted) !important; }
+  .admin-info .admin-email { color: var(--text-secondary) !important; }
+
+  .btn-logout {
+    color: var(--danger) !important;
+    background: var(--bg-elevated) !important;
+    border-color: var(--border) !important;
+  }
+
+  .main-content { background: var(--bg-base) !important; }
+
+  .content-header {
+    background: rgba(255,255,255,0.9) !important;
+    border-bottom-color: var(--border) !important;
+    h1 { color: var(--text-primary) !important; }
+    p  { color: var(--text-secondary) !important; }
+  }
+
+  .stat-card, .data-card, .table-card {
+    background: var(--bg-surface) !important;
+    border-color: var(--border) !important;
+    box-shadow: var(--shadow-sm) !important;
+  }
+
+  .section-title, h2, h3 { color: var(--text-primary) !important; }
+
+  .data-table {
+    th { background: var(--bg-elevated) !important; color: var(--text-muted) !important; }
+    td { color: var(--text-primary) !important; border-color: var(--border) !important; }
+    tr:hover { background: var(--bg-hover) !important; }
+  }
+
+  .badge { color: var(--text-primary) !important; }
+}

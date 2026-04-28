@@ -53,6 +53,7 @@ import { ConfirmacaoDialogTaskComponent } from './confirmacao-dialog-task/confir
 import { AlocarPessoaTarefaComponent } from './alocar-pessoa-tarefa/alocar-pessoa-tarefa.component';
 import { DialogPessoaTarefaComponent } from './dialog-pessoa-tarefa/dialog-pessoa-tarefa.component';
 import { HomeSelectorComponent } from './home-selector/home-selector.component';
+import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
 
 const dialogMock = {
   close: () => { }
@@ -71,6 +72,7 @@ const dialogMock = {
     FooterComponent,
     DialogPessoaTarefaComponent,
     DashboardComponent,
+    ThemeToggleComponent,
   ],
   imports: [
     CommonModule,
@@ -100,6 +102,7 @@ const dialogMock = {
     DashboardComponent,
     FooterComponent,
     HomeSelectorComponent,
+    ThemeToggleComponent,
   ],
   providers: [
     { provide: MatDialogTitle, useValue: [] },
