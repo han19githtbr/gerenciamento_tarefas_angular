@@ -135,3 +135,47 @@
   0%, 100% { opacity: 0.4; transform: scale(1); }
   50%       { opacity: 1;   transform: scale(1.5); }
 }
+
+
+/* ── RESPONSIVIDADE MOBILE ─── */
+@media (max-width: 768px) {
+  .theme-toggle {
+    gap: 5px;
+
+    &__track {
+      width: 44px;
+      height: 24px;
+    }
+
+    &__thumb {
+      width: 18px;
+      height: 18px;
+      top: 3px;
+      left: 3px;
+    }
+
+    &--light .theme-toggle__thumb {
+      transform: translateX(20px);
+    }
+
+    .icon-sun  { width: 11px; height: 11px; }
+    .icon-moon { width: 9px;  height: 9px;  }
+
+    &__label {
+      font-size: 10px;
+      min-width: 24px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .login-theme-btn,
+  .home-theme-btn {
+    top: 12px;
+    right: 12px;
+  }
+
+  .theme-toggle__label {
+    display: none; /* Esconde o label "Dark/Light" em telas muito pequenas */
+  }
+}

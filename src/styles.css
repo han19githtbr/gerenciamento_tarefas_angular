@@ -235,3 +235,307 @@ html, body {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   LIGHT THEME — variáveis sobrescritas via [data-theme="light"]
+══════════════════════════════════════════════════════════════ */
+[data-theme="light"] {
+  --bg-base:        #f0f2f8;
+  --bg-surface:     #ffffff;
+  --bg-elevated:    #f7f8fc;
+  --bg-hover:       #eef0f7;
+
+  --border:         rgba(0,0,0,0.08);
+  --border-focus:   rgba(0,0,0,0.2);
+
+  --text-primary:   #1a1e2a;
+  --text-secondary: #4e5672;
+  --text-muted:     #8890a8;
+
+  --blue:           #2563eb;
+  --blue-glow:      rgba(37,99,235,0.15);
+  --teal:           #0d9488;
+  --teal-glow:      rgba(13,148,136,0.15);
+  --violet:         #7c3aed;
+  --violet-glow:    rgba(124,58,237,0.15);
+  --amber:          #d97706;
+  --amber-glow:     rgba(217,119,6,0.15);
+  --danger:         #dc2626;
+  --danger-glow:    rgba(220,38,38,0.15);
+  --success:        #059669;
+
+  --shadow-sm:  0 2px 8px rgba(0,0,0,0.08);
+  --shadow-md:  0 4px 20px rgba(0,0,0,0.1);
+  --shadow-lg:  0 8px 40px rgba(0,0,0,0.12);
+}
+
+[data-theme="light"] html,
+[data-theme="light"] body,
+html[data-theme="light"],
+html[data-theme="light"] body {
+  background-color: #f0f2f8 !important;
+  background: #f0f2f8 !important;
+  color: #1a1e2a !important;
+}
+
+/* Dialogs no tema claro */
+[data-theme="light"] .mat-dialog-container {
+  background: #ffffff !important;
+  border: 1px solid rgba(0,0,0,0.08) !important;
+  color: #1a1e2a !important;
+}
+
+[data-theme="light"] .mat-form-field-flex,
+[data-theme="light"] .mat-mdc-text-field-wrapper {
+  background-color: #f7f8fc !important;
+}
+
+[data-theme="light"] .mat-select-panel,
+[data-theme="light"] .mat-mdc-select-panel {
+  background: #ffffff !important;
+  border: 1px solid rgba(0,0,0,0.08) !important;
+}
+
+[data-theme="light"] .mat-option,
+[data-theme="light"] .mat-mdc-option {
+  color: #1a1e2a !important;
+}
+
+[data-theme="light"] .mat-option:hover:not(.mat-option-disabled),
+[data-theme="light"] .mat-option.mat-active,
+[data-theme="light"] .mat-mdc-option:hover,
+[data-theme="light"] .mat-mdc-option.mat-mdc-option-active {
+  background: #eef0f7 !important;
+  color: #d97706 !important;
+}
+
+[data-theme="light"] .toast-container .ngx-toastr {
+  background-color: #ffffff !important;
+  border: 1px solid rgba(0,0,0,0.1) !important;
+  color: #1a1e2a !important;
+}
+
+[data-theme="light"] ::-webkit-scrollbar-track   { background: #f0f2f8; }
+[data-theme="light"] ::-webkit-scrollbar-thumb   { background: #d1d5e0; }
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover { background: #b0b5c8; }
+
+/* Posição do botão de tema nas páginas de login e home */
+.login-theme-btn,
+.home-theme-btn {
+  position: fixed;
+  top: 16px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.sidebar-theme-wrap {
+  margin-top: 8px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* ══════════════════════════════════════════════════════
+   LIGHT THEME — OVERRIDES GLOBAIS COMPLETOS
+══════════════════════════════════════════════════════ */
+
+/* Força fundo e cor base em TODA a página */
+html[data-theme="light"],
+html[data-theme="light"] body {
+  background-color: #f0f2f8 !important;
+  background: #f0f2f8 !important;
+  color: #1a1e2a !important;
+}
+
+/* Todos os textos principais */
+html[data-theme="light"] h1,
+html[data-theme="light"] h2,
+html[data-theme="light"] h3,
+html[data-theme="light"] h4,
+html[data-theme="light"] h5,
+html[data-theme="light"] h6,
+html[data-theme="light"] p,
+html[data-theme="light"] span:not(.badge-dot):not(.star):not(.theme-toggle__label),
+html[data-theme="light"] label,
+html[data-theme="light"] td,
+html[data-theme="light"] th,
+html[data-theme="light"] li,
+html[data-theme="light"] a:not(.btn),
+html[data-theme="light"] button:not(.theme-toggle) {
+  color: #1a1e2a !important;
+}
+
+/* Containers e cards */
+html[data-theme="light"] .app-shell,
+html[data-theme="light"] .user-layout,
+html[data-theme="light"] .admin-layout,
+html[data-theme="light"] .main-content,
+html[data-theme="light"] .user-main {
+  background: #f0f2f8 !important;
+}
+
+/* Topbars */
+html[data-theme="light"] .topbar,
+html[data-theme="light"] header.topbar {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+  backdrop-filter: blur(12px);
+}
+
+html[data-theme="light"] .topbar__nav-item,
+html[data-theme="light"] .topbar__nav-item span {
+  color: #4e5672 !important;
+}
+html[data-theme="light"] .topbar__nav-item:hover,
+html[data-theme="light"] .topbar__nav-item--active {
+  color: #1a1e2a !important;
+  background: rgba(0,0,0,0.05) !important;
+}
+html[data-theme="light"] .topbar__title-main { color: #1a1e2a !important; }
+html[data-theme="light"] .topbar__title-sub  { color: #4e5672 !important; }
+
+/* Admin sidebar */
+html[data-theme="light"] .sidebar {
+  background: rgba(255, 255, 255, 0.97) !important;
+  border-right: 1px solid rgba(0,0,0,0.08) !important;
+}
+html[data-theme="light"] .sidebar-brand span { color: #1a1e2a !important; }
+html[data-theme="light"] .sidebar-nav button { color: #4e5672 !important; }
+html[data-theme="light"] .sidebar-nav button:hover,
+html[data-theme="light"] .sidebar-nav button.active {
+  background: rgba(0,0,0,0.05) !important;
+  color: #1a1e2a !important;
+}
+html[data-theme="light"] .admin-label { color: #8890a8 !important; }
+html[data-theme="light"] .admin-email { color: #4e5672 !important; }
+html[data-theme="light"] .nav-count {
+  background: rgba(0,0,0,0.1) !important;
+  color: #1a1e2a !important;
+}
+
+/* Content header admin */
+html[data-theme="light"] .content-header {
+  background: rgba(255,255,255,0.9) !important;
+  border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+}
+
+/* Cards e stat cards */
+html[data-theme="light"] .stat-card,
+html[data-theme="light"] .mini-stat,
+html[data-theme="light"] .section-card,
+html[data-theme="light"] .data-card,
+html[data-theme="light"] .table-card,
+html[data-theme="light"] .task-card,
+html[data-theme="light"] .dept-card,
+html[data-theme="light"] .person-card {
+  background: #ffffff !important;
+  border-color: rgba(0,0,0,0.08) !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important;
+}
+
+html[data-theme="light"] .stat-card__value,
+html[data-theme="light"] .ms-value,
+html[data-theme="light"] .stat-card__label,
+html[data-theme="light"] .ms-label {
+  color: #1a1e2a !important;
+}
+
+/* Tabelas */
+html[data-theme="light"] table { background: transparent !important; }
+html[data-theme="light"] th {
+  background: #f7f8fc !important;
+  color: #8890a8 !important;
+  border-color: rgba(0,0,0,0.08) !important;
+}
+html[data-theme="light"] td {
+  color: #1a1e2a !important;
+  border-color: rgba(0,0,0,0.06) !important;
+}
+html[data-theme="light"] tr:hover { background: #f0f2f8 !important; }
+
+/* Botões de ação */
+html[data-theme="light"] .btn-icon {
+  background: #ffffff !important;
+  border: 1px solid rgba(0,0,0,0.12) !important;
+  color: #4e5672 !important;
+}
+html[data-theme="light"] .btn-logout {
+  background: #fff0f0 !important;
+  color: #dc2626 !important;
+  border-color: rgba(220,38,38,0.2) !important;
+}
+
+/* Task cards no dashboard */
+html[data-theme="light"] .task-card {
+  background: #ffffff !important;
+}
+html[data-theme="light"] .task-card__name,
+html[data-theme="light"] .task-card__title { color: #1a1e2a !important; }
+html[data-theme="light"] .task-card__meta { color: #4e5672 !important; }
+
+/* Notification / alert banners */
+html[data-theme="light"] .notif-item {
+  background: #fffbeb !important;
+  border-color: rgba(217,119,6,0.2) !important;
+  color: #1a1e2a !important;
+}
+
+/* Chip de usuário */
+html[data-theme="light"] .user-chip {
+  background: #f0f2f8 !important;
+  border: 1px solid rgba(0,0,0,0.1) !important;
+}
+html[data-theme="light"] .user-email-short { color: #4e5672 !important; }
+
+/* Páginas de login */
+html[data-theme="light"] .login-wrapper {
+  background: linear-gradient(135deg, #e8f4fd 0%, #f0f2f8 50%, #e8eaf6 100%) !important;
+}
+html[data-theme="light"] .login-card,
+html[data-theme="light"] .home-card {
+  background: rgba(255,255,255,0.92) !important;
+  border-color: rgba(0,0,0,0.08) !important;
+}
+html[data-theme="light"] .login-title,
+html[data-theme="light"] .login-subtitle { color: #1a1e2a !important; }
+html[data-theme="light"] .login-badge {
+  background: rgba(37,99,235,0.08) !important;
+  color: #2563eb !important;
+}
+html[data-theme="light"] .form-input {
+  background: #f7f8fc !important;
+  border-color: rgba(0,0,0,0.12) !important;
+  color: #1a1e2a !important;
+}
+html[data-theme="light"] .form-input::placeholder { color: #8890a8 !important; }
+
+/* Home selector */
+html[data-theme="light"] .home-wrapper {
+  background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 100%) !important;
+}
+html[data-theme="light"] .btn-option {
+  background: #ffffff !important;
+  border-color: rgba(0,0,0,0.08) !important;
+  color: #1a1e2a !important;
+}
+html[data-theme="light"] .option-info strong { color: #1a1e2a !important; }
+html[data-theme="light"] .option-info span   { color: #4e5672 !important; }
+html[data-theme="light"] .option-arrow       { color: #4e5672 !important; }
+
+/* Progress bars e outros elementos */
+html[data-theme="light"] .progress-bar-bg {
+  background: rgba(0,0,0,0.08) !important;
+}
+
+/* Empty states */
+html[data-theme="light"] .empty-state,
+html[data-theme="light"] .empty-state p { color: #8890a8 !important; }
+
+/* Drag & drop */
+html[data-theme="light"] .cdk-drag-placeholder {
+  background: #f0f2f8 !important;
+  border-color: rgba(0,0,0,0.15) !important;
+}
+html[data-theme="light"] .cdk-drag-preview {
+  background: #ffffff !important;
+  border-color: rgba(0,0,0,0.12) !important;
+}
