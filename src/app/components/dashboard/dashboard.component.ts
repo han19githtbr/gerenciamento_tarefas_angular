@@ -520,6 +520,7 @@ export class DashboardComponent implements OnInit {
       data: {
         title: 'Deletar Departamento',
         id: departamento.id,
+        titulo: departamento.titulo,
         ordem_apresentacao: departamento.ordem_apresentacao,
       }
     });

@@ -48,7 +48,7 @@ export class ConfirmacaoDialogDepartmentComponent implements OnInit {
         public dialogRef: MatDialogRef<ConfirmacaoDialogDepartmentComponent>,
         private alertModalService: AlertModalService,
         private toastr: ToastrService,
-        @Inject(MAT_DIALOG_DATA) public data: ConfirmacaoDialogDepartmentComponent,
+        @Inject(MAT_DIALOG_DATA) public data: { title: string; id: number; titulo: string; ordem_apresentacao: any },
     ) {
         this.title = data['title'];
         this.departamento.id = data['id'];
