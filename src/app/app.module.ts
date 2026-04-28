@@ -11,7 +11,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 //import { EnvironmentProviders } from '@angular/core';
 import { DialogFinalizarTarefaComponent } from './components/dialog-finalizar-tarefa/dialog-finalizar-tarefa.component';
-
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { LoadingInterceptor } from './interceptors/loading.interceptor';
 
 @NgModule({
   declarations: [
@@ -57,7 +59,11 @@ import { DialogFinalizarTarefaComponent } from './components/dialog-finalizar-ta
       //positionClass: 'toast-bottom-right', // Classe CSS para a posição da notificação
     })
   ],
-  providers: [ToastrService],
+  providers: [
+    ToastrService,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

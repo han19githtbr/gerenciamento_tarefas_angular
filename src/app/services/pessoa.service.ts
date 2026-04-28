@@ -20,53 +20,41 @@ export class PessoaService {
     private auth: AuthService
   ) { }
 
-  private authHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      'Content-Type': 'application/json; charset=utf-8',
-      'Authorization': 'Bearer ' + this.auth.getToken()
-    });
-  }
 
   savePessoa(item: any): Observable<any> {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
 
-    return this.http.post(this.CONTROLLER + '/salvarPessoa', item, { headers: this.authHeaders(), observe: 'response' }).pipe(
+    return this.http.post(this.CONTROLLER + '/salvarPessoa', item, { observe: 'response' }).pipe(
       tap(() => this.notificationService.addNotification('adicionou', 'pessoa'))
     );
   }
 
   getAllPessoa() {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
 
-    return this.http.get(this.CONTROLLER + '/getAllPessoa', { headers: this.authHeaders(), observe: 'response' });
+    return this.http.get(this.CONTROLLER + '/getAllPessoa', { observe: 'response' });
   }
 
   alterarPessoa(name: string, item: any): Observable<any> {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
-    //this.notificationService.addNotification('Você adicionou uma pessoa.');
-    return this.http.put(this.CONTROLLER + '/alterarPessoa/' + name, item, { headers: this.authHeaders(), observe: 'response' }).pipe(
+
+    return this.http.put(this.CONTROLLER + '/alterarPessoa/' + name, item, { observe: 'response' }).pipe(
       tap(() => this.notificationService.addNotification('alterou', 'pessoa'))
     );
   }
 
   removerPessoa(item: any): Observable<any> {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
-    //this.notificationService.addNotification('Você removeu uma pessoa.');
-    return this.http.delete(this.CONTROLLER + '/removerPessoa/' + item, { headers: this.authHeaders(), observe: 'response' }).pipe(
+
+    return this.http.delete(this.CONTROLLER + '/removerPessoa/' + item, { observe: 'response' }).pipe(
       tap(() => this.notificationService.addNotification('removeu', 'pessoa'))
     );
   }
 
   getPessoasPorDepartamento(item: any): Observable<any> {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
 
-    return this.http.get(this.CONTROLLER + '/getPessoasDepartamentos/' + item, { headers: this.authHeaders(), observe: 'response' });
+    return this.http.get(this.CONTROLLER + '/getPessoasDepartamentos/' + item, { observe: 'response' });
   }
 
   salvarPessoaOrder(pessoas: Pessoa[]): Observable<any> {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
 
-    return this.http.put(this.CONTROLLER + '/salvarPessoaOrder', pessoas, { headers: this.authHeaders() });
+    return this.http.put(this.CONTROLLER + '/salvarPessoaOrder', pessoas, { });
   }
 
 }

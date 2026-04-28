@@ -1,10 +1,16 @@
 import { Component } from '@angular/core';
+import { LoadingService } from './services/loading.service';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  template: `
+    <div *ngIf="loading.loading$ | async" class="loading-overlay">
+      <div class="spinner"></div>
+      <p>Carregando...</p>
+    </div>
+    <router-outlet></router-outlet>
+  `
 })
 export class AppComponent {
-  title = 'projeto';
+  constructor(public loading: LoadingService) {}
 }

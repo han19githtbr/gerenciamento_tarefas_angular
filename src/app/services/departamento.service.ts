@@ -22,19 +22,12 @@ export class DepartamentoService {
     console.log('🔥 Controller URL:', this.CONTROLLER);
   }
 
-  // Substitua o método authHeaders():
-  private authHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      'Content-Type': 'application/json; charset=utf-8',
-      'Authorization': 'Bearer ' + this.auth.getToken()
-    });
-  }
 
   saveDepartamento(item: any): Observable<any> {
     return this.http.post(
-        this.CONTROLLER + '/salvarDepartamento',
-        item,
-        { headers: this.authHeaders(), observe: 'response' }
+      this.CONTROLLER + '/salvarDepartamento',
+      item,
+      { observe: 'response' }
     ).pipe(
         tap(() => this.notificationService.addNotification('adicionou', 'departamento'))
     );
@@ -42,29 +35,25 @@ export class DepartamentoService {
 
 
   getAllDepartamento() {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
 
-    return this.http.get(this.CONTROLLER + '/getAllDepartamento', { headers: this.authHeaders(), observe: 'response' });
+    return this.http.get(this.CONTROLLER + '/getAllDepartamento', { observe: 'response' });
   }
 
   salvarDepartamentoOrder(departamentos: Departamento[]): Observable<any> {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
 
-    return this.http.put(this.CONTROLLER + '/salvarDepartamentoOrder', departamentos, { headers: this.authHeaders() });
+    return this.http.put(this.CONTROLLER + '/salvarDepartamentoOrder', departamentos, { });
   }
 
   alterarDepartamento(titulo: string, item: any): Observable<any> {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
-    //this.notificationService.addNotification('Você alterou um departamento.');
-    return this.http.put(this.CONTROLLER + '/alterarDepartamento/' + titulo, item, { headers: this.authHeaders(), observe: 'response' }).pipe(
+
+    return this.http.put(this.CONTROLLER + '/alterarDepartamento/' + titulo, item, { observe: 'response' }).pipe(
       tap(() => this.notificationService.addNotification('alterou', 'departamento'))
     );
   }
 
   removerDepartamento(item: any): Observable<any> {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
-    //this.notificationService.addNotification('Você removeu um departamento.');
-    return this.http.delete(this.CONTROLLER + '/removerDepartamento/' + item, { headers: this.authHeaders(), observe: 'response' }).pipe(
+
+    return this.http.delete(this.CONTROLLER + '/removerDepartamento/' + item, { observe: 'response' }).pipe(
       tap(() => this.notificationService.addNotification('removeu', 'departamento'))
     );
   }

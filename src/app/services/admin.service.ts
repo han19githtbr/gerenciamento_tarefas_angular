@@ -13,25 +13,19 @@ export class AdminService {
 
   constructor(private http: HttpClient, private auth: AuthService) {}
 
-  private authHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      'Content-Type': 'application/json; charset=utf-8',
-      'Authorization': 'Bearer ' + this.auth.getToken()
-    });
-  }
 
   getDashboard(): Observable<any> {
-    return this.http.get<any>(this.API + '/dashboard', { headers: this.authHeaders() });
+    return this.http.get<any>(this.API + '/dashboard', { });
   }
 
   getMensagensPendentes(): Observable<any[]> {
-    return this.http.get<any[]>(this.API + '/mensagens/pendentes', { headers: this.authHeaders() });
+    return this.http.get<any[]>(this.API + '/mensagens/pendentes', { });
   }
 
   getMinhasNotificacoes(): Observable<any[]> {
     return this.http.get<any[]>(
       environment.apiUrl + '/notificacoes/pendentes',
-      { headers: this.authHeaders() }
+      { }
     );
   }
 
@@ -39,7 +33,7 @@ export class AdminService {
     return this.http.put(
       environment.apiUrl + '/notificacoes/ler/' + id,
       {},
-      { headers: this.authHeaders() }
+      { }
     );
   }
 
@@ -47,35 +41,34 @@ export class AdminService {
     return this.http.put(
       this.API + '/mensagem/' + mensagemId + '/responder',
       { resposta },
-      { headers: this.authHeaders() }
+      { }
     );
   }
 
   getContagemEmAndamento(): Observable<{ total: number }> {
     return this.http.get<{ total: number }>(
       this.TAREFAS_API + '/contagemEmAndamento',
-      { headers: this.authHeaders() }
+      { }
     );
   }
 
   excluirMensagem(mensagemId: number): Observable<any> {
     return this.http.delete(
       this.API + '/mensagem/' + mensagemId,
-      { headers: this.authHeaders() }
+      { }
     );
   }
 
   getAllTarefas(): Observable<any[]> {
-    return this.http.get<any[]>(this.TAREFAS_API + '/getAllTarefa', { headers: this.authHeaders() });
+    return this.http.get<any[]>(this.TAREFAS_API + '/getAllTarefa', { });
   }
 
   getAllPessoas(): Observable<any[]> {
-    return this.http.get<any[]>(this.PESSOAS_API + '/getAllPessoa', { headers: this.authHeaders() });
+    return this.http.get<any[]>(this.PESSOAS_API + '/getAllPessoa', { });
   }
 
   getAllDepartamentos(): Observable<any[]> {
-    return this.http.get<any[]>(this.DEPT_API + '/getAllDepartamento', { headers: this.authHeaders() });
+    return this.http.get<any[]>(this.DEPT_API + '/getAllDepartamento', { });
   }
-
 
 }
