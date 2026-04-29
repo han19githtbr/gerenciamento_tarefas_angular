@@ -9,21 +9,6 @@ import { DepartamentoService } from 'src/app/services/departamento.service';
 import { HttpRequest } from '@angular/common/http';
 import { AlertModalService } from 'src/app/services/alert-modal.service';
 
-
-// Definindo a função getToastOptions fora da classe
-/*function getToastOptions() {
-  return {
-    timeOut: 3000,
-    closeButton: true,
-    progressBar: true,
-    positionClass: 'toast-bottom-right',
-    tapToDismiss: true,
-    toastClass: 'ngx-toastr',
-    titleClass: 'toast-title',
-    messageClass: 'toast-message'
-  };
-}*/
-
 @Component({
   selector: 'app-adicionar-pessoa',
   templateUrl: './adicionar-pessoa.component.html',
@@ -101,21 +86,6 @@ export class AdicionarPessoaComponent implements OnInit {
   }
 
 
-  /*showSuccess(message: string) {
-    this.toastr.success(message, 'Sucesso', getToastOptions());
-  }
-
-  showError(message: string) {
-    this.toastr.error(message, 'Erro', getToastOptions());
-  }*/
-
-  /*showSuccess(message: string) {
-    this.toastr.success(message, 'Sucesso', getToastOptions());
-  }*/
-
-  /*showError(message: string) {
-    this.toastr.error(message, 'Erro', getToastOptions());
-  }*/
 
   showSuccess() {
     const mensagem = this.data?.body?.mensagem || 'Operação realizada com sucesso!';
@@ -134,9 +104,9 @@ export class AdicionarPessoaComponent implements OnInit {
     });
   }
 
-  showError() {
+  showError(mensagem?: string) {
     //this.toastr.error('O campo nome é obrigatório.', 'Erro', {
-    this.toastr.error(this.data.body.mensagem, 'Erro', {
+    this.toastr.error(mensagem || 'Erro ao processar a operação.', 'Erro', {
       timeOut: 3000,
       closeButton: true,
       progressBar: true,
@@ -157,7 +127,7 @@ export class AdicionarPessoaComponent implements OnInit {
 
       if (!nomeControl.value) {
         this.disableBox = false;
-        this.showError();
+        this.showError('Erro ao salvar pessoa.');
         return;
       }
 
@@ -186,12 +156,12 @@ export class AdicionarPessoaComponent implements OnInit {
               this.dialogRef.close(pessoaSalva);
             } else {
               this.disableBox = false;
-              this.showError();
+              this.showError('Erro ao salvar pessoa.');
             }
           },
           error: (error) => {
             this.disableBox = false;
-            this.showError();
+            this.showError('Erro ao salvar pessoa.');
             console.error('Erro ao salvar pessoa:', error);
           }
         });
@@ -220,12 +190,12 @@ export class AdicionarPessoaComponent implements OnInit {
               this.dialogRef.close(pessoaAlterada);
             } else {
               this.disableBox = false;
-              this.showError();
+              this.showError('Erro ao alterar pessoa.');
             }
           },
           error: (error) => {
             this.disableBox = false;
-            this.showError();
+            this.showError('Erro ao alterar pessoa.');
             console.error('Erro ao alterar pessoa:', error);
           }
         });

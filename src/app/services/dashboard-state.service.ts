@@ -63,14 +63,14 @@ export class DashboardStateService {
   carregarTudo(): void {
     forkJoin({
       pessoas:       this.pessoaService.getAllPessoa().pipe(
-                       map((r: HttpResponse<Pessoa[]>) => r.body ?? [])
-                     ),
+                      map((r: any) => Array.isArray(r) ? r : (r.body ?? []))
+                    ),
       departamentos: this.departamentoService.getAllDepartamento().pipe(
-                       map((r: HttpResponse<Departamento[]>) => r.body ?? [])
-                     ),
+                      map((r: any) => Array.isArray(r) ? r : (r.body ?? []))
+                    ),
       tarefas:       this.tarefaService.getAllTarefa().pipe(
-                       map((r: HttpResponse<Tarefa[]>) => r.body ?? [])
-                     ),
+                      map((r: any) => Array.isArray(r) ? r : (r.body ?? []))
+                    ),
     }).subscribe({
       next: ({ pessoas, departamentos, tarefas }) => {
         this._pessoas.next(pessoas);
@@ -83,10 +83,9 @@ export class DashboardStateService {
     this._carregarContagemEmAndamento();
   }
 
-  /** Recarrega apenas tarefas (útil após salvar/remover/alocar uma tarefa). */
   recarregarTarefas(): void {
     this.tarefaService.getAllTarefa()
-      .pipe(map((r: HttpResponse<Tarefa[]>) => r.body ?? []))
+      .pipe(map((r: any) => Array.isArray(r) ? r : (r.body ?? [])))
       .subscribe({
         next: (tarefas) => this._atualizarTarefas(tarefas),
         error: (err) => console.error('Erro ao recarregar tarefas:', err)
@@ -95,20 +94,18 @@ export class DashboardStateService {
     this._carregarContagemEmAndamento();
   }
 
-  /** Recarrega apenas pessoas (útil após salvar/remover uma pessoa). */
   recarregarPessoas(): void {
     this.pessoaService.getAllPessoa()
-      .pipe(map((r: HttpResponse<Pessoa[]>) => r.body ?? []))
+      .pipe(map((r: any) => Array.isArray(r) ? r : (r.body ?? [])))
       .subscribe({
         next: (pessoas) => this._pessoas.next(pessoas),
         error: (err) => console.error('Erro ao recarregar pessoas:', err)
       });
   }
 
-  /** Recarrega apenas departamentos. */
   recarregarDepartamentos(): void {
     this.departamentoService.getAllDepartamento()
-      .pipe(map((r: HttpResponse<Departamento[]>) => r.body ?? []))
+      .pipe(map((r: any) => Array.isArray(r) ? r : (r.body ?? [])))
       .subscribe({
         next: (depts) => this._departamentos.next(depts),
         error: (err) => console.error('Erro ao recarregar departamentos:', err)

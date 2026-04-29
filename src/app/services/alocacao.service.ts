@@ -48,7 +48,7 @@ export class AlocacaoService {
     }
 
     const tarefaDeptId = this._getDepartamentoId(tarefa);
-    const pessoaDeptId = pessoa.departamentoId;
+    const pessoaDeptId = pessoa.departamentoId ?? (pessoa.departamento as any)?.id;
 
     if (!tarefaDeptId || !pessoaDeptId)
       return 'Não foi possível identificar o departamento.';

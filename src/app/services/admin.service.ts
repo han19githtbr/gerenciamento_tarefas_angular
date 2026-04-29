@@ -81,11 +81,11 @@ export class AdminService {
   }
 
   prorrogarTarefa(tarefaId: number, novoPrazo: string): Observable<any> {
-    return this.http.put(`${this.API}/admin/tarefa/${tarefaId}/prorrogar`, { novoPrazo });
+    return this.http.put(`${this.API}/tarefa/${tarefaId}/prorrogar`, { novoPrazo });
   }
 
   encerrarTarefa(tarefaId: number): Observable<any> {
-    return this.http.put(`${this.API}/admin/tarefa/${tarefaId}/encerrar`, {});
+    return this.http.put(`${this.API}/tarefa/${tarefaId}/encerrar`, {});
   }
 
 }
