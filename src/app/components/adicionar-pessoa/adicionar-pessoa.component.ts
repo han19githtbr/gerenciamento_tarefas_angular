@@ -131,6 +131,8 @@ export class AdicionarPessoaComponent implements OnInit {
         return;
       }
 
+      this.pessoa.nome = nomeControl.value;
+
       if (this.pessoaButton == "Create") {
         this.pessoaService.savePessoa(this.pessoa).subscribe({
           next: (data) => {

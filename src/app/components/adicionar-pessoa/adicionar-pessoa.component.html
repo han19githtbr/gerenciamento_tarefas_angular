@@ -23,7 +23,7 @@
                   <label class="form-label" for="form2Example1">Departamento</label>
 
                   <form [formGroup]="formDepartment" id="contactForm" class="formDepartment">
-                    <select (change)="onDepartment()" class="departamento" formControlName="id" [(ngModel)]="pessoa.id" id="form2Example1">
+                    <select (change)="onDepartment()" class="departamento" formControlName="id" [(ngModel)]="pessoa.departamento.id" id="form2Example1">
                       <option *ngFor="let item of departamentos" class="departamentoOption" [value]="item.id">{{ item.id }} - {{ item.titulo }}</option>
                     </select>
                   </form>
