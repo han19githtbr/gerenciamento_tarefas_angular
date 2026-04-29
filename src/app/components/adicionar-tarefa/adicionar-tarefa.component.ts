@@ -106,26 +106,13 @@ export class AdicionarTarefaComponent implements OnInit {
   }
 
   onDepartment() {
-    // Pega o valor do formulário principal
     const deptId = this.form.get('departamentoId')?.value;
-
     if (deptId) {
-      // Garante que o departamento existe
       if (!this.tarefa.departamento) {
         this.tarefa.departamento = new Departamento();
       }
-
-      // Encontra o departamento completo na lista
-      const selectedDept = this.departamentos.find(dept => dept.id === +deptId);
-      if (selectedDept) {
-        // Atribui o departamento completo à tarefa
-        this.tarefa.departamento = selectedDept;
-      } else {
-        // Se não encontrou na lista, pelo menos define o ID
-        this.tarefa.departamento.id = +deptId;
-      }
-
-      console.log('Departamento selecionado:', this.tarefa.departamento);
+      // Envia apenas o id — o backend faz o findById internamente
+      this.tarefa.departamento.id = +deptId;
     }
   }
 
@@ -152,75 +139,73 @@ export class AdicionarTarefaComponent implements OnInit {
   submit(form: any) {
     this.disableBox = true;
 
-    // Validação do formulário
+
     if (this.form.invalid) {
       this.disableBox = false;
       this.marcarCamposComoMarcados();
       return;
     }
 
-    // Chama onDepartment para garantir que o departamento está definido
+
+    // Lê os valores só depois de confirmar que o form é válido
+    this.tarefa.titulo = this.form.get('titulo')?.value;
+    this.tarefa.descricao = this.form.get('descricao')?.value;
+    this.tarefa.prazo = this.form.get('prazo')?.value;
+
     this.onDepartment();
 
-    // Validação do departamento
     const deptId = this.form.get('departamentoId')?.value;
     if (!deptId) {
-        this.disableBox = false;
-        this.showError("Selecione um departamento.");
-        return;
+      this.disableBox = false;
+      this.showError('Selecione um departamento.');
+      return;
     }
 
-    // DEBUG: Mostra os dados que serão enviados
-    console.log('Dados da tarefa a enviar:', {
+    // Monta payload limpo para evitar campos extras que confundem o backend
+    const payload = {
+      id: this.tarefa.id,
       titulo: this.tarefa.titulo,
       descricao: this.tarefa.descricao,
       prazo: this.tarefa.prazo,
-      departamento: this.tarefa.departamento,
-      departamentoId: deptId
-    });
+      departamento: { id: +deptId },
+      ordem_apresentacao: this.tarefa.ordem_apresentacao
+    };
 
-    if(this.tarefaButton == "Create"){
-        this.tarefaService.salvarTarefa(this.tarefa).subscribe({
-          next: (response: any) => {
-            console.log('Resposta do servidor:', response);
-
-            if(response.body?.success){
-                this.showSuccess(response.body.mensagem || "A tarefa foi salva com sucesso.");
-                this.dialogRef.close({
-                  success: true,
-                  tarefa: response.body.tarefa || this.tarefa
-                });
-            } else{
-                this.disableBox = false;
-                const errorMsg = response.body?.mensagem || 'Erro ao salvar a tarefa';
-                this.showError(errorMsg);
-            }
-          },
-          error: (error) => {
+    if (this.tarefaButton === 'Create') {
+      this.tarefaService.salvarTarefa(payload).subscribe({
+        next: (response: any) => {
+          if (response.body?.success) {
+            this.showSuccess(response.body.mensagem || 'A tarefa foi salva com sucesso.');
+            this.dialogRef.close({ success: true, tarefa: response.body });
+          } else {
             this.disableBox = false;
-            console.error('Erro na requisição:', error);
-            this.showError('Erro de conexão com o servidor. Verifique se o back-end está rodando.');
+            this.showError(response.body?.mensagem || 'Erro ao salvar a tarefa');
           }
-        });
+        },
+        error: (error) => {
+          this.disableBox = false;
+          console.error('Erro na requisição:', error);
+          this.showError('Erro de conexão com o servidor. Verifique se o back-end está rodando.');
+        }
+      });
     } else {
-        const nomeTarefa = encodeURIComponent(this.oldTitle);
-        this.tarefaService.alterarTarefa(nomeTarefa, this.tarefa).subscribe({
-          next: (response: any) => {
-            if(response.body?.success){
-                this.showSuccess(response.body.mensagem || "A tarefa foi alterada com sucesso.");
-                this.dialogRef.close(response.body);
-            } else {
-                this.disableBox = false;
-                const errorMsg = response.body?.mensagem || 'Erro ao alterar a tarefa';
-                this.showError(errorMsg);
-            }
-          },
-          error: (error) => {
+      const nomeTarefa = encodeURIComponent(this.oldTitle);
+      this.tarefaService.alterarTarefa(nomeTarefa, payload).subscribe({
+        next: (response: any) => {
+          if (response.body?.success) {
+            this.showSuccess(response.body.mensagem || 'A tarefa foi alterada com sucesso.');
+            this.dialogRef.close(response.body);
+          } else {
             this.disableBox = false;
-            console.error('Erro na requisição:', error);
-            this.showError('Erro de conexão com o servidor.');
+            this.showError(response.body?.mensagem || 'Erro ao alterar a tarefa');
           }
-        });
+        },
+        error: (error) => {
+          this.disableBox = false;
+          console.error('Erro na requisição:', error);
+          this.showError('Erro de conexão com o servidor.');
+        }
+      });
     }
   }
 
