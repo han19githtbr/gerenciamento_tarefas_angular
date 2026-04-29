@@ -61,4 +61,16 @@ export class TarefaService {
   getContagemEmAndamento(): Observable<{ total: number }> {
     return this.http.get<{ total: number }>(this.CONTROLLER + '/contagemEmAndamento');
   }
+
+
+  /** Feature 1: Remove uma pessoa de uma tarefa */
+  desalocarPessoa(tarefaId: number, pessoaId: number): Observable<any> {
+    return this.http.delete(`${this.CONTROLLER}/desalocar/${tarefaId}/${pessoaId}`, { observe: 'response' });
+  }
+
+  /** Feature 2: Conta tarefas com prazo vencido */
+  contarVencidas(): Observable<{ total: number }> {
+    return this.http.get<{ total: number }>(`${this.CONTROLLER}/vencidas/count`);
+  }
+
 }

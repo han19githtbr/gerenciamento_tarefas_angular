@@ -31,6 +31,8 @@ export class DashboardStateService {
   private _tarefasPendentes   = new BehaviorSubject<Tarefa[]>([]);
   private _tarefasAlocadas    = new BehaviorSubject<Tarefa[]>([]);
   private _tarefasEmAndamento = new BehaviorSubject<number>(0);
+  private _tarefasVencidas = new BehaviorSubject<number>(0);
+  readonly tarefasVencidas$ = this._tarefasVencidas.asObservable();
 
   readonly pessoas$           = this._pessoas.asObservable();
   readonly departamentos$     = this._departamentos.asObservable();
@@ -146,7 +148,12 @@ export class DashboardStateService {
   marcarTarefaFinalizada(tarefaId: number, duracao?: number): void {
     const tarefas = this.tarefas.map(t => {
       if (t.id !== tarefaId) return t;
-      return { ...t, finalizado: true, duracao: duracao ?? t.duracao };
+      // Cria nova instância de Tarefa para preservar os getters da classe
+      const atualizada = Object.assign(new Tarefa(), t, {
+        finalizado: true,
+        duracao: duracao ?? t.duracao
+      });
+      return atualizada;
     });
     this._atualizarTarefas(tarefas);
   }
@@ -155,13 +162,25 @@ export class DashboardStateService {
 
   /** Deriva tarefas pendentes e alocadas a partir da lista completa. */
   private _atualizarTarefas(tarefas: Tarefa[]): void {
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+
     this._tarefas.next(tarefas);
     this._tarefasPendentes.next(
-      tarefas.filter(t => !t.finalizado && !t.pessoaId && !t.pessoa)
+      tarefas.filter(t => !t.finalizado && !t.pessoaId && !t.pessoa && !(t.pessoasAlocadas?.length))
     );
     this._tarefasAlocadas.next(
-      tarefas.filter(t => t.pessoaId != null || t.pessoa != null)
+      tarefas.filter(t => t.pessoaId != null || t.pessoa != null || (t.pessoasAlocadas && t.pessoasAlocadas.length > 0))
     );
+
+    // Feature 2 & 5: conta vencidas
+    const vencidas = tarefas.filter(t => {
+      if (!t.prazo || t.finalizado) return false;
+      const prazo = new Date(t.prazo);
+      prazo.setHours(0, 0, 0, 0);
+      return prazo < hoje;
+    });
+    this._tarefasVencidas.next(vencidas.length);
   }
 
   private _carregarContagemEmAndamento(): void {

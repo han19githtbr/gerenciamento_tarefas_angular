@@ -42,6 +42,11 @@ export class AlocacaoService {
     if (!tarefa.id) return 'A tarefa selecionada não tem um ID válido.';
     if (!pessoa.id) return 'A pessoa selecionada não tem um ID válido.';
 
+    // Feature 4: bloqueia tarefa vencida
+    if (tarefa.vencida || tarefa.isPrazoVencido) {
+      return '🚫 Esta tarefa está com o prazo vencido. Não é possível alocar novas pessoas.';
+    }
+
     const tarefaDeptId = this._getDepartamentoId(tarefa);
     const pessoaDeptId = pessoa.departamentoId;
 
@@ -53,6 +58,11 @@ export class AlocacaoService {
 
     return null;
   }
+
+  desalocarPessoa(tarefaId: number, pessoaId: number): Observable<any> {
+    return this.tarefaService.desalocarPessoa(tarefaId, pessoaId);
+  }
+
 
   /**
    * Abre o dialog de confirmação de alocação.

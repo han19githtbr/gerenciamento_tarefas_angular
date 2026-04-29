@@ -86,11 +86,14 @@
         <div class="stat-card__glow"></div>
       </div>
 
-      <div class="stat-card stat-card--amber">
+      <div class="stat-card stat-card--amber"
+          [class.stat-card--blinking]="(tarefasVencidas$ | async) > 0">
         <div class="stat-card__icon"><i class="fa fa-clock-o"></i></div>
         <div class="stat-card__body">
-          <span class="stat-card__value">{{ (tarefasPendentes$ | async)?.length ?? 0 }}</span>
-          <span class="stat-card__label">Pendentes</span>
+          <span class="stat-card__value">{{ (tarefasVencidas$ | async) ?? 0 }}</span>
+          <span class="stat-card__label">
+            {{ (tarefasVencidas$ | async) > 0 ? '⚠️ Vencidas' : 'Pendentes' }}
+          </span>
         </div>
         <div class="stat-card__glow"></div>
       </div>
@@ -356,8 +359,13 @@
           <mat-form-field class="alloc-field" appearance="outline">
             <mat-label>Selecione uma tarefa</mat-label>
             <mat-select [(value)]="tarefaSelecionada" (selectionChange)="selecionarTarefa($event)">
-              <mat-option *ngFor="let tarefa of tarefas$ | async" [value]="tarefa">
-                {{ tarefa.titulo }}
+              <mat-option *ngFor="let tarefa of tarefas$ | async"
+                          [value]="tarefa"
+                          [disabled]="tarefa.vencida || tarefa.isPrazoVencido">
+                <span [style.color]="(tarefa.vencida || tarefa.isPrazoVencido) ? '#ef4444' : 'inherit'">
+                  {{ tarefa.titulo }}
+                  <small *ngIf="tarefa.vencida || tarefa.isPrazoVencido"> — ⚠️ Prazo vencido</small>
+                </span>
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -397,14 +405,13 @@
             <tr>
               <th>Tarefa</th>
               <th>Departamento</th>
-              <th>Pessoa Alocada</th>
+              <th>Pessoas Alocadas</th>
               <th>Prazo</th>
               <th>Status</th>
               <th class="col-actions">Ações</th>
             </tr>
           </thead>
           <tbody>
-
             <ng-container *ngIf="tarefasAlocadas$ | async as tarefasAlocadas">
               <tr *ngIf="tarefasAlocadas.length === 0">
                 <td colspan="6" class="empty-state">
@@ -412,31 +419,64 @@
                   <span>Nenhuma alocação realizada ainda</span>
                 </td>
               </tr>
-              <tr *ngFor="let tarefa of tarefasAlocadas" class="data-row">
+              <tr *ngFor="let tarefa of tarefasAlocadas" class="data-row"
+                  [class.row--vencida]="tarefa.vencida || tarefa.isPrazoVencido">
                 <td><strong>{{ tarefa.titulo }}</strong></td>
                 <td><span class="badge-dept">{{ tarefa.departamento }}</span></td>
+
+                <!-- Feature 1: múltiplas pessoas alocadas -->
                 <td>
-                  <div class="cell-with-avatar" *ngIf="tarefa.pessoa">
-                    <div class="avatar avatar--sm">{{ tarefa.pessoa?.nome?.charAt(0) }}</div>
-                    <span>{{ tarefa.pessoa?.nome }}</span>
+                  <div class="pessoas-alocadas-list">
+                    <ng-container *ngIf="tarefa.pessoasAlocadas?.length > 0; else legacyPessoa">
+                      <div class="pessoa-chip" *ngFor="let p of tarefa.pessoasAlocadas">
+                        <div class="avatar avatar--sm">{{ p.nome?.charAt(0) }}</div>
+                        <span>{{ p.nome }}</span>
+                        <!-- Botão remover pessoa individual -->
+                        <button class="btn-remove-pessoa"
+                                *ngIf="!tarefa.finalizado"
+                                (click)="desalocarPessoa(tarefa.id, p.id)"
+                                title="Remover {{ p.nome }} da tarefa">
+                          <i class="fa fa-times"></i>
+                        </button>
+                      </div>
+                    </ng-container>
+                    <ng-template #legacyPessoa>
+                      <div class="cell-with-avatar" *ngIf="tarefa.pessoa">
+                        <div class="avatar avatar--sm">{{ tarefa.pessoa?.nome?.charAt(0) }}</div>
+                        <span>{{ tarefa.pessoa?.nome }}</span>
+                      </div>
+                    </ng-template>
                   </div>
                 </td>
+
                 <td>
-                  <span class="date-chip">
+                  <span class="date-chip" [class.date-chip--vencida]="tarefa.vencida || tarefa.isPrazoVencido">
                     <i class="fa fa-calendar"></i>
                     {{ tarefa.prazo | date:'dd/MM/yyyy' }}
                   </span>
                 </td>
+
+                <!-- Feature 5: status "Pendente" com piscar quando vencida -->
                 <td>
                   <span class="status-badge"
-                        [ngClass]="tarefa.finalizado ? 'status-badge--done' : 'status-badge--pending'">
-                    <i class="fa" [ngClass]="tarefa.finalizado ? 'fa-check-circle' : 'fa-hourglass-half'"></i>
-                    {{ tarefa.finalizado ? 'Concluído' : 'Em andamento' }}
+                        [ngClass]="{
+                          'status-badge--done':    tarefa.finalizado,
+                          'status-badge--vencida': !tarefa.finalizado && (tarefa.vencida || tarefa.isPrazoVencido),
+                          'status-badge--pending': !tarefa.finalizado && !(tarefa.vencida || tarefa.isPrazoVencido)
+                        }">
+                    <i class="fa"
+                      [ngClass]="{
+                        'fa-check-circle':  tarefa.finalizado,
+                        'fa-exclamation-triangle': !tarefa.finalizado && (tarefa.vencida || tarefa.isPrazoVencido),
+                        'fa-hourglass-half': !tarefa.finalizado && !(tarefa.vencida || tarefa.isPrazoVencido)
+                      }"></i>
+                    {{ tarefa.finalizado ? 'Concluído' : (tarefa.vencida || tarefa.isPrazoVencido) ? 'Pendente' : 'Em andamento' }}
                   </span>
                 </td>
+
                 <td class="col-actions">
                   <div class="action-btns">
-                    <button *ngIf="!tarefa.finalizado"
+                    <button *ngIf="!tarefa.finalizado && !(tarefa.vencida || tarefa.isPrazoVencido)"
                             class="btn-action btn-action--success"
                             (click)="abrirDialogFinalizarTarefa(tarefa)"
                             title="Finalizar Tarefa">
@@ -445,11 +485,15 @@
                     <span *ngIf="tarefa.finalizado" class="badge-completed">
                       <i class="fa fa-check-circle"></i> Concluída
                     </span>
+                    <!-- Feature 5: badge "Vencida" com aviso ao admin -->
+                    <span *ngIf="!tarefa.finalizado && (tarefa.vencida || tarefa.isPrazoVencido)"
+                          class="badge-vencida badge-vencida--blink">
+                      <i class="fa fa-clock-o"></i> Vencida
+                    </span>
                   </div>
                 </td>
               </tr>
             </ng-container>
-
           </tbody>
         </table>
       </div>

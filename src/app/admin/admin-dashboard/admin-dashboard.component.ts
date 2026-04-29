@@ -33,6 +33,10 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   isRefreshing = false;
   mensagensRecolhidas = false;
   activeTab: 'overview' | 'tarefas' | 'pessoas' | 'departamentos' | 'mensagens' = 'overview';
+  tarefasVencidas: any[] = [];
+  novoPrazo: { [id: number]: string } = {};
+  expandedVencidas = false;
+  today: string = new Date().toISOString().split('T')[0];
 
   private pollingInterval: any;
 
@@ -88,6 +92,43 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     });
     this.carregarMensagensPendentes();
   }
+
+
+  carregarVencidas(): void {
+    this.adminService.getTarefasVencidas().subscribe({
+      next: (tarefas) => this.tarefasVencidas = tarefas,
+      error: () => {}
+    });
+  }
+
+  prorrogarTarefa(tarefaId: number): void {
+    const prazo = this.novoPrazo[tarefaId];
+    if (!prazo) {
+      alert('Informe o novo prazo.');
+      return;
+    }
+    this.adminService.prorrogarTarefa(tarefaId, prazo).subscribe({
+      next: () => {
+        alert('Tarefa prorrogada com sucesso!');
+        this.carregarVencidas();
+        this.carregarStatsGerais();
+      },
+      error: () => alert('Erro ao prorrogar tarefa.')
+    });
+  }
+
+  encerrarTarefa(tarefaId: number): void {
+    if (!confirm('Tem certeza que deseja encerrar esta tarefa?')) return;
+    this.adminService.encerrarTarefa(tarefaId).subscribe({
+      next: () => {
+        alert('Tarefa encerrada com sucesso!');
+        this.carregarVencidas();
+        this.carregarStatsGerais();
+      },
+      error: () => alert('Erro ao encerrar tarefa.')
+    });
+  }
+
 
   toggleMensagens(): void {
     this.mensagensRecolhidas = !this.mensagensRecolhidas;

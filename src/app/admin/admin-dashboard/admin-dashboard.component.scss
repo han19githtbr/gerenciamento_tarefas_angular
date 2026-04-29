@@ -1163,4 +1163,204 @@
   }
 
   .badge { color: var(--text-primary) !important; }
+
+
+  @keyframes blink-panel {
+    0%, 100% { border-color: rgba(239,68,68,0.4); box-shadow: 0 0 0 rgba(239,68,68,0); }
+    50%       { border-color: rgba(239,68,68,0.8); box-shadow: 0 0 16px rgba(239,68,68,0.3); }
+  }
+
+  .vencidas-panel {
+    background: linear-gradient(135deg, rgba(239,68,68,0.08), rgba(239,68,68,0.03));
+    border: 1.5px solid rgba(239,68,68,0.35);
+    border-radius: 16px;
+    margin: 1.5rem 0;
+    overflow: hidden;
+    animation: blink-panel 2s ease-in-out infinite;
+
+    &__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+
+      &:hover { background: rgba(239,68,68,0.08); }
+
+      i { color: rgba(255,255,255,0.5); transition: transform 0.2s; }
+    }
+
+    &__title {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      h3 { margin: 0; font-size: 1rem; font-weight: 700; color: #fca5a5; }
+    }
+
+    &__body {
+      padding: 0 1.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+
+  .vencidas-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ef4444;
+    animation: blink-panel 1.2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  .vencidas-count {
+    background: rgba(239,68,68,0.25);
+    color: #fca5a5;
+    border-radius: 999px;
+    padding: 0.15rem 0.6rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .vencida-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+
+    &__info {
+      flex: 1;
+      min-width: 180px;
+
+      h4 { margin: 0 0 0.35rem; font-size: 0.95rem; color: #f1f5f9; }
+    }
+
+    &__prazo {
+      font-size: 0.8rem;
+      color: #fca5a5;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    &__pessoas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.5rem;
+    }
+
+    &__actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.75rem;
+    }
+  }
+
+  .pessoa-tag {
+    background: rgba(255,255,255,0.07);
+    border-radius: 999px;
+    padding: 0.15rem 0.6rem;
+    font-size: 0.75rem;
+    color: #94a3b8;
+  }
+
+  .prazo-input-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+    label { font-size: 0.78rem; color: #94a3b8; white-space: nowrap; }
+  }
+
+  .input-date {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    padding: 0.4rem 0.7rem;
+    color: #f1f5f9;
+    font-size: 0.82rem;
+    outline: none;
+    transition: border-color 0.2s;
+
+    &:focus { border-color: rgba(99,102,241,0.6); }
+  }
+
+  .btn-prorrogar {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    border: none;
+    border-radius: 8px;
+    padding: 0.4rem 0.9rem;
+    color: white;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: opacity 0.2s, transform 0.15s;
+
+    &:hover { opacity: 0.88; transform: translateY(-1px); }
+    &:active { transform: scale(0.97); }
+  }
+
+  .btn-encerrar {
+    background: transparent;
+    border: 1px solid rgba(239,68,68,0.4);
+    border-radius: 8px;
+    padding: 0.4rem 0.9rem;
+    color: #fca5a5;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: background 0.2s, transform 0.15s;
+
+    &:hover { background: rgba(239,68,68,0.12); transform: translateY(-1px); }
+    &:active { transform: scale(0.97); }
+  }
+
+  /* ── Responsividade ─────────────────────────────────────── */
+  @media (max-width: 640px) {
+    .vencida-card {
+      flex-direction: column;
+
+      &__actions {
+        align-items: flex-start;
+        width: 100%;
+      }
+    }
+
+    .prazo-input-group {
+      width: 100%;
+
+      .input-date { flex: 1; min-width: 130px; }
+      .btn-prorrogar { flex: 1; justify-content: center; }
+    }
+
+    .btn-encerrar {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .vencidas-panel {
+      margin: 1rem 0;
+      border-radius: 12px;
+    }
+  }
+
+
 }

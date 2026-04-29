@@ -71,4 +71,21 @@ export class AdminService {
     return this.http.get<any[]>(this.DEPT_API + '/getAllDepartamento', { });
   }
 
+  /*getTarefasVencidas(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.API}/tarefas/vencidas/count`);
+    // Se quiser a lista completa, crie endpoint GET /tarefas/vencidas no backend
+  }*/
+
+  getTarefasVencidas(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.API}/tarefas/vencidas`);
+  }
+
+  prorrogarTarefa(tarefaId: number, novoPrazo: string): Observable<any> {
+    return this.http.put(`${this.API}/admin/tarefa/${tarefaId}/prorrogar`, { novoPrazo });
+  }
+
+  encerrarTarefa(tarefaId: number): Observable<any> {
+    return this.http.put(`${this.API}/admin/tarefa/${tarefaId}/encerrar`, {});
+  }
+
 }
