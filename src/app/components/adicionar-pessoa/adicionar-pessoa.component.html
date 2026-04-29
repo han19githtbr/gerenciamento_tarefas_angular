@@ -14,7 +14,7 @@
                   <label class="form-label" for="form2Example1">Nome</label>
                   <!-- <mat-form-field> -->
                   <input matInput formControlName="nome" [(ngModel)]="pessoa.nome" type="text" id="form2Example1" class="form-control" />
-                  <div *ngIf="form.get['nome']?.dirty || form.get['nome']?.touched">
+                  <div *ngIf="form.get('nome')?.dirty || form.get('nome')?.touched">
                     <mat-error class="erro" *ngIf="form.get('nome').hasError('required')">O campo nome é obrigatório.</mat-error>
                   </div>
                 </div>
@@ -22,11 +22,13 @@
                 <div class="form-outline formatar-mat-form">
                   <label class="form-label" for="form2Example1">Departamento</label>
 
-                  <form [formGroup]="formDepartment" id="contactForm" class="formDepartment">
-                    <select (change)="onDepartment()" class="departamento" formControlName="id" [(ngModel)]="pessoa.departamento.id" id="form2Example1">
-                      <option *ngFor="let item of departamentos" class="departamentoOption" [value]="item.id">{{ item.id }} - {{ item.titulo }}</option>
-                    </select>
-                  </form>
+                  <select (change)="onDepartment()" class="departamento" formControlName="departamentoId" id="departamentoPessoa">
+                    <option value="" disabled>Selecione um departamento</option>
+                    <option *ngFor="let item of departamentos" class="departamentoOption" [value]="item.id">{{ item.id }} - {{ item.titulo }}</option>
+                  </select>
+                  <div *ngIf="form.get('departamentoId')?.dirty || form.get('departamentoId')?.touched">
+                    <mat-error class="erro" *ngIf="form.get('departamentoId').hasError('required')">O departamento e obrigatorio.</mat-error>
+                  </div>
                 </div>
             </div>
           </mat-dialog-content>

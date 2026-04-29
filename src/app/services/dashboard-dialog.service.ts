@@ -41,6 +41,8 @@ export class DashboardDialogService {
         title: 'Editar Pessoa',
         id: pessoa.id,
         nome: pessoa.nome,
+        email: pessoa.email,
+        departamentoId: pessoa.departamentoId ?? (pessoa.departamento as any)?.id,
         ordem_apresentacao: pessoa.ordem_apresentacao,
         pessoaButton: 'Edit'
       }

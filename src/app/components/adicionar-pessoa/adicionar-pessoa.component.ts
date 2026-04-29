@@ -6,7 +6,6 @@ import { Pessoa } from 'src/app/model/Pessoa.model';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { Departamento } from 'src/app/model/Departamento.model';
 import { DepartamentoService } from 'src/app/services/departamento.service';
-import { HttpRequest } from '@angular/common/http';
 import { AlertModalService } from 'src/app/services/alert-modal.service';
 
 @Component({
@@ -18,8 +17,6 @@ export class AdicionarPessoaComponent implements OnInit {
   form!: FormGroup;
 
   title: string = '';
-
-  formDepartment!: FormGroup;
 
   pessoaButton: string = '';
 
@@ -34,7 +31,7 @@ export class AdicionarPessoaComponent implements OnInit {
   pessoas: Pessoa[] = [];
 
 
-  departamentoSelecionadoId: number = null;
+  departamentoSelecionadoId: number | null = null;
 
   constructor(
       private fb: FormBuilder,
@@ -49,6 +46,7 @@ export class AdicionarPessoaComponent implements OnInit {
     this.pessoaButton = data['pessoaButton'];
     this.pessoa.id = data['id'];
     this.pessoa.nome = data['nome'];
+    this.pessoa.email = data['email'];
     this.pessoa.ordem_apresentacao = data['ordem_apresentacao'];
     this.oldName = data['nome'];
 
@@ -60,15 +58,16 @@ export class AdicionarPessoaComponent implements OnInit {
   ngOnInit() {
     this.form = this.fb.group({
       nome: ["", [Validators.required, Validators.maxLength(255)]],
-      //id: ["", Validators.required]
-    });
-
-    this.formDepartment = this.fb.group({
-      id: ["", Validators.required]
+      departamentoId: [this.data['departamentoId'] || "", Validators.required]
     });
 
     this.departamentoService.getAllDepartamento().subscribe((data: any) => {
       this.departamentos = data.body;
+      const departamentoId = this.data['departamentoId'] || this.pessoa.departamento?.id;
+      if (departamentoId) {
+        this.form.patchValue({ departamentoId });
+        this.setDepartamentoSelecionado(departamentoId);
+      }
     });
   }
 
@@ -78,11 +77,16 @@ export class AdicionarPessoaComponent implements OnInit {
   }
 
   onDepartment() {
-    this.departamentoSelecionadoId = +this.formDepartment.controls['id'].value;
+    this.setDepartamentoSelecionado(this.form.controls['departamentoId'].value);
+  }
+
+  private setDepartamentoSelecionado(departamentoId: number | string) {
+    this.departamentoSelecionadoId = +departamentoId;
     if (!this.pessoa.departamento) {
       this.pessoa.departamento = new Departamento();
     }
     this.pessoa.departamento.id = this.departamentoSelecionadoId;
+    this.pessoa.departamentoId = this.departamentoSelecionadoId;
   }
 
 
@@ -127,11 +131,18 @@ export class AdicionarPessoaComponent implements OnInit {
 
       if (!nomeControl.value) {
         this.disableBox = false;
-        this.showError('Erro ao salvar pessoa.');
+        this.showError('O campo nome é obrigatório.');
+        return;
+      }
+
+      if (form.invalid) {
+        this.disableBox = false;
+        this.showError('Selecione um departamento.');
         return;
       }
 
       this.pessoa.nome = nomeControl.value;
+      this.setDepartamentoSelecionado(form.get('departamentoId').value);
 
       if (this.pessoaButton == "Create") {
         this.pessoaService.savePessoa(this.pessoa).subscribe({
@@ -142,6 +153,13 @@ export class AdicionarPessoaComponent implements OnInit {
                 ...this.pessoa,
                 id: data.body.id,
                 nome: data.body.nome,
+                email: data.body.email,
+                departamento: {
+                  ...this.pessoa.departamento,
+                  id: data.body.departamentoId,
+                  titulo: data.body.departamento
+                } as Departamento,
+                departamentoId: data.body.departamentoId,
                 ordem_apresentacao: data.body.ordem_apresentacao,
                 mensagem: data.body.mensagem
               };
@@ -158,7 +176,7 @@ export class AdicionarPessoaComponent implements OnInit {
               this.dialogRef.close(pessoaSalva);
             } else {
               this.disableBox = false;
-              this.showError('Erro ao salvar pessoa.');
+              this.showError(data.body?.mensagem || 'Erro ao salvar pessoa.');
             }
           },
           error: (error) => {
@@ -177,6 +195,13 @@ export class AdicionarPessoaComponent implements OnInit {
                 ...this.pessoa,
                 id: data.body.id,
                 nome: data.body.nome,
+                email: data.body.email,
+                departamento: {
+                  ...this.pessoa.departamento,
+                  id: data.body.departamentoId,
+                  titulo: data.body.departamento
+                } as Departamento,
+                departamentoId: data.body.departamentoId,
                 ordem_apresentacao: data.body.ordem_apresentacao,
                 mensagem: data.body.mensagem
               };
@@ -192,7 +217,7 @@ export class AdicionarPessoaComponent implements OnInit {
               this.dialogRef.close(pessoaAlterada);
             } else {
               this.disableBox = false;
-              this.showError('Erro ao alterar pessoa.');
+              this.showError(data.body?.mensagem || 'Erro ao alterar pessoa.');
             }
           },
           error: (error) => {

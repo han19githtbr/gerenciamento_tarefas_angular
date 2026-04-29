@@ -1331,7 +1331,8 @@ body {
   /* ── Multi-pessoas alocadas (Feature 1) ──────────────────── */
   .pessoas-alocadas-list {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     gap: 0.35rem;
   }
 
@@ -1345,6 +1346,7 @@ body {
     padding: 0.2rem 0.5rem 0.2rem 0.25rem;
     max-width: 200px;
     font-size: 0.82rem;
+    position: relative;
     transition: background 0.2s;
 
     &:hover {
@@ -1356,6 +1358,41 @@ body {
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 120px;
+    }
+
+    &[data-email]:hover::after {
+      content: attr(data-email);
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 8px);
+      transform: translateX(-50%);
+      z-index: 20;
+      max-width: 260px;
+      padding: 0.35rem 0.55rem;
+      border-radius: 6px;
+      background: #111827;
+      color: #f9fafb;
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+      font-size: 0.72rem;
+      line-height: 1.2;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    &[data-email]:hover::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 3px);
+      transform: translateX(-50%) rotate(45deg);
+      z-index: 19;
+      width: 9px;
+      height: 9px;
+      background: #111827;
+      border-right: 1px solid rgba(255,255,255,0.14);
+      border-bottom: 1px solid rgba(255,255,255,0.14);
+      pointer-events: none;
     }
   }
 

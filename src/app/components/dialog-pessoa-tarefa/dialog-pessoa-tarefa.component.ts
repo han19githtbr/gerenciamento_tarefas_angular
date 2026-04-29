@@ -42,7 +42,12 @@ export class DialogPessoaTarefaComponent implements OnInit {
           this.disableBox = true; // evita duplo clique
           this.tarefaService.alocarPessoaNaTarefa(this.data.tarefa.id, this.pessoaId, this.emailPessoa).subscribe({
               next: (data) => {
-                  this.dialogRefPessoaTarefa.close({ result: 'Sim', mensagem: data.body.mensagem });
+                  if (data.body?.success) {
+                      this.dialogRefPessoaTarefa.close({ result: 'Sim', mensagem: data.body.mensagem });
+                  } else {
+                      this.disableBox = false;
+                      this.dialogRefPessoaTarefa.close({ result: 'Erro', mensagem: data.body?.mensagem || 'Erro ao alocar pessoa.' });
+                  }
               },
               error: (err) => {
                   console.error('Erro ao alocar:', err);

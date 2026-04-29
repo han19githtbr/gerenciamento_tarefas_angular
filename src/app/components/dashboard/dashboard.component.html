@@ -428,7 +428,10 @@
                 <td>
                   <div class="pessoas-alocadas-list">
                     <ng-container *ngIf="tarefa.pessoasAlocadas?.length > 0; else legacyPessoa">
-                      <div class="pessoa-chip" *ngFor="let p of tarefa.pessoasAlocadas">
+                      <div class="pessoa-chip"
+                           *ngFor="let p of tarefa.pessoasAlocadas"
+                           [attr.title]="p.email || 'Sem email cadastrado'"
+                           [attr.data-email]="p.email || 'Sem email cadastrado'">
                         <div class="avatar avatar--sm">{{ p.nome?.charAt(0) }}</div>
                         <span>{{ p.nome }}</span>
                         <!-- Botão remover pessoa individual -->
@@ -443,7 +446,7 @@
                     <ng-template #legacyPessoa>
                       <div class="cell-with-avatar" *ngIf="tarefa.pessoa">
                         <div class="avatar avatar--sm">{{ tarefa.pessoa?.nome?.charAt(0) }}</div>
-                        <span>{{ tarefa.pessoa?.nome }}</span>
+                        <span [attr.title]="tarefa.pessoa?.email || 'Sem email cadastrado'">{{ tarefa.pessoa?.nome }}</span>
                       </div>
                     </ng-template>
                   </div>
