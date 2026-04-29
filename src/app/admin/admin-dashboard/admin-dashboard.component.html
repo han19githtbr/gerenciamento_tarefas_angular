@@ -368,6 +368,55 @@
       </div>
     </div>
 
+
+    <section class="vencidas-panel" *ngIf="tarefasVencidas.length > 0">
+
+      <div class="vencidas-panel__header" (click)="expandedVencidas = !expandedVencidas">
+        <div class="vencidas-panel__title">
+          <span class="vencidas-dot"></span>
+          <h3>⚠️ Tarefas Vencidas</h3>
+          <span class="vencidas-count">{{ tarefasVencidas.length }}</span>
+        </div>
+        <i class="fa" [ngClass]="expandedVencidas ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+      </div>
+
+      <div class="vencidas-panel__body" *ngIf="expandedVencidas">
+        <div class="vencida-card" *ngFor="let t of tarefasVencidas">
+
+          <div class="vencida-card__info">
+            <h4>{{ t.titulo }}</h4>
+            <span class="vencida-card__prazo">
+              <i class="fa fa-calendar"></i> Venceu em: {{ t.prazo | date:'dd/MM/yyyy' }}
+            </span>
+            <div class="vencida-card__pessoas" *ngIf="t.pessoasAlocadas?.length">
+              <span *ngFor="let p of t.pessoasAlocadas" class="pessoa-tag">
+                {{ p.nome }}
+              </span>
+            </div>
+          </div>
+
+          <div class="vencida-card__actions">
+            <div class="prazo-input-group">
+              <label>Novo prazo:</label>
+              <input type="date"
+                    [(ngModel)]="novoPrazo[t.id]"
+                    class="input-date"
+                    [min]="today" />
+              <button class="btn-prorrogar" (click)="prorrogarTarefa(t.id)">
+                <i class="fa fa-calendar-plus-o"></i> Prorrogar
+              </button>
+            </div>
+            <button class="btn-encerrar" (click)="encerrarTarefa(t.id)">
+              <i class="fa fa-times-circle"></i> Encerrar Tarefa
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+
   </main>
 </div>
 
