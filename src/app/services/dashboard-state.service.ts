@@ -63,13 +63,22 @@ export class DashboardStateService {
   carregarTudo(): void {
     forkJoin({
       pessoas:       this.pessoaService.getAllPessoa().pipe(
-                      map((r: any) => Array.isArray(r) ? r : (r.body ?? []))
+                      map((r: any) => {
+                        const data = r?.body !== undefined ? r.body : r;
+                        return Array.isArray(data) ? data : [];
+                      })
                     ),
       departamentos: this.departamentoService.getAllDepartamento().pipe(
-                      map((r: any) => Array.isArray(r) ? r : (r.body ?? []))
+                      map((r: any) => {
+                        const data = r?.body !== undefined ? r.body : r;
+                        return Array.isArray(data) ? data : [];
+                      })
                     ),
       tarefas:       this.tarefaService.getAllTarefa().pipe(
-                      map((r: any) => Array.isArray(r) ? r : (r.body ?? []))
+                      map((r: any) => {
+                        const data = r?.body !== undefined ? r.body : r;
+                        return Array.isArray(data) ? data : [];
+                      })
                     ),
     }).subscribe({
       next: ({ pessoas, departamentos, tarefas }) => {
@@ -85,7 +94,10 @@ export class DashboardStateService {
 
   recarregarTarefas(): void {
     this.tarefaService.getAllTarefa()
-      .pipe(map((r: any) => Array.isArray(r) ? r : (r.body ?? [])))
+      .pipe(map((r: any) => {
+        const data = r?.body !== undefined ? r.body : r;
+        return Array.isArray(data) ? data : [];
+      }))
       .subscribe({
         next: (tarefas) => this._atualizarTarefas(tarefas),
         error: (err) => console.error('Erro ao recarregar tarefas:', err)
@@ -96,7 +108,10 @@ export class DashboardStateService {
 
   recarregarPessoas(): void {
     this.pessoaService.getAllPessoa()
-      .pipe(map((r: any) => Array.isArray(r) ? r : (r.body ?? [])))
+      .pipe(map((r: any) => {
+        const data = r?.body !== undefined ? r.body : r;
+        return Array.isArray(data) ? data : [];
+      }))
       .subscribe({
         next: (pessoas) => this._pessoas.next(pessoas),
         error: (err) => console.error('Erro ao recarregar pessoas:', err)
@@ -105,7 +120,10 @@ export class DashboardStateService {
 
   recarregarDepartamentos(): void {
     this.departamentoService.getAllDepartamento()
-      .pipe(map((r: any) => Array.isArray(r) ? r : (r.body ?? [])))
+      .pipe(map((r: any) => {
+        const data = r?.body !== undefined ? r.body : r;
+        return Array.isArray(data) ? data : [];
+      }))
       .subscribe({
         next: (depts) => this._departamentos.next(depts),
         error: (err) => console.error('Erro ao recarregar departamentos:', err)
