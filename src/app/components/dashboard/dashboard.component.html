@@ -2,6 +2,13 @@
 <!-- ║  DASHBOARD — SISTEMA DE GERENCIAMENTO DE TAREFAS        ║ -->
 <!-- ╚══════════════════════════════════════════════════════════╝ -->
 
+<!--
+  O template foi atualizado para usar o async pipe nos lugares em que
+  os arrays eram referenciados diretamente. Isso garante que a view
+  reaja automaticamente aos BehaviorSubjects do DashboardStateService,
+  sem necessidade de `ChangeDetectorRef` ou atribuições manuais.
+-->
+
 <div class="app-shell">
 
   <!-- ═══════════════════════════════════════════════════════════
@@ -38,8 +45,7 @@
     </nav>
 
     <div class="topbar__actions">
-      <!--<app-theme-toggle></app-theme-toggle>-->
-      <button class="btn-icon" (click)="recarregarTodasAsListas()" title="Recarregar dados">
+      <button class="btn-icon" (click)="recarregarTudo()" title="Recarregar dados">
         <i class="fa fa-refresh"></i>
       </button>
     </div>
@@ -50,12 +56,13 @@
   ═══════════════════════════════════════════════════════════ -->
   <main class="main-content">
 
-    <!-- ── STAT CARDS ROW ─────────────────────────────────────── -->
+    <!-- ── STAT CARDS ─────────────────────────────────────────── -->
     <section class="stats-row">
+
       <div class="stat-card stat-card--blue">
         <div class="stat-card__icon"><i class="fa fa-users"></i></div>
         <div class="stat-card__body">
-          <span class="stat-card__value">{{ pessoas.length }}</span>
+          <span class="stat-card__value">{{ (pessoas$ | async)?.length ?? 0 }}</span>
           <span class="stat-card__label">Pessoas</span>
         </div>
         <div class="stat-card__glow"></div>
@@ -64,7 +71,7 @@
       <div class="stat-card stat-card--teal">
         <div class="stat-card__icon"><i class="fa fa-building"></i></div>
         <div class="stat-card__body">
-          <span class="stat-card__value">{{ departamentos.length }}</span>
+          <span class="stat-card__value">{{ (departamentos$ | async)?.length ?? 0 }}</span>
           <span class="stat-card__label">Departamentos</span>
         </div>
         <div class="stat-card__glow"></div>
@@ -73,7 +80,7 @@
       <div class="stat-card stat-card--violet">
         <div class="stat-card__icon"><i class="fa fa-tasks"></i></div>
         <div class="stat-card__body">
-          <span class="stat-card__value">{{ tarefas.length }}</span>
+          <span class="stat-card__value">{{ (tarefas$ | async)?.length ?? 0 }}</span>
           <span class="stat-card__label">Tarefas</span>
         </div>
         <div class="stat-card__glow"></div>
@@ -82,11 +89,12 @@
       <div class="stat-card stat-card--amber">
         <div class="stat-card__icon"><i class="fa fa-clock-o"></i></div>
         <div class="stat-card__body">
-          <span class="stat-card__value">{{ tarefasPendentes.length }}</span>
+          <span class="stat-card__value">{{ (tarefasPendentes$ | async)?.length ?? 0 }}</span>
           <span class="stat-card__label">Pendentes</span>
         </div>
         <div class="stat-card__glow"></div>
       </div>
+
     </section>
 
     <!-- ── PEOPLE SECTION ─────────────────────────────────────── -->
@@ -118,47 +126,51 @@
               <th class="col-actions">Ações</th>
             </tr>
           </thead>
-          <tbody cdkDropList (cdkDropListDropped)="reOrdemList($event)">
-            <tr *ngIf="pessoas.length === 0">
-              <td colspan="5" class="empty-state">
-                <i class="fa fa-user-plus"></i>
-                <span>Nenhuma pessoa cadastrada</span>
-              </td>
-            </tr>
-            <tr *ngFor="let item of pessoas; let i = index" cdkDrag class="data-row">
-              <td class="col-index">
-                <span class="row-index">{{ i + 1 }}</span>
-              </td>
-              <td>
-                <div class="cell-with-avatar">
-                  <div class="avatar">{{ item.nome?.charAt(0) }}</div>
-                  <span>{{ item.nome }}</span>
-                </div>
-              </td>
-              <td>
-                <span class="badge-dept">{{ item.departamento }}</span>
-              </td>
-              <td class="col-order">
-                <div class="order-btns">
-                  <button class="btn-order" *ngIf="i !== 0" (click)="upPeople(i)" title="Mover acima">
-                    <i class="fa fa-chevron-up"></i>
-                  </button>
-                  <button class="btn-order" *ngIf="i !== pessoas.length - 1" (click)="downPeople(i)" title="Mover abaixo">
-                    <i class="fa fa-chevron-down"></i>
-                  </button>
-                </div>
-              </td>
-              <td class="col-actions">
-                <div class="action-btns">
-                  <button class="btn-action btn-action--danger" (click)="removerPessoa(i, item)" title="Remover">
-                    <i class="fa fa-trash"></i>
-                  </button>
-                  <button class="btn-action btn-action--edit" (click)="alterarPessoa(i, item)" title="Editar">
-                    <i class="fa fa-pencil"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
+          <tbody cdkDropList (cdkDropListDropped)="reOrdemPessoas($event)">
+
+            <ng-container *ngIf="pessoas$ | async as pessoas">
+              <tr *ngIf="pessoas.length === 0">
+                <td colspan="5" class="empty-state">
+                  <i class="fa fa-user-plus"></i>
+                  <span>Nenhuma pessoa cadastrada</span>
+                </td>
+              </tr>
+              <tr *ngFor="let item of pessoas; let i = index" cdkDrag class="data-row">
+                <td class="col-index">
+                  <span class="row-index">{{ i + 1 }}</span>
+                </td>
+                <td>
+                  <div class="cell-with-avatar">
+                    <div class="avatar">{{ item.nome?.charAt(0) }}</div>
+                    <span>{{ item.nome }}</span>
+                  </div>
+                </td>
+                <td>
+                  <span class="badge-dept">{{ item.departamento }}</span>
+                </td>
+                <td class="col-order">
+                  <div class="order-btns">
+                    <button class="btn-order" *ngIf="i !== 0" (click)="upPeople(i)" title="Mover acima">
+                      <i class="fa fa-chevron-up"></i>
+                    </button>
+                    <button class="btn-order" *ngIf="i !== pessoas.length - 1" (click)="downPeople(i)" title="Mover abaixo">
+                      <i class="fa fa-chevron-down"></i>
+                    </button>
+                  </div>
+                </td>
+                <td class="col-actions">
+                  <div class="action-btns">
+                    <button class="btn-action btn-action--danger" (click)="removerPessoa(item)" title="Remover">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                    <button class="btn-action btn-action--edit" (click)="alterarPessoa(i, item)" title="Editar">
+                      <i class="fa fa-pencil"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+
           </tbody>
         </table>
       </div>
@@ -192,44 +204,48 @@
               <th class="col-actions">Ações</th>
             </tr>
           </thead>
-          <tbody cdkDropList (cdkDropListDropped)="reOrdemListDepartment($event)">
-            <tr *ngIf="departamentos.length === 0">
-              <td colspan="4" class="empty-state">
-                <i class="fa fa-building-o"></i>
-                <span>Nenhum departamento cadastrado</span>
-              </td>
-            </tr>
-            <tr *ngFor="let item of departamentos; let i = index" cdkDrag class="data-row">
-              <td class="col-index">
-                <span class="row-index">{{ i + 1 }}</span>
-              </td>
-              <td>
-                <div class="dept-name">
-                  <i class="fa fa-circle dept-dot"></i>
-                  {{ item.titulo }}
-                </div>
-              </td>
-              <td class="col-order">
-                <div class="order-btns">
-                  <button class="btn-order" *ngIf="i !== 0" (click)="upDepartment(i)" title="Mover acima">
-                    <i class="fa fa-chevron-up"></i>
-                  </button>
-                  <button class="btn-order" *ngIf="i !== departamentos.length - 1" (click)="downDepartment(i)" title="Mover abaixo">
-                    <i class="fa fa-chevron-down"></i>
-                  </button>
-                </div>
-              </td>
-              <td class="col-actions">
-                <div class="action-btns">
-                  <button class="btn-action btn-action--danger" (click)="removerDepartamento(i, item)" title="Remover">
-                    <i class="fa fa-trash"></i>
-                  </button>
-                  <button class="btn-action btn-action--edit" (click)="alterarDepartamento(i, item)" title="Editar">
-                    <i class="fa fa-pencil"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
+          <tbody cdkDropList (cdkDropListDropped)="reOrdemDepartamentos($event)">
+
+            <ng-container *ngIf="departamentos$ | async as departamentos">
+              <tr *ngIf="departamentos.length === 0">
+                <td colspan="4" class="empty-state">
+                  <i class="fa fa-building-o"></i>
+                  <span>Nenhum departamento cadastrado</span>
+                </td>
+              </tr>
+              <tr *ngFor="let item of departamentos; let i = index" cdkDrag class="data-row">
+                <td class="col-index">
+                  <span class="row-index">{{ i + 1 }}</span>
+                </td>
+                <td>
+                  <div class="dept-name">
+                    <i class="fa fa-circle dept-dot"></i>
+                    {{ item.titulo }}
+                  </div>
+                </td>
+                <td class="col-order">
+                  <div class="order-btns">
+                    <button class="btn-order" *ngIf="i !== 0" (click)="upDepartment(i)" title="Mover acima">
+                      <i class="fa fa-chevron-up"></i>
+                    </button>
+                    <button class="btn-order" *ngIf="i !== departamentos.length - 1" (click)="downDepartment(i)" title="Mover abaixo">
+                      <i class="fa fa-chevron-down"></i>
+                    </button>
+                  </div>
+                </td>
+                <td class="col-actions">
+                  <div class="action-btns">
+                    <button class="btn-action btn-action--danger" (click)="removerDepartamento(item)" title="Remover">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                    <button class="btn-action btn-action--edit" (click)="alterarDepartamento(i, item)" title="Editar">
+                      <i class="fa fa-pencil"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+
           </tbody>
         </table>
       </div>
@@ -266,51 +282,55 @@
               <th class="col-actions">Ações</th>
             </tr>
           </thead>
-          <tbody cdkDropList (cdkDropListDropped)="reOrdemListTarefas($event)">
-            <tr *ngIf="tarefas.length === 0">
-              <td colspan="7" class="empty-state">
-                <i class="fa fa-check-square-o"></i>
-                <span>Nenhuma tarefa cadastrada. Clique em "Nova Tarefa" para começar.</span>
-              </td>
-            </tr>
-            <tr *ngFor="let item of tarefas; let i = index" cdkDrag class="data-row">
-              <td class="col-index">
-                <span class="row-index">{{ item.id || i + 1 }}</span>
-              </td>
-              <td>
-                <span class="badge-dept">
-                  {{ item.departamento?.titulo || item.departamento || 'Sem departamento' }}
-                </span>
-              </td>
-              <td><strong>{{ item.titulo }}</strong></td>
-              <td class="cell-desc">{{ item.descricao }}</td>
-              <td>
-                <span class="date-chip">
-                  <i class="fa fa-calendar"></i>
-                  {{ item.prazo | date:'dd/MM/yyyy' }}
-                </span>
-              </td>
-              <td class="col-order">
-                <div class="order-btns">
-                  <button class="btn-order" *ngIf="i !== 0" (click)="upTask(i)" title="Mover acima">
-                    <i class="fa fa-chevron-up"></i>
-                  </button>
-                  <button class="btn-order" *ngIf="i !== tarefas.length - 1" (click)="downTask(i)" title="Mover abaixo">
-                    <i class="fa fa-chevron-down"></i>
-                  </button>
-                </div>
-              </td>
-              <td class="col-actions">
-                <div class="action-btns">
-                  <button class="btn-action btn-action--danger" (click)="removerTarefa(i, item)" title="Remover">
-                    <i class="fa fa-trash"></i>
-                  </button>
-                  <button class="btn-action btn-action--edit" (click)="alterarTarefa(i, item)" title="Editar">
-                    <i class="fa fa-pencil"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
+          <tbody cdkDropList (cdkDropListDropped)="reOrdemTarefas($event)">
+
+            <ng-container *ngIf="tarefas$ | async as tarefas">
+              <tr *ngIf="tarefas.length === 0">
+                <td colspan="7" class="empty-state">
+                  <i class="fa fa-check-square-o"></i>
+                  <span>Nenhuma tarefa cadastrada. Clique em "Nova Tarefa" para começar.</span>
+                </td>
+              </tr>
+              <tr *ngFor="let item of tarefas; let i = index" cdkDrag class="data-row">
+                <td class="col-index">
+                  <span class="row-index">{{ item.id || i + 1 }}</span>
+                </td>
+                <td>
+                  <span class="badge-dept">
+                    {{ item.departamento?.titulo || item.departamento || 'Sem departamento' }}
+                  </span>
+                </td>
+                <td><strong>{{ item.titulo }}</strong></td>
+                <td class="cell-desc">{{ item.descricao }}</td>
+                <td>
+                  <span class="date-chip">
+                    <i class="fa fa-calendar"></i>
+                    {{ item.prazo | date:'dd/MM/yyyy' }}
+                  </span>
+                </td>
+                <td class="col-order">
+                  <div class="order-btns">
+                    <button class="btn-order" *ngIf="i !== 0" (click)="upTask(i)" title="Mover acima">
+                      <i class="fa fa-chevron-up"></i>
+                    </button>
+                    <button class="btn-order" *ngIf="i !== tarefas.length - 1" (click)="downTask(i)" title="Mover abaixo">
+                      <i class="fa fa-chevron-down"></i>
+                    </button>
+                  </div>
+                </td>
+                <td class="col-actions">
+                  <div class="action-btns">
+                    <button class="btn-action btn-action--danger" (click)="removerTarefa(item)" title="Remover">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                    <button class="btn-action btn-action--edit" (click)="alterarTarefa(item)" title="Editar">
+                      <i class="fa fa-pencil"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+
           </tbody>
         </table>
       </div>
@@ -332,10 +352,11 @@
 
       <div class="alloc-form">
         <div class="alloc-form__fields">
+
           <mat-form-field class="alloc-field" appearance="outline">
             <mat-label>Selecione uma tarefa</mat-label>
             <mat-select [(value)]="tarefaSelecionada" (selectionChange)="selecionarTarefa($event)">
-              <mat-option *ngFor="let tarefa of tarefas" [value]="tarefa">
+              <mat-option *ngFor="let tarefa of tarefas$ | async" [value]="tarefa">
                 {{ tarefa.titulo }}
               </mat-option>
             </mat-select>
@@ -348,14 +369,13 @@
           <mat-form-field class="alloc-field" appearance="outline">
             <mat-label>Selecione uma pessoa</mat-label>
             <mat-select [(value)]="pessoaSelecionada">
-              <mat-option *ngFor="let pessoa of pessoas" [value]="pessoa">
+              <mat-option *ngFor="let pessoa of pessoas$ | async" [value]="pessoa">
                 {{ pessoa.nome }}
               </mat-option>
             </mat-select>
           </mat-form-field>
+
         </div>
-
-
 
         <button class="btn-alocar" (click)="alocarPessoaNaTarefa()">
           <i class="fa fa-link"></i>
@@ -384,51 +404,52 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngIf="tarefasAlocadas.length === 0">
-              <td colspan="6" class="empty-state">
-                <i class="fa fa-link"></i>
-                <span>Nenhuma alocação realizada ainda</span>
-              </td>
-            </tr>
-            <tr *ngFor="let tarefa of tarefasAlocadas" class="data-row">
-              <td><strong>{{ tarefa.titulo }}</strong></td>
-              <td><span class="badge-dept">{{ tarefa.departamento }}</span></td>
-              <td>
-                <div class="cell-with-avatar" *ngIf="tarefa.pessoa">
-                  <div class="avatar avatar--sm">{{ tarefa.pessoa?.nome?.charAt(0) }}</div>
-                  <span>{{ tarefa.pessoa?.nome }}</span>
-                </div>
-              </td>
-              <td>
-                <span class="date-chip">
-                  <i class="fa fa-calendar"></i>
-                  {{ tarefa.prazo | date:'dd/MM/yyyy' }}
-                </span>
-              </td>
-              <td>
-                <span class="status-badge" [ngClass]="tarefa.finalizado ? 'status-badge--done' : 'status-badge--pending'">
-                  <i class="fa" [ngClass]="tarefa.finalizado ? 'fa-check-circle' : 'fa-hourglass-half'"></i>
-                  {{ tarefa.finalizado ? 'Concluído' : 'Em andamento' }}
-                </span>
-              </td>
-              <td class="col-actions">
-                <div class="action-btns">
-                  <!-- Botão de finalizar só aparece se NÃO estiver finalizado -->
-                  <button
-                    *ngIf="!tarefa.finalizado"
-                    class="btn-action btn-action--success"
-                    (click)="abrirDialogFinalizarTarefa(tarefa)"
-                    title="Finalizar Tarefa">
-                    <i class="fa fa-check"></i>
-                  </button>
 
-                  <!-- Indicador de concluída (opcional) -->
-                  <span *ngIf="tarefa.finalizado" class="badge-completed">
-                    <i class="fa fa-check-circle"></i> Concluída
+            <ng-container *ngIf="tarefasAlocadas$ | async as tarefasAlocadas">
+              <tr *ngIf="tarefasAlocadas.length === 0">
+                <td colspan="6" class="empty-state">
+                  <i class="fa fa-link"></i>
+                  <span>Nenhuma alocação realizada ainda</span>
+                </td>
+              </tr>
+              <tr *ngFor="let tarefa of tarefasAlocadas" class="data-row">
+                <td><strong>{{ tarefa.titulo }}</strong></td>
+                <td><span class="badge-dept">{{ tarefa.departamento }}</span></td>
+                <td>
+                  <div class="cell-with-avatar" *ngIf="tarefa.pessoa">
+                    <div class="avatar avatar--sm">{{ tarefa.pessoa?.nome?.charAt(0) }}</div>
+                    <span>{{ tarefa.pessoa?.nome }}</span>
+                  </div>
+                </td>
+                <td>
+                  <span class="date-chip">
+                    <i class="fa fa-calendar"></i>
+                    {{ tarefa.prazo | date:'dd/MM/yyyy' }}
                   </span>
-                </div>
-              </td>
-            </tr>
+                </td>
+                <td>
+                  <span class="status-badge"
+                        [ngClass]="tarefa.finalizado ? 'status-badge--done' : 'status-badge--pending'">
+                    <i class="fa" [ngClass]="tarefa.finalizado ? 'fa-check-circle' : 'fa-hourglass-half'"></i>
+                    {{ tarefa.finalizado ? 'Concluído' : 'Em andamento' }}
+                  </span>
+                </td>
+                <td class="col-actions">
+                  <div class="action-btns">
+                    <button *ngIf="!tarefa.finalizado"
+                            class="btn-action btn-action--success"
+                            (click)="abrirDialogFinalizarTarefa(tarefa)"
+                            title="Finalizar Tarefa">
+                      <i class="fa fa-check"></i>
+                    </button>
+                    <span *ngIf="tarefa.finalizado" class="badge-completed">
+                      <i class="fa fa-check-circle"></i> Concluída
+                    </span>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+
           </tbody>
         </table>
       </div>
@@ -436,9 +457,9 @@
 
   </main>
 
-  <!-- footer -->
   <footer class="app-footer">
     <span>© 2026 TaskFlow — Sistema de Gerenciamento de Tarefas</span>
   </footer>
 
 </div>
+
