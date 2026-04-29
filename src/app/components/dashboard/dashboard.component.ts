@@ -59,6 +59,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   readonly tarefasPendentes$  = this.state.tarefasPendentes$;
   readonly tarefasAlocadas$   = this.state.tarefasAlocadas$;
   readonly tarefasEmAndamento$ = this.state.tarefasEmAndamento$;
+  readonly tarefasVencidas$ = this.state.tarefasVencidas$;
 
   private destroy$ = new Subject<void>();
 
@@ -123,6 +124,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
       });
   }
+
 
   // ── CRUD — Departamentos ─────────────────────────────────────────────────
 
@@ -212,6 +214,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
       });
   }
+
+
+  desalocarPessoa(tarefaId: number, pessoaId: number): void {
+    this.alocacao.desalocarPessoa(tarefaId, pessoaId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: any) => {
+          const data = res.body || res;
+          if (data?.success) {
+            this.showSuccess('Pessoa removida da tarefa.');
+            this.state.recarregarTarefas();
+          } else {
+            this.showError(data?.mensagem || 'Erro ao remover alocação.');
+          }
+        },
+        error: () => this.showError('Erro ao remover alocação.')
+      });
+  }
+
 
   abrirDialogFinalizarTarefa(tarefa: Tarefa): void {
     this.alocacao.abrirDialogFinalizarTarefa(tarefa)
