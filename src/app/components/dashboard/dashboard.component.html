@@ -436,10 +436,12 @@
                         <span>{{ p.nome }}</span>
                         <!-- Botão remover pessoa individual -->
                         <button class="btn-remove-pessoa"
+                                type="button"
                                 *ngIf="!tarefa.finalizado"
                                 (click)="desalocarPessoa(tarefa.id, p.id)"
-                                title="Remover {{ p.nome }} da tarefa">
-                          <i class="fa fa-times"></i>
+                                title="Remover {{ p.nome }} da tarefa"
+                                attr.aria-label="Remover {{ p.nome }} da tarefa">
+                          <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
                     </ng-container>
