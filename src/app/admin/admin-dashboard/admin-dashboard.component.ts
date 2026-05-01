@@ -166,6 +166,12 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     this.setTab('mensagens');
   }
 
+  irParaVencidas(notif: any): void {
+    this.dispensarNotificacaoAdmin(notif);
+    this.carregarVencidas();
+    this.expandedVencidas = true;
+  }
+
   toggleOcultarMensagem(id: number): void {
     if (this.mensagensOcultas.has(id)) {
       this.mensagensOcultas.delete(id);

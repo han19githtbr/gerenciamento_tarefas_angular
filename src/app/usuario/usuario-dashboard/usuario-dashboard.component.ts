@@ -15,6 +15,7 @@ export class UsuarioDashboardComponent implements OnInit, OnDestroy {
   novasMensagens: { [tarefaId: number]: string } = {};
   mensagensOcultas: Set<number> = new Set();
   tarefasExpandidas: { [tarefaId: number]: boolean } = {};
+  respostasVencimento: { [notifId: number]: string } = {};
   isLoading = true;
   private pollingInterval: any;
 
@@ -112,6 +113,21 @@ export class UsuarioDashboardComponent implements OnInit, OnDestroy {
         this.notificacoes = this.notificacoes.filter(n => n.id !== notif.id);
       },
       error: () => {}
+    });
+  }
+
+  responderVencimento(notif: any): void {
+    const opcao = this.respostasVencimento[notif.id];
+    if (!opcao) {
+      alert('Selecione uma opção (A ou B) antes de enviar.');
+      return;
+    }
+    this.usuarioService.responderVencimento(notif.id, opcao).subscribe({
+      next: () => {
+        // Remove a notificação do banner após resposta
+        this.notificacoes = this.notificacoes.filter(n => n.id !== notif.id);
+      },
+      error: () => alert('Erro ao enviar resposta.')
     });
   }
 

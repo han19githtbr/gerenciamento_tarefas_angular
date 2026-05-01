@@ -28,10 +28,41 @@
 
   <!-- Notification Banner -->
   <div class="notif-banners" *ngIf="notificacoes.length > 0">
-    <div class="notif-item" *ngFor="let n of notificacoes">
-      <span class="notif-icon">⏰</span>
-      <span class="notif-text">{{ n.mensagem }}</span>
-      <button class="notif-close" (click)="dispensarNotificacao(n)">✕</button>
+    <div class="notif-item" *ngFor="let n of notificacoes"
+        [class.notif-vencimento]="n.tipo === 'PRAZO_VENCIDO'">
+
+      <!-- Notificação de prazo vencido: mostra as opções A e B -->
+      <ng-container *ngIf="n.tipo === 'PRAZO_VENCIDO'; else notifSimples">
+        <span class="notif-icon">🚨</span>
+        <div class="notif-vencimento-body">
+          <span class="notif-text">{{ n.mensagem }}</span>
+          <div class="notif-opcoes">
+            <label>
+              <input type="radio" name="opcao_{{n.id}}" value="A"
+                    [(ngModel)]="respostasVencimento[n.id]">
+              A) Preciso de um prazo maior
+            </label>
+            <label>
+              <input type="radio" name="opcao_{{n.id}}" value="B"
+                    [(ngModel)]="respostasVencimento[n.id]">
+              B) Não estou conseguindo executar a tarefa
+            </label>
+            <button class="btn-enviar-resposta"
+                    [disabled]="!respostasVencimento[n.id]"
+                    (click)="responderVencimento(n)">
+              Enviar Resposta
+            </button>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Notificação genérica (prazo prorrogado, tarefa encerrada etc.) -->
+      <ng-template #notifSimples>
+        <span class="notif-icon">⏰</span>
+        <span class="notif-text">{{ n.mensagem }}</span>
+        <button class="notif-close" (click)="dispensarNotificacao(n)">✕</button>
+      </ng-template>
+
     </div>
   </div>
 
