@@ -52,12 +52,14 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     this.adminEmail = this.auth.getAdminEmail();
     this.carregarStatsGerais();
     this.carregarDados();
+    this.carregarVencidas();
     this.verificarNotificacoesAdmin();
     // Atualiza stats E mensagens a cada 30 segundos
     this.pollingInterval = setInterval(() => {
       this.carregarStatsGerais();
       this.carregarMensagensPendentes();
       this.verificarNotificacoesAdmin();
+      this.carregarVencidas();
     }, 30000);
   }
 
@@ -233,6 +235,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
   getStatusBadge(tarefa: any): string {
     if (tarefa.finalizado) return 'concluida';
+    if (tarefa.vencida) return 'vencida';
     if (tarefa.emAndamento) return 'andamento';
     if (tarefa.pessoaId || tarefa.pessoa) return 'alocada';
     return 'pendente';
@@ -240,6 +243,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
   getStatusLabel(tarefa: any): string {
     if (tarefa.finalizado) return 'Concluída';
+    if (tarefa.vencida) return 'Vencida';
     if (tarefa.emAndamento) return 'Em Andamento';
     if (tarefa.pessoaId || tarefa.pessoa) return 'Alocada';
     return 'Pendente';

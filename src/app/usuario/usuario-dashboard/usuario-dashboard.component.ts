@@ -133,12 +133,14 @@ export class UsuarioDashboardComponent implements OnInit, OnDestroy {
 
   getStatusLabel(tarefa: any): string {
     if (tarefa.finalizado) return 'Concluída';
+    if (tarefa.vencida) return 'Vencida';
     if (tarefa.emAndamento) return 'Em Andamento';
     return 'Pendente';
   }
 
   getStatusClass(tarefa: any): string {
     if (tarefa.finalizado) return 'status-concluida';
+    if (tarefa.vencida) return 'status-vencida';
     if (tarefa.emAndamento) return 'status-andamento';
     return 'status-pendente';
   }

@@ -147,8 +147,11 @@
                     (click)="iniciarTarefa(tarefa.id)">
               ▶ Iniciar Tarefa
             </button>
-            <div class="status-pill andamento-pill" *ngIf="tarefa.emAndamento && !tarefa.finalizado">
+            <div class="status-pill andamento-pill" *ngIf="tarefa.emAndamento && !tarefa.finalizado && !tarefa.vencida">
               <span class="pulse-dot"></span> Em Andamento
+            </div>
+            <div class="status-pill vencida-pill" *ngIf="tarefa.vencida && !tarefa.finalizado">
+              ⚠️ Prazo Vencido
             </div>
             <div class="status-pill concluida-pill" *ngIf="tarefa.finalizado">
               ✅ Tarefa Concluída
