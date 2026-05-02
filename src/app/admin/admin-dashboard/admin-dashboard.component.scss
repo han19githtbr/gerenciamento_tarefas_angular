@@ -1337,6 +1337,67 @@
   &:active { transform: scale(0.97); }
 }
 
+
+/* Modal de edição */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000;
+}
+
+.modal-box {
+  background: #1a1a2e;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  width: 100%; max-width: 480px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  h3 { margin: 0; font-size: 1rem; color: #fff; }
+}
+
+.modal-close {
+  background: none; border: none; color: rgba(255,255,255,0.5);
+  font-size: 1.1rem; cursor: pointer;
+  &:hover { color: #e94560; }
+}
+
+.modal-body {
+  padding: 1.25rem;
+  display: flex; flex-direction: column; gap: 0.75rem;
+  label { font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-bottom: 2px; }
+}
+
+.modal-input {
+  width: 100%; padding: 0.55rem 0.75rem;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px; color: #fff; font-size: 0.9rem;
+  box-sizing: border-box;
+  &:focus { outline: none; border-color: #7b2ff7; }
+}
+
+.modal-footer {
+  display: flex; justify-content: flex-end; gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.btn-edit-task {
+  background: rgba(123,47,247,0.15);
+  border: 1px solid rgba(123,47,247,0.3);
+  color: #a78bfa; border-radius: 6px;
+  padding: 0.3rem 0.65rem; cursor: pointer; font-size: 0.8rem;
+  &:hover { background: rgba(123,47,247,0.3); }
+}
+
+
 @media (max-width: 640px) {
   .vencida-card {
     flex-direction: column;

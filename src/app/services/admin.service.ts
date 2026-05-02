@@ -80,6 +80,10 @@ export class AdminService {
     return this.http.get<any[]>(`${this.API}/tarefas/vencidas`);
   }
 
+  editarTarefa(tarefaId: number, dados: { titulo: string; descricao?: string; prazo?: string }): Observable<any> {
+    return this.http.put(`${this.API}/tarefa/${tarefaId}/editar`, dados);
+  }
+
   prorrogarTarefa(tarefaId: number, novoPrazo: string): Observable<any> {
     return this.http.put(`${this.API}/tarefa/${tarefaId}/prorrogar`, { novoPrazo });
   }

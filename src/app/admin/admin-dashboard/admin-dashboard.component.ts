@@ -37,6 +37,9 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   novoPrazo: { [id: number]: string } = {};
   expandedVencidas = false;
   today: string = new Date().toISOString().split('T')[0];
+  // Modal de edição de tarefa
+  tarefaEmEdicao: any = null;
+  edicaoForm: { titulo: string; descricao: string; prazo: string } = { titulo: '', descricao: '', prazo: '' };
 
   private pollingInterval: any;
 
@@ -233,6 +236,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   }
 
 
+
   getStatusBadge(tarefa: any): string {
     if (tarefa.finalizado) return 'concluida';
     if (tarefa.vencida) return 'vencida';
@@ -254,4 +258,41 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     const diff = new Date(prazo).getTime() - Date.now();
     return diff > 0 && diff < 86400000 * 3;
   }
+
+
+  abrirEdicaoTarefa(tarefa: any): void {
+    this.tarefaEmEdicao = tarefa;
+    this.edicaoForm = {
+      titulo: tarefa.titulo || '',
+      descricao: tarefa.descricao || '',
+      prazo: tarefa.prazo ? tarefa.prazo.split('T')[0] : ''
+    };
+  }
+
+  fecharEdicaoTarefa(): void {
+    this.tarefaEmEdicao = null;
+  }
+
+  salvarEdicaoTarefa(): void {
+    if (!this.tarefaEmEdicao || !this.edicaoForm.titulo.trim()) {
+      alert('O título é obrigatório.');
+      return;
+    }
+    this.adminService.editarTarefa(this.tarefaEmEdicao.id, this.edicaoForm).subscribe({
+      next: (res: any) => {
+        if (res?.success === false) {
+          alert(res.mensagem || 'Erro ao salvar.');
+          return;
+        }
+        alert('Tarefa atualizada com sucesso!');
+        this.fecharEdicaoTarefa();
+        this.carregarDados();
+        this.carregarStatsGerais();
+        this.carregarVencidas();
+      },
+      error: () => alert('Erro ao atualizar tarefa.')
+    });
+  }
+
+
 }

@@ -219,6 +219,7 @@
               <th>Pessoa Alocada</th>
               <th>Prazo</th>
               <th>Status</th>
+              <th>Ações</th>
             </tr>
           </thead>
           <tbody>
@@ -247,9 +248,14 @@
               <td>
                 <span class="badge" [ngClass]="'badge-' + getStatusBadge(t)">{{ getStatusLabel(t) }}</span>
               </td>
+              <td>
+                <button class="btn-edit-task" (click)="abrirEdicaoTarefa(t)" title="Editar tarefa">
+                  ✏️ Editar
+                </button>
+              </td>
             </tr>
             <tr *ngIf="todasTarefas.length === 0">
-              <td colspan="6" class="empty-row">Nenhuma tarefa encontrada</td>
+              <td colspan="7" class="empty-row">Nenhuma tarefa encontrada</td>
             </tr>
           </tbody>
         </table>
@@ -417,7 +423,32 @@
     </section>
 
 
+    <!-- MODAL DE EDIÇÃO DE TAREFA -->
+    <div class="modal-overlay" *ngIf="tarefaEmEdicao" (click)="fecharEdicaoTarefa()">
+      <div class="modal-box" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>✏️ Editar Tarefa</h3>
+          <button class="modal-close" (click)="fecharEdicaoTarefa()">✕</button>
+        </div>
+        <div class="modal-body">
+          <label>Título</label>
+          <input type="text" [(ngModel)]="edicaoForm.titulo" class="modal-input" placeholder="Título da tarefa" />
+
+          <label>Descrição</label>
+          <textarea [(ngModel)]="edicaoForm.descricao" class="modal-input" rows="3" placeholder="Descrição..."></textarea>
+
+          <label>Prazo</label>
+          <input type="date" [(ngModel)]="edicaoForm.prazo" class="modal-input" [min]="today" />
+        </div>
+        <div class="modal-footer">
+          <button class="btn-encerrar" (click)="fecharEdicaoTarefa()">Cancelar</button>
+          <button class="btn-prorrogar" (click)="salvarEdicaoTarefa()">💾 Salvar</button>
+        </div>
+      </div>
+    </div>
+
   </main>
+
 </div>
 
-<app-dashboard></app-dashboard>
+<!--<app-dashboard></app-dashboard>-->
