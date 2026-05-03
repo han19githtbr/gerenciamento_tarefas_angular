@@ -80,6 +80,16 @@ export class AdicionarTarefaComponent implements OnInit {
         departamentoId: ['', Validators.required]
       });
 
+      if (this.tarefaButton === 'Edit') {
+        this.form.patchValue({
+          titulo: this.tarefa.titulo || '',
+          descricao: this.tarefa.descricao || '',
+          prazo: this.tarefa.prazo
+            ? new Date(this.tarefa.prazo).toISOString().split('T')[0]
+            : ''
+        });
+      }
+
       // Carrega os departamentos primeiro
       this.departamentoService.getAllDepartamento().subscribe((data: any) => {
         this.departamentos = data.body;
@@ -89,7 +99,7 @@ export class AdicionarTarefaComponent implements OnInit {
           this.form.patchValue({
             departamentoId: this.tarefa.departamento.id
           });
-          this.onDepartment(); // Atualiza o departamento
+          this.onDepartment();
         }
 
         console.log('Departamentos carregados:', this.departamentos);
