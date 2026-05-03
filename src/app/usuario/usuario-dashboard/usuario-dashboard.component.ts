@@ -55,6 +55,17 @@ export class UsuarioDashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  enviarNotificacaoConclusao(tarefaId: number): void {
+    if (!confirm('Confirma que esta tarefa foi concluída? O administrador será notificado para aprovação.')) return;
+    this.usuarioService.enviarNotificacaoConclusao(tarefaId).subscribe({
+      next: () => {
+        alert('Notificação enviada! Aguarde a aprovação do administrador.');
+        this.carregarMinhasTarefas();
+      },
+      error: (err) => alert(err?.error?.erro || 'Erro ao enviar notificação de conclusão.')
+    });
+  }
+
   toggleMensagens(tarefaId: number): void {
     this.tarefasExpandidas[tarefaId] = !this.tarefasExpandidas[tarefaId];
   }

@@ -147,6 +147,15 @@
                     (click)="iniciarTarefa(tarefa.id)">
               ▶ Iniciar Tarefa
             </button>
+            <button class="btn-concluir"
+                    *ngIf="tarefa.emAndamento && !tarefa.finalizado && !tarefa.aguardandoConclusao"
+                    (click)="enviarNotificacaoConclusao(tarefa.id)">
+              ✅ Enviar para Conclusão
+            </button>
+            <div class="status-pill aguardando-pill"
+                *ngIf="tarefa.aguardandoConclusao && !tarefa.finalizado">
+              ⏳ Aguardando Aprovação do Admin
+            </div>
             <div class="status-pill andamento-pill" *ngIf="tarefa.emAndamento && !tarefa.finalizado && !tarefa.vencida">
               <span class="pulse-dot"></span> Em Andamento
             </div>

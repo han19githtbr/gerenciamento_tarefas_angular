@@ -92,4 +92,15 @@ export class AdminService {
     return this.http.put(`${this.API}/tarefa/${tarefaId}/encerrar`, {});
   }
 
+  getNotificacoesConclusao(): Observable<any[]> {
+    return this.http.get<any[]>(environment.apiUrl + '/notificacoes/conclusao-pendentes');
+  }
+
+  aprovarConclusao(notifId: number, tarefaId: number): Observable<any> {
+    return this.http.put(
+      environment.apiUrl + `/notificacoes/aprovar-conclusao/${notifId}`,
+      { tarefaId }
+    );
+  }
+
 }

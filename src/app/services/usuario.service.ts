@@ -47,4 +47,14 @@ export class UsuarioService {
   marcarNotificacaoLida(id: number): Observable<any> {
     return this.http.put(this.NOTIF_API + '/ler/' + id, {}, { headers: this.authHeaders() });
   }
+
+
+  enviarNotificacaoConclusao(tarefaId: number): Observable<any> {
+    return this.http.post(
+      this.API + '/tarefa/' + tarefaId + '/notificar-conclusao',
+      {},
+      { headers: this.authHeaders() }
+    );
+  }
+
 }

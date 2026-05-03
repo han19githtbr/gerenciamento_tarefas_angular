@@ -27,6 +27,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   todosDepartamentos: any[] = [];
   mensagensPendentes: any[] = [];
   notificacoesAdmin: any[] = [];
+  notificacoesConclusao: any[] = [];
   mensagensOcultas: Set<number> = new Set();
   respostas: { [id: number]: string } = {};
   isLoading = true;
@@ -39,7 +40,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   today: string = new Date().toISOString().split('T')[0];
   // Modal de edição de tarefa
   tarefaEmEdicao: any = null;
-  edicaoForm: { titulo: string; descricao: string; prazo: string } = { titulo: '', descricao: '', prazo: '' };
+  edicaoForm: { titulo: string; descricao: string; prazo: string; departamentoId: number | null } = { titulo: '', descricao: '', prazo: '', departamentoId: null };
 
   private pollingInterval: any;
 
@@ -57,11 +58,13 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     this.carregarDados();
     this.carregarVencidas();
     this.verificarNotificacoesAdmin();
+    this.verificarNotificacoesConclusao();
     // Atualiza stats E mensagens a cada 30 segundos
     this.pollingInterval = setInterval(() => {
       this.carregarStatsGerais();
       this.carregarMensagensPendentes();
       this.verificarNotificacoesAdmin();
+      this.verificarNotificacoesConclusao();
       this.carregarVencidas();
     }, 30000);
   }
@@ -265,9 +268,39 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     this.edicaoForm = {
       titulo: tarefa.titulo || '',
       descricao: tarefa.descricao || '',
-      prazo: tarefa.prazo ? tarefa.prazo.split('T')[0] : ''
+      prazo: tarefa.prazo ? String(tarefa.prazo).split('T')[0] : '',
+      departamentoId: tarefa.departamentoId || null
     };
   }
+
+
+  verificarNotificacoesConclusao(): void {
+    this.adminService.getNotificacoesConclusao().subscribe({
+      next: (notifs: any[]) => { this.notificacoesConclusao = notifs || []; },
+      error: () => {}
+    });
+  }
+
+  aprovarConclusao(notifId: number, tarefaId: number): void {
+    this.adminService.aprovarConclusao(notifId, tarefaId).subscribe({
+      next: () => {
+        this.notificacoesConclusao = this.notificacoesConclusao.filter(n => n.id !== notifId);
+        this.carregarDados();
+        this.carregarStatsGerais();
+      },
+      error: () => alert('Erro ao aprovar conclusão.')
+    });
+  }
+
+  deixarNaEspera(notifId: number): void {
+    this.adminService.marcarNotificacaoLida(notifId).subscribe({
+      next: () => {
+        this.notificacoesConclusao = this.notificacoesConclusao.filter(n => n.id !== notifId);
+      },
+      error: () => {}
+    });
+  }
+
 
   fecharEdicaoTarefa(): void {
     this.tarefaEmEdicao = null;

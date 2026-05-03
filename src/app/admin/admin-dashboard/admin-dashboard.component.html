@@ -109,6 +109,31 @@
       </div>
     </div>
 
+
+    <!-- NOTIFICAÇÕES DE CONCLUSÃO DE TAREFA -->
+    <div *ngIf="notificacoesConclusao.length > 0" class="conclusao-notif-stack">
+      <div class="conclusao-notif-header">
+        <span class="conclusao-icon">✅</span>
+        <strong>Solicitações de Conclusão</strong>
+        <span class="conclusao-count">{{ notificacoesConclusao.length }}</span>
+      </div>
+      <div class="conclusao-notif-item" *ngFor="let notif of notificacoesConclusao">
+        <div class="conclusao-notif-body">
+          <span class="conclusao-notif-text">{{ notif.mensagem }}</span>
+          <span class="conclusao-notif-date">{{ notif.dataCriacao | date:'dd/MM HH:mm' }}</span>
+        </div>
+        <div class="conclusao-notif-actions">
+          <button class="btn-aprovar-conclusao" (click)="aprovarConclusao(notif.id, notif.tarefaId)">
+            ✅ Aprovar
+          </button>
+          <button class="btn-espera-conclusao" (click)="deixarNaEspera(notif.id)">
+            ⏳ Deixar na Espera
+          </button>
+        </div>
+      </div>
+    </div>
+
+
     <!-- Loading -->
     <div *ngIf="isLoading" class="loading-state">
       <div class="spinner"></div>

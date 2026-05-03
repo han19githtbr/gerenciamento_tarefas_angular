@@ -1398,6 +1398,112 @@
 }
 
 
+/* ── NOTIFICAÇÕES DE CONCLUSÃO ─────────────────────────── */
+.conclusao-notif-stack {
+  margin: 0 0 1.25rem;
+  background: rgba(16, 185, 129, 0.07);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.conclusao-notif-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid rgba(16, 185, 129, 0.15);
+  font-size: 0.9rem;
+  color: #6ee7b7;
+
+  .conclusao-count {
+    margin-left: auto;
+    background: rgba(16, 185, 129, 0.2);
+    border-radius: 10px;
+    padding: 2px 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+}
+
+.conclusao-notif-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid rgba(16, 185, 129, 0.08);
+
+  &:last-child { border-bottom: none; }
+}
+
+.conclusao-notif-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.conclusao-notif-text {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.4;
+}
+
+.conclusao-notif-date {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.35);
+}
+
+.conclusao-notif-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.btn-aprovar-conclusao {
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #6ee7b7;
+  border-radius: 6px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+
+  &:hover { background: rgba(16, 185, 129, 0.35); }
+}
+
+.btn-espera-conclusao {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #fcd34d;
+  border-radius: 6px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+
+  &:hover { background: rgba(245, 158, 11, 0.25); }
+}
+
+/* Responsividade para notificações de conclusão */
+@media (max-width: 640px) {
+  .conclusao-notif-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.65rem;
+  }
+
+  .conclusao-notif-actions {
+    width: 100%;
+
+    button { flex: 1; justify-content: center; text-align: center; }
+  }
+}
+
+
 @media (max-width: 640px) {
   .vencida-card {
     flex-direction: column;
