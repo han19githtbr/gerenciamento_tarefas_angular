@@ -108,7 +108,8 @@ export class DashboardDialogService {
         descricao: tarefa.descricao,
         prazo: tarefa.prazo,
         ordem_apresentacao: tarefa.ordem_apresentacao,
-        tarefaButton: 'Edit'
+        tarefaButton: 'Edit',
+        departamentoId: (tarefa.departamento as any)?.id ?? tarefa.departamentoId  // ← ADICIONE ESTA LINHA
       }
     }).afterClosed();
   }
