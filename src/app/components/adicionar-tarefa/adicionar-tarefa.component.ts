@@ -69,6 +69,7 @@ export class AdicionarTarefaComponent implements OnInit {
 
       if (!this.tarefa.departamento) {
         this.tarefa.departamento = new Departamento();
+        this.tarefa.departamento.id = data['departamentoId'];
       }
   }
 
