@@ -4,15 +4,10 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "start:en": "ng serve --configuration=en",
     "build": "npx ng build --configuration production",
-    "build:en": "npx ng build --configuration=production-en",
     "build:dev": "npx ng build --configuration=production --optimization=false",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "extract-i18n": "ng extract-i18n --output-path src/locale",
-    "set-env": "node set-env.js",
-    "build:vercel": "node set-env.js && npx ng build --configuration=production"
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {
@@ -22,12 +17,10 @@
     "@angular/compiler": "~13.1.0",
     "@angular/core": "~13.1.0",
     "@angular/forms": "~13.1.0",
-    "@angular/localize": "~13.1.0",
     "@angular/material": "^13.3.9",
     "@angular/platform-browser": "~13.1.0",
     "@angular/platform-browser-dynamic": "~13.1.0",
     "@angular/router": "~13.1.0",
-    "@angular/service-worker": "~13.1.0",
     "ngx-toastr": "^13.1.0",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",
