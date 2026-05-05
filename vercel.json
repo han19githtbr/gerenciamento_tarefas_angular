@@ -1,13 +1,27 @@
 {
-  "buildCommand": "npm run build:dev",
+  "buildCommand": "npm run build:vercel",
   "outputDirectory": "dist/gerenciamento-tarefas-angular",
-  "devCommand": "ng serve",
   "installCommand": "npm install",
   "routes": [
     {
-      "src": "/[^.]+",
-      "dest": "/index.html",
-      "status": 200
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
+    },
+    {
+      "src": "/(.*\\.js)",
+      "dest": "/$1"
+    },
+    {
+      "src": "/(.*\\.css)",
+      "dest": "/$1"
+    },
+    {
+      "src": "/(.*\\.ico)",
+      "dest": "/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }

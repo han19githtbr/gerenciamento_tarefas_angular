@@ -10,7 +10,9 @@
     "build:dev": "npx ng build --configuration=production --optimization=false",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "extract-i18n": "ng extract-i18n --output-path src/locale"
+    "extract-i18n": "ng extract-i18n --output-path src/locale",
+    "set-env": "node set-env.js",
+    "build:vercel": "node set-env.js && npx ng build --configuration=production"
   },
   "private": true,
   "dependencies": {
