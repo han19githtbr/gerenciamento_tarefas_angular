@@ -114,6 +114,31 @@ export class UsuarioDashboardComponent implements OnInit, OnDestroy {
     return msg?.respondidaPorIa || msg?.adminEmail === 'ia-assistente@sistema.com';
   }
 
+  formatarDataMensagem(data: string | Date | null | undefined): string {
+    if (!data) return '';
+    const dataNormalizada = typeof data === 'string'
+      ? this.normalizarDataSemFusoComoUtc(data)
+      : data;
+    const date = new Date(dataNormalizada);
+
+    if (Number.isNaN(date.getTime())) return '';
+
+    return new Intl.DateTimeFormat('pt-BR', {
+      timeZone: 'America/Sao_Paulo',
+      day: '2-digit',
+      month: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    }).format(date).replace(',', '');
+  }
+
+  private normalizarDataSemFusoComoUtc(data: string): string {
+    const valor = data.trim().replace(/\.(\d{3})\d+/, '.$1');
+    const possuiFuso = /([zZ]|[+-]\d{2}:?\d{2})$/.test(valor);
+    return possuiFuso ? valor : `${valor}Z`;
+  }
+
   toggleOcultarMensagem(msgId: number): void {
     if (this.mensagensOcultas.has(msgId)) {
       this.mensagensOcultas.delete(msgId);

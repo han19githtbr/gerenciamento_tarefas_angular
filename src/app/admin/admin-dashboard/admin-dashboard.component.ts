@@ -267,6 +267,31 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     return descricao;
   }
 
+  formatarDataMensagem(data: string | Date | null | undefined): string {
+    if (!data) return '';
+    const dataNormalizada = typeof data === 'string'
+      ? this.normalizarDataSemFusoComoUtc(data)
+      : data;
+    const date = new Date(dataNormalizada);
+
+    if (Number.isNaN(date.getTime())) return '';
+
+    return new Intl.DateTimeFormat('pt-BR', {
+      timeZone: 'America/Sao_Paulo',
+      day: '2-digit',
+      month: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    }).format(date).replace(',', '');
+  }
+
+  private normalizarDataSemFusoComoUtc(data: string): string {
+    const valor = data.trim().replace(/\.(\d{3})\d+/, '.$1');
+    const possuiFuso = /([zZ]|[+-]\d{2}:?\d{2})$/.test(valor);
+    return possuiFuso ? valor : `${valor}Z`;
+  }
+
   isPrazoUrgente(prazo: any): boolean {
     if (!prazo) return false;
     const diff = new Date(prazo).getTime() - Date.now();

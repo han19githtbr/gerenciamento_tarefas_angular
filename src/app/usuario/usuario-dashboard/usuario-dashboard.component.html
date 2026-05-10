@@ -200,11 +200,11 @@
 
               <ng-container *ngIf="!mensagensOcultas.has(msg.id)">
                 <p>{{ msg.texto }}</p>
-                <span class="msg-time">{{ msg.dataCriacao | date:'dd/MM HH:mm' }}</span>
+                <span class="msg-time">{{ formatarDataMensagem(msg.dataCriacao) }}</span>
                 <div class="msg-admin" *ngIf="msg.respondida">
                   <span class="msg-author admin-author">Admin</span>
                   <p>{{ msg.resposta }}</p>
-                  <span class="msg-time">{{ msg.dataResposta | date:'dd/MM HH:mm' }}</span>
+                  <span class="msg-time">{{ formatarDataMensagem(msg.dataResposta) }}</span>
                 </div>
                 <div class="msg-aguardando" *ngIf="!msg.respondida">
                   <span>⏳ Aguardando resposta do administrador...</span>
@@ -269,7 +269,7 @@
 
               <ng-container *ngIf="!mensagensOcultas.has(msg.id)">
                 <p class="msg-texto-usuario">{{ msg.texto }}</p>
-                <span class="msg-time">{{ msg.dataCriacao | date:'dd/MM HH:mm' }}</span>
+                <span class="msg-time">{{ formatarDataMensagem(msg.dataCriacao) }}</span>
 
                 <div class="msg-ia-resposta" *ngIf="msg.respondida && msg.resposta">
                   <div class="msg-ia-header">
@@ -278,7 +278,7 @@
                     <span class="ia-tag">{{ isRespostaIa(msg) ? 'Resposta automatica' : 'Resposta do admin' }}</span>
                   </div>
                   <p class="msg-ia-texto">{{ msg.resposta }}</p>
-                  <span class="msg-time ia-time">{{ msg.dataResposta | date:'dd/MM HH:mm' }}</span>
+                  <span class="msg-time ia-time">{{ formatarDataMensagem(msg.dataResposta) }}</span>
                 </div>
 
                 <div class="msg-aguardando" *ngIf="!msg.respondida && !msg.resposta">

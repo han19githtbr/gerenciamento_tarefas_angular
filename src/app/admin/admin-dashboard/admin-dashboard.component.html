@@ -360,7 +360,7 @@
                 </div>
               </div>
               <div class="msg-header-actions">
-                <span class="msg-date">{{ msg.dataCriacao | date:'dd/MM HH:mm' }}</span>
+                <span class="msg-date">{{ formatarDataMensagem(msg.dataCriacao) }}</span>
                 <button class="btn-msg-action btn-ocultar"
                         (click)="toggleOcultarMensagem(msg.id)"
                         [title]="mensagensOcultas.has(msg.id) ? 'Mostrar mensagem' : 'Ocultar mensagem'">
