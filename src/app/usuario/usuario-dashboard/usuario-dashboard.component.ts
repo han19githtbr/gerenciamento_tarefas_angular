@@ -13,6 +13,8 @@ export class UsuarioDashboardComponent implements OnInit, OnDestroy {
   minhasTarefas: any[] = [];
   notificacoes: any[] = [];
   novasMensagens: { [tarefaId: number]: string } = {};
+  enviandoMensagemAdmin: { [tarefaId: number]: boolean } = {};
+  enviandoMensagemIa: { [tarefaId: number]: boolean } = {};
   mensagensOcultas: Set<number> = new Set();
   tarefasExpandidas: { [tarefaId: number]: boolean } = {};
   respostasVencimento: { [notifId: number]: string } = {};
@@ -71,15 +73,45 @@ export class UsuarioDashboardComponent implements OnInit, OnDestroy {
   }
 
   enviarMensagem(tarefaId: number): void {
+    this.enviarMensagemAdmin(tarefaId);
+  }
+
+  enviarMensagemAdmin(tarefaId: number): void {
     const texto = this.novasMensagens[tarefaId];
     if (!texto?.trim()) return;
+    this.enviandoMensagemAdmin[tarefaId] = true;
     this.usuarioService.enviarMensagem(tarefaId, texto).subscribe({
       next: () => {
         this.novasMensagens[tarefaId] = '';
+        this.enviandoMensagemAdmin[tarefaId] = false;
         this.carregarMinhasTarefas();
       },
-      error: () => alert('Erro ao enviar mensagem')
+      error: () => {
+        this.enviandoMensagemAdmin[tarefaId] = false;
+        alert('Erro ao enviar mensagem ao administrador');
+      }
     });
+  }
+
+  enviarMensagemIa(tarefaId: number): void {
+    const texto = this.novasMensagens[tarefaId];
+    if (!texto?.trim()) return;
+    this.enviandoMensagemIa[tarefaId] = true;
+    this.usuarioService.enviarMensagemParaIa(tarefaId, texto).subscribe({
+      next: () => {
+        this.novasMensagens[tarefaId] = '';
+        this.enviandoMensagemIa[tarefaId] = false;
+        this.carregarMinhasTarefas();
+      },
+      error: () => {
+        this.enviandoMensagemIa[tarefaId] = false;
+        alert('Erro ao enviar dúvida para IA');
+      }
+    });
+  }
+
+  isRespostaIa(msg: any): boolean {
+    return msg?.respondidaPorIa || msg?.adminEmail === 'ia-assistente@sistema.com';
   }
 
   toggleOcultarMensagem(msgId: number): void {

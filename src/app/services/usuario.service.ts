@@ -28,6 +28,11 @@ export class UsuarioService {
       { texto }, { headers: this.authHeaders() });
   }
 
+  enviarMensagemParaIa(tarefaId: number, texto: string): Observable<any> {
+    return this.http.post(this.API + '/tarefa/' + tarefaId + '/mensagem/ia',
+      { texto }, { headers: this.authHeaders() });
+  }
+
   responderVencimento(notifId: number, opcao: string): Observable<any> {
     return this.http.post(
       this.API + '/notificacao/' + notifId + '/responder-vencimento',

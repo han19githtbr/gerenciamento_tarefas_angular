@@ -775,6 +775,22 @@ $ia-glow:       rgba(124, 58, 237, 0.18);
       box-shadow: none;
     }
   }
+
+  .mensagem-acoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn-enviar-admin {
+    background: linear-gradient(135deg, #0f766e, #14b8a6);
+    box-shadow: 0 4px 14px rgba(20, 184, 166, 0.18);
+
+    &:hover:not(:disabled) {
+      box-shadow: 0 6px 18px rgba(20, 184, 166, 0.32);
+    }
+  }
 }
 
 // ── No messages empty state ───────────────────────────────────────────────
