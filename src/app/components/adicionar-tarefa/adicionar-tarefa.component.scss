@@ -1,36 +1,20 @@
-.close:not(:disabled):not(.disabled) {
-  outline: 0;
-}
+// src/app/components/adicionar-tarefa/adicionar-tarefa.component.scss
+// Substitua o arquivo inteiro por este conteúdo.
 
-.formatar-mat-form{
-  margin-bottom: 20px;
-}
+// ── Variáveis ─────────────────────────────────────────────────────────────
+$ia-purple:    #7c3aed;
+$ia-purple-lt: #ede9fe;
+$ia-teal:      #0891b2;
+$ia-teal-lt:   #e0f2fe;
+$radius:       8px;
 
-.formatar-mat-form .mat-form-field {
-  display: block;
-}
-
-.formatar-mat-form input{
-  border: 1px solid black;
-}
-
-.formatar-mat-form .form-control {
-  height: 0;
-  padding: 1.375rem 0.25rem;
-}
-
-.form-label {
-  margin-right: 10px;
-  font-weight: bold;
-}
+// ── Estrutura do modal ────────────────────────────────────────────────────
+.close:not(:disabled):not(.disabled) { outline: 0; }
 
 .modal-container {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -38,42 +22,205 @@
 }
 
 .modal-content {
-  background-color: white;
-  width: 30rem;
-  border-radius: 5px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  background: #fff;
+  width: 32rem;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
 }
 
-.currency-input {
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  width: max-content;
-  padding: 0.5rem 0;
-  margin-top: 0.5rem;
+// ── Formulário ────────────────────────────────────────────────────────────
+.formatar-mat-form {
+  margin-bottom: 20px;
 
-  & span {
-    margin: 0 1rem;
-  }
+  .mat-form-field { display: block; }
 
-  & input {
-    border: none;
+  input { border: 1px solid #d1d5db; }
+
+  .form-control {
+    height: 0;
+    padding: 1.375rem 0.25rem;
+    border-radius: 6px;
+    transition: border-color 0.2s;
 
     &:focus {
+      border-color: $ia-purple;
       outline: none;
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
     }
   }
 }
 
-.erro{
-  color: red;
-  font-size: small;
-  display: block;
+.formatar-mat-formC {
+  margin-bottom: 20px;
+
+  .form-control {
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 0.5rem;
+    width: 100%;
+
+    &:focus {
+      border-color: $ia-teal;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.12);
+    }
+  }
 }
 
+.form-label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #374151;
+  margin-right: 8px;
+}
+
+// ── Label + botão IA lado a lado ──────────────────────────────────────────
+.field-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  gap: 8px;
+}
+
+// ── Botões de IA ──────────────────────────────────────────────────────────
+.btn-ia {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: $ia-purple-lt;
+  color: $ia-purple;
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+  white-space: nowrap;
+  line-height: 1.4;
+
+  &:hover:not(:disabled) {
+    background: $ia-purple;
+    color: #fff;
+    box-shadow: 0 3px 10px rgba(124, 58, 237, 0.35);
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) { transform: translateY(0); }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  // Variante para "Sugerir Prazo" (azul teal)
+  &--prazo {
+    background: $ia-teal-lt;
+    color: $ia-teal;
+    border-color: rgba(8, 145, 178, 0.3);
+
+    &:hover:not(:disabled) {
+      background: $ia-teal;
+      color: #fff;
+      box-shadow: 0 3px 10px rgba(8, 145, 178, 0.35);
+    }
+  }
+
+  // Estado loading
+  &--loading {
+    pointer-events: none;
+  }
+
+  &__icon { font-size: 0.8rem; }
+
+  // Spinner inline
+  &__spinner {
+    width: 12px;
+    height: 12px;
+    border: 2px solid rgba(124, 58, 237, 0.25);
+    border-top-color: $ia-purple;
+    border-radius: 50%;
+    animation: ia-spin 0.7s linear infinite;
+    flex-shrink: 0;
+  }
+
+  &--prazo &__spinner {
+    border-color: rgba(8, 145, 178, 0.25);
+    border-top-color: $ia-teal;
+  }
+}
+
+@keyframes ia-spin {
+  to { transform: rotate(360deg); }
+}
+
+// ── Feedback inline da IA ─────────────────────────────────────────────────
+.ia-feedback {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: linear-gradient(135deg, #f5f3ff 0%, #e0f2fe 100%);
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  animation: ia-fadein 0.3s ease;
+
+  &__icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+
+  &__text {
+    font-size: 0.8rem;
+    color: #4b5563;
+    line-height: 1.5;
+  }
+}
+
+@keyframes ia-fadein {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// ── Erros ─────────────────────────────────────────────────────────────────
+.erro {
+  color: #dc2626;
+  font-size: 0.78rem;
+  display: block;
+  margin-top: 3px;
+}
+
+// ── Departamento select ───────────────────────────────────────────────────
+.departamento {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: #fff;
+  transition: border-color 0.2s;
+
+  &:focus {
+    border-color: $ia-purple;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+  }
+}
+
+// ── Responsivo ────────────────────────────────────────────────────────────
 @media (max-width: 540px) {
   .modal-content {
     width: calc(100vw - 32px);
     max-width: 100%;
     margin: 0 16px;
   }
+
+  .field-label-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .btn-ia { align-self: flex-start; }
 }
+

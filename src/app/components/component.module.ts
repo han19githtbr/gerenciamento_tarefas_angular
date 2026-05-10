@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
-import { MatDialogModule, MatDialogRef, MatDialogTitle, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
@@ -55,10 +55,6 @@ import { DialogPessoaTarefaComponent } from './dialog-pessoa-tarefa/dialog-pesso
 import { HomeSelectorComponent } from './home-selector/home-selector.component';
 import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
 
-const dialogMock = {
-  close: () => { }
-};
-
 @NgModule({
   declarations: [
     AdicionarPessoaComponent,
@@ -105,9 +101,6 @@ const dialogMock = {
     ThemeToggleComponent,
   ],
   providers: [
-    { provide: MatDialogTitle, useValue: [] },
-    { provide: MAT_DIALOG_DATA, useValue: [] },
-    { provide: MatDialogRef, useValue: dialogMock },
     AlertModalService,
   ],
 })

@@ -578,3 +578,249 @@ $red: #e94560;
     &__meta  { color: var(--text-secondary) !important; }
   }
 }
+
+
+// ── Variáveis IA ──────────────────────────────────────────────────────────
+$ia-purple:     #7c3aed;
+$ia-purple-bg:  rgba(124, 58, 237, 0.08);
+$ia-purple-bdr: rgba(124, 58, 237, 0.22);
+$ia-glow:       rgba(124, 58, 237, 0.18);
+
+// ── Cabeçalho da seção de mensagens ──────────────────────────────────────
+.mensagens-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #94a3b8;
+  padding: 0.75rem 1.25rem 0.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.ia-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: $ia-purple-bg;
+  border: 1px solid $ia-purple-bdr;
+  color: #a78bfa;
+  border-radius: 20px;
+  padding: 2px 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+// ── Texto da mensagem do usuário ──────────────────────────────────────────
+.msg-texto-usuario {
+  font-size: 0.875rem;
+  color: #e2e8f0;
+  margin: 6px 0 4px;
+  line-height: 1.55;
+}
+
+// ── Bloco de resposta da IA ───────────────────────────────────────────────
+.msg-ia-resposta {
+  margin-top: 12px;
+  background: $ia-purple-bg;
+  border: 1px solid $ia-purple-bdr;
+  border-radius: 10px;
+  padding: 12px 14px;
+  position: relative;
+  animation: ia-appear 0.35s ease;
+
+  // Linha decorativa à esquerda
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, $ia-purple, #a78bfa);
+    border-radius: 10px 0 0 10px;
+  }
+}
+
+@keyframes ia-appear {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.msg-ia-header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 8px;
+}
+
+.ia-avatar {
+  width: 24px;
+  height: 24px;
+  background: $ia-purple-bg;
+  border: 1px solid $ia-purple-bdr;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+}
+
+.ia-author {
+  color: #a78bfa !important;
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+
+.ia-tag {
+  font-size: 0.68rem;
+  background: rgba(124, 58, 237, 0.15);
+  color: #c4b5fd;
+  border-radius: 20px;
+  padding: 1px 7px;
+  font-weight: 500;
+  margin-left: auto;
+}
+
+.msg-ia-texto {
+  font-size: 0.875rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+  margin: 0 0 6px;
+}
+
+.ia-time {
+  color: #a78bfa !important;
+  opacity: 0.7;
+}
+
+// ── Aguardando processamento ──────────────────────────────────────────────
+.msg-aguardando {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  padding: 8px 0 4px;
+
+  .aguardando-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: $ia-purple;
+    animation: ia-pulse 1.2s infinite;
+    flex-shrink: 0;
+  }
+}
+
+@keyframes ia-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.75); }
+}
+
+// ── Textarea e botão de envio ─────────────────────────────────────────────
+.nova-mensagem {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 1rem 1.25rem 1.25rem;
+
+  textarea {
+    width: 100%;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.04);
+    color: #e2e8f0;
+    padding: 10px 12px;
+    font-size: 0.875rem;
+    resize: vertical;
+    min-height: 72px;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &::placeholder { color: rgba(255,255,255,0.3); }
+
+    &:focus {
+      border-color: $ia-purple;
+      box-shadow: 0 0 0 3px $ia-glow;
+      outline: none;
+    }
+  }
+
+  .btn-enviar {
+    align-self: flex-end;
+    background: linear-gradient(135deg, $ia-purple, #a855f7);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 9px 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
+    box-shadow: 0 4px 14px $ia-glow;
+
+    &:hover:not(:disabled) {
+      opacity: 0.88;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(124, 58, 237, 0.35);
+    }
+
+    &:active:not(:disabled) { transform: translateY(0); }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+  }
+}
+
+// ── No messages empty state ───────────────────────────────────────────────
+.no-msgs {
+  text-align: center;
+  color: #64748b;
+  font-size: 0.82rem;
+  padding: 1.5rem 1rem 0.5rem;
+  font-style: italic;
+}
+
+// ── Light theme overrides ─────────────────────────────────────────────────
+:host-context(html[data-theme="light"]) {
+
+  .mensagens-header { color: #6b7280; border-bottom-color: #e5e7eb; }
+
+  .ia-badge {
+    background: rgba(124, 58, 237, 0.1);
+    color: $ia-purple;
+    border-color: rgba(124, 58, 237, 0.25);
+  }
+
+  .msg-texto-usuario { color: #1f2937; }
+
+  .msg-ia-resposta {
+    background: rgba(124, 58, 237, 0.05);
+    border-color: rgba(124, 58, 237, 0.2);
+  }
+
+  .msg-ia-texto { color: #374151; }
+
+  .ia-author { color: $ia-purple !important; }
+
+  .ia-tag { background: rgba(124, 58, 237, 0.08); color: $ia-purple; }
+
+  .ia-time { color: $ia-purple !important; }
+
+  .nova-mensagem {
+    textarea {
+      background: #f9fafb;
+      border-color: #d1d5db;
+      color: #1f2937;
+      &::placeholder { color: #9ca3af; }
+      &:focus { border-color: $ia-purple; box-shadow: 0 0 0 3px rgba(124,58,237,0.1); }
+    }
+  }
+
+  .no-msgs { color: #9ca3af; }
+}

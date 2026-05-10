@@ -1,15 +1,19 @@
 <div class="modal-container">
   <div class="modal-content">
       <form [formGroup]="form" (ngSubmit)="submit(form)">
+
+          <!-- Header -->
           <div class="modal-header">
             <h5 class="modal-title" mat-dialog-title>{{data.title}}</h5>
             <button type="button" class="close" mat-dialog-close>
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
+
           <mat-dialog-content>
             <div class="modal-body">
 
+                <!-- Departamento -->
                 <div class="form-outline formatar-mat-form">
 
                     <label class="form-label" for="departamentoSelect">Departamento</label>
@@ -42,7 +46,7 @@
                   </div>
                 </div>
 
-                <div class="form-outline formatar-mat-form">
+                <!--<div class="form-outline formatar-mat-form">
                     <label class="form-label" for="descricaoInput">Descrição</label>
                     <input matInput formControlName="descricao" type="text" required
                           id="descricaoInput" class="form-control" />
@@ -51,9 +55,36 @@
                         O campo descrição é obrigatório.
                       </mat-error>
                     </div>
+                </div>-->
+
+                <!-- Descrição + botão IA -->
+                <div class="form-outline formatar-mat-form">
+                  <div class="field-label-row">
+                    <label class="form-label" for="descricaoInput">Descrição</label>
+
+                    <!-- Feature 3: Gerar Descrição -->
+                    <button type="button"
+                            class="btn-ia"
+                            [class.btn-ia--loading]="iaLoadingDescricao"
+                            [disabled]="iaLoadingDescricao"
+                            (click)="gerarDescricaoComIA()">
+                      <span class="btn-ia__icon" *ngIf="!iaLoadingDescricao">✨</span>
+                      <span class="btn-ia__spinner" *ngIf="iaLoadingDescricao"></span>
+                      {{ iaLoadingDescricao ? 'Gerando...' : 'Gerar com IA' }}
+                    </button>
+                  </div>
+
+                  <input matInput formControlName="descricao" type="text" required
+                        id="descricaoInput" class="form-control" />
+                  <div *ngIf="form.get('descricao')?.dirty || form.get('descricao')?.touched">
+                    <mat-error class="erro" *ngIf="form.get('descricao').hasError('required')">
+                      O campo descrição é obrigatório.
+                    </mat-error>
+                  </div>
                 </div>
 
-                <div class="form-outline formatar-mat-formC" style="position: relative;">
+
+                <!--<div class="form-outline formatar-mat-formC" style="position: relative;">
                   <label class="form-label" for="prazoInput">Prazo</label>
                   <input matInput formControlName="prazo" type="date" required
                          [(ngModel)]="tarefa.prazo" id="prazoInput" placeholder="ex: 0000/00/00"
@@ -66,11 +97,49 @@
                       Data inválida, verifique o formato.
                     </mat-error>
                   </div>
+                </div>-->
+
+
+                <!-- Prazo + botão IA -->
+                <div class="form-outline formatar-mat-formC" style="position: relative;">
+                  <div class="field-label-row">
+                    <label class="form-label" for="prazoInput">Prazo</label>
+
+                    <!-- Feature 2: Sugerir Prazo -->
+                    <button type="button"
+                            class="btn-ia btn-ia--prazo"
+                            [class.btn-ia--loading]="iaLoadingPrazo"
+                            [disabled]="iaLoadingPrazo"
+                            (click)="sugerirPrazoComIA()">
+                      <span class="btn-ia__icon" *ngIf="!iaLoadingPrazo">📅</span>
+                      <span class="btn-ia__spinner" *ngIf="iaLoadingPrazo"></span>
+                      {{ iaLoadingPrazo ? 'Calculando...' : 'Sugerir com IA' }}
+                    </button>
+                  </div>
+
+                  <input matInput formControlName="prazo" type="date" required
+                        [(ngModel)]="tarefa.prazo" id="prazoInput"
+                        [disabled]="disableBox" class="form-control" />
+                  <div *ngIf="form.get('prazo')?.dirty || form.get('prazo')?.touched">
+                    <mat-error class="erro" *ngIf="form.get('prazo').hasError('required')">
+                      O campo data limite é obrigatório.
+                    </mat-error>
+                    <mat-error class="erro" *ngIf="form.get('prazo').hasError('dataInvalida')">
+                      Data inválida, verifique o formato.
+                    </mat-error>
+                  </div>
+                </div>
+
+                <!-- Feedback inline da IA -->
+                <div class="ia-feedback" *ngIf="iaMensagem">
+                  <span class="ia-feedback__icon">🤖</span>
+                  <span class="ia-feedback__text">{{ iaMensagem }}</span>
                 </div>
 
             </div>
           </mat-dialog-content>
 
+          <!-- Footer -->
           <div class="modal-footer">
             <mat-dialog-actions class="justify-content-end">
               <button type="button" class="btn btn-secondary mr-1" mat-dialog-close>Cancelar</button>
@@ -79,6 +148,7 @@
               </button>
             </mat-dialog-actions>
           </div>
+
       </form>
   </div>
 </div>
