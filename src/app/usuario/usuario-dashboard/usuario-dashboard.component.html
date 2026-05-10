@@ -252,13 +252,17 @@
                 <div class="msg-item-actions">
                   <button class="btn-msg-mini btn-ocultar-mini"
                           (click)="toggleOcultarMensagem(msg.id)"
+                          type="button"
+                          [attr.aria-label]="mensagensOcultas.has(msg.id) ? 'Mostrar mensagem' : 'Ocultar mensagem'"
                           [title]="mensagensOcultas.has(msg.id) ? 'Mostrar' : 'Ocultar'">
-                    {{ mensagensOcultas.has(msg.id) ? 'Mostrar' : 'Ocultar' }}
+                    <i class="fa" [ngClass]="mensagensOcultas.has(msg.id) ? 'fa-eye' : 'fa-eye-slash'"></i>
                   </button>
                   <button class="btn-msg-mini btn-excluir-mini"
                           (click)="excluirMensagemUsuario(tarefa.id, msg.id)"
+                          type="button"
+                          aria-label="Excluir mensagem"
                           title="Excluir mensagem">
-                    Excluir
+                    <i class="fa fa-trash"></i>
                   </button>
                 </div>
               </div>
