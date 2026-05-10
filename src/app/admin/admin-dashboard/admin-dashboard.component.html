@@ -252,7 +252,7 @@
               <td class="id-cell">#{{ t.id }}</td>
               <td>
                 <strong>{{ t.titulo }}</strong>
-                <small>{{ t.descricao }}</small>
+                <small>{{ formatarDescricao(t.descricao) }}</small>
               </td>
               <td>
                 <span class="dept-tag">{{ t.departamento || '—' }}</span>

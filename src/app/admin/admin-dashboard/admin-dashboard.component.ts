@@ -256,6 +256,17 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     return 'Pendente';
   }
 
+  formatarDescricao(descricao: string): string {
+    if (!descricao) {
+      return '';
+    }
+    const prefixo = 'Descrição gerada automaticamente para a tarefa:';
+    if (descricao.startsWith(prefixo)) {
+      return descricao.substring(prefixo.length).trim();
+    }
+    return descricao;
+  }
+
   isPrazoUrgente(prazo: any): boolean {
     if (!prazo) return false;
     const diff = new Date(prazo).getTime() - Date.now();
